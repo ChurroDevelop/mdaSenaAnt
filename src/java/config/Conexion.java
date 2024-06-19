@@ -28,7 +28,7 @@ public class Conexion {
         try { // Manejo de excepciones
             if (!con.isClosed()) { // Si la conexion esta abierta
                 con.close(); // Cierra la conexion a la base de datos
-            }
+            }   
         } catch (Exception e) {
             System.out.println("Error al cerrar la conexion " + e.getMessage());
         }
