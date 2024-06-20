@@ -1,4 +1,6 @@
+<%@page import="config.Conexion"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +42,7 @@
         </h1>
       </div>
     </div>
-    <form action="viewsMonitor/inicio.jsp" class="grid">
+    <form action="/svUsuario?accion=verificar" method="POST" class="grid">
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
             class="w-4 h-4 opacity-70">
@@ -49,21 +51,21 @@
             <path
                 d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
         </svg>
-        <input type="text" class="grow text-mdaBlack" placeholder="Correo institucional" />
+        <input type="text" name="txtCorreo" class="grow text-mdaBlack" placeholder="Correo institucional" />
       </label>
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
             class="w-4 h-4 opacity-70">
             <path fill-rule="evenodd"
                 d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-                clip-rule="evenodd" />
+                clip-rule="evenodd" />  
         </svg>
-        <input type="password" class="grow text-mdaBlack" placeholder="Contraseña" />
+        <input type="password" name="txtClave" class="grow text-mdaBlack" placeholder="Contraseña" />
       </label>
       <p class="text-sm text-right mt-1 text-mdaGreen hover:underline">
         <a href="#">¿Olvidó su contraseña?</a>
       </p>
-      <button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
+      <button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen" name="verificar" value="verificar">
         Ingresar
       </button>
     </form>
