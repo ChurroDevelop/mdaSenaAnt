@@ -5,9 +5,7 @@
 package modelo;
 
 import config.Conexion;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 /**
  *
@@ -16,53 +14,31 @@ import java.sql.Statement;
 public class UsuarioDAO extends Conexion{
     
     public Usuario identificar(Usuario user) throws Exception{
-        Usuario usu = new Usuario();
-        Conexion con = new Conexion();
-        Connection cn = null;
-        Statement st = null;
-        ResultSet rs = null;
-        
-        
+        Usuario usu = null;
+        ResultSet rs;
         String sql = "SELECT id_usuario, tb_rol.nombre_rol FROM tb_usuarios " +
                     "INNER JOIN tb_rol on tb_rol.id_rol = tb_usuarios.id_rol_fk " +
                     "WHERE correo_inst = '" +  user.getCorreoInstitucional() + "' " +
                     "AND " +
-                    "contraseña = '" + user.getContraseña() +"'";
-        
-        
+                    "contrasena = '" + user.getContrasena() +"'";
         try {
-            cn = con.conectar();
-            st = cn.createStatement();
-            rs = st.executeQuery(sql);
+            this.conectar(false);
+            rs = this.ejecutarOrdenDatos(sql);
             if (rs.next() == true) {
                 usu = new Usuario();
                 usu.setId_usuario((rs.getInt("id_usuario")));
-                usu.setCorreoInstitucional(user.getCorreoInstitucional());
+                usu.setCorreoInstitucional(usu.getCorreoInstitucional());
                 usu.setId_rol_fk(new Rol());
                 usu.getId_rol_fk().setNombre_rol(rs.getString("nombre_rol"));
             }
             else{
                 System.out.println("No ejecuta el if");
             }
+            rs.close();
         } catch (Exception e) {
             System.out.println("Error 2: " + e.getMessage());
-        }
-        finally{
-            if (rs != null && rs.isClosed() == false) {
-                rs.close();
-            }
-            
-            rs = null;
-            if (st != null && st.isClosed() == false) {
-                st.close();
-            }
-            
-            st = null;
-            if (con != null && cn.isClosed() == false) {
-                cn.close();
-            }
-            
-            cn = null;
+        }finally{
+            this.cerrar(false);
         }
         return usu;
     }

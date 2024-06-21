@@ -2,16 +2,16 @@ package modelo;
 public class Usuario {
     private int id_usuario;
     private String correoInstitucional;
-    private String contraseña;
+    private String contrasena;
     private Rol id_rol_fk;
 
     public Usuario() {
     }
 
-    public Usuario(int id_usuario, String correoInstitucional, String contraseña, Rol id_rol_fk) {
+    public Usuario(int id_usuario, String correoInstitucional, String contrasena, Rol id_rol_fk) {
         this.id_usuario = id_usuario;
         this.correoInstitucional = correoInstitucional;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.id_rol_fk = id_rol_fk;
     }
 
@@ -31,12 +31,12 @@ public class Usuario {
         this.correoInstitucional = correoInstitucional;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contraseña) {
+        this.contrasena = contraseña;
     }
 
     public Rol getId_rol_fk() {

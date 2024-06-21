@@ -42,7 +42,7 @@
         </h1>
       </div>
     </div>
-    <form action="/svUsuario?accion=verificar" method="POST" class="grid">
+    <form action="/svLogin?accion=verificar" method="POST" class="grid">
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
             class="w-4 h-4 opacity-70">

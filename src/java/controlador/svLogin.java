@@ -21,8 +21,8 @@ import modelo.UsuarioDAO;
  *
  * @author Propietario
  */
-@WebServlet(name = "svUsuario", urlPatterns = {"/svUsuario"})
-public class svUsuario extends HttpServlet {
+@WebServlet(name = "svLogin", urlPatterns = {"/svLogin"})
+public class svLogin extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -73,13 +73,13 @@ public class svUsuario extends HttpServlet {
         UsuarioDAO dao;
         Usuario usuario;
         usuario = this.obtenerUsuario(request);
-        
         dao = new UsuarioDAO();
         usuario = dao.identificar(usuario);
         if (usuario != null && usuario.getId_rol_fk().getNombre_rol().equals("Aprendiz")) {
              sesion = request.getSession();
              sesion.setAttribute("Aprendiz", usuario);
              request.setAttribute("Hola", "Bienvenido al sistema");
+             System.out.println("Redireccionando a la vista del aprendiz");
              response.sendRedirect("views/viewsAprendiz/inicio.jsp");
              this.getServletConfig().getServletContext().getRequestDispatcher("/views/viewsAprendiz/inicio.jsp").forward(request, response);
         }
@@ -97,8 +97,10 @@ public class svUsuario extends HttpServlet {
                     this.getServletConfig().getServletContext().getRequestDispatcher("/views/viewsMonitor/inicio.jsp").forward(request, response);
                 }
                 else{
+                    System.out.println(usuario.getId_rol_fk().getNombre_rol() + "Hola");
+                    System.out.println("Error en las credenciales");
                     request.setAttribute("mensaje", "Credenciales incorrectas");
-                    request.getRequestDispatcher("views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/login.jsp").forward(request, response);
                 }
             }
         }
@@ -112,30 +114,9 @@ public class svUsuario extends HttpServlet {
     }
 
     private Usuario obtenerUsuario(HttpServletRequest request) {
-//        final String regexAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b";
-//        final String regexInstructor = "\\b[A-Za-z0-9._%+-]+@misena\\.edu\\.co\\b";
-//        Pattern pAprendiz = Pattern.compile(regexAprendiz);
-//        Pattern pInstructor = Pattern.compile(regexInstructor);
-
         Usuario u = new Usuario();
         u.setCorreoInstitucional(request.getParameter("txtCorreo"));
-        u.setContraseña(request.getParameter("txtClave"));
-        
-//        Matcher mAprendiz = pAprendiz.matcher(u.getCorreoInstitucional());
-//        Matcher mInstructor = pInstructor.matcher(u.getCorreoInstitucional());
-//        
-//        try {
-//            if (mAprendiz.matches()) {
-//                System.out.println("Es aprendiz");
-//            }
-//            else{
-//                if (mInstructor.matches()) {
-//                    System.out.println("Es instructor");
-//                }
-//            }
-//        } catch (Exception e) {
-//            
-//        }
+        u.setContrasena(request.getParameter("txtClave"));
         return u;
     }
 
