@@ -66,7 +66,7 @@
           </button>
         </a>
         <!-- Botón para registrrse -->
-        <a href="views/register.jsp">
+        <a href="views/registro.jsp">
           <button class="btn w-full border-mdaBlack bg-white text-mdaBlack hover:bg-white">
             Regístrese
           </button>

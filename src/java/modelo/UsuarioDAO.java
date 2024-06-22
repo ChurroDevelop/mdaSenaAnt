@@ -6,6 +6,7 @@ package modelo;
 
 import config.Conexion;
 import java.sql.ResultSet;
+import modelo.PasswordEncryptionUtil;
 
 /**
  *
@@ -24,6 +25,15 @@ public class UsuarioDAO extends Conexion{
         try {
             this.conectar(false);
             rs = this.ejecutarOrdenDatos(sql);
+            
+            
+            
+            // Apartado para encriptar las contraseñas
+//            String encriptada = PasswordEncryptionUtil.encriptar(user.getContrasena());
+//            System.out.println("Contraseña encripatada " + encriptada);
+            // ****************************************************
+            
+            
             if (rs.next() == true) {
                 usu = new Usuario();
                 usu.setId_usuario((rs.getInt("id_usuario")));

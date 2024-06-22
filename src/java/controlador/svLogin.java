@@ -100,7 +100,7 @@ public class svLogin extends HttpServlet {
                     System.out.println(usuario.getId_rol_fk().getNombre_rol() + "Hola");
                     System.out.println("Error en las credenciales");
                     request.setAttribute("mensaje", "Credenciales incorrectas");
-                    request.getRequestDispatcher("/views/login.jsp").forward(request, response);
+                    response.sendRedirect("views/login.jsp");
                 }
             }
         }
