@@ -9,7 +9,7 @@ public class Conexion {
     private String password = "";
     private String host = "localhost";
     private String port = "3306";
-    private String database = "db_mda_sena";
+    private String database = "mdasena_db";
     private String className = "com.mysql.cj.jdbc.Driver";
     private String url = "jdbc:mysql://"+host+":"+port+"/"+database;
     private Connection con;
