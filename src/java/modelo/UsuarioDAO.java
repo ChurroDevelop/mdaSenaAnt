@@ -4,7 +4,8 @@
  */
 package modelo;
 
-import config.Conexion;
+import modelo.Conexion;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import modelo.PasswordEncryptionUtil;
 
@@ -25,15 +26,6 @@ public class UsuarioDAO extends Conexion{
         try {
             this.conectar(false);
             rs = this.ejecutarOrdenDatos(sql);
-            
-            
-            
-            // Apartado para encriptar las contraseñas
-//            String encriptada = PasswordEncryptionUtil.encriptar(user.getContrasena());
-//            System.out.println("Contraseña encripatada " + encriptada);
-            // ****************************************************
-            
-            
             if (rs.next() == true) {
                 usu = new Usuario();
                 usu.setId_usuario((rs.getInt("id_usuario")));
@@ -51,5 +43,58 @@ public class UsuarioDAO extends Conexion{
             this.cerrar(false);
         }
         return usu;
+    }
+    
+    public void registro(Usuario user) throws Exception{
+         String sql;
+        sql = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES ('"+ user.getCorreoInstitucional() + "', '"+ user.getContrasena() +"', '"+ user.getId_rol_fk().getId_rol() +"')";
+        try {
+            this.conectar(false);
+            this.ejecutarOrder(sql);
+            this.cerrar(true);
+            System.out.println("Se ejecuto correctamente");
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
+    
+    public boolean registroUsuario(String correo, String password, int rol) throws Exception{
+        
+//        PreparedStatement ps = null;
+//        
+//        try {
+//            String encriptPassword = PasswordEncryptionUtil.encriptar(password);
+//            System.out.println(encriptPassword + ": Contraseña encriptada");
+//            String sql = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES (?,?,?)";
+//            System.out.println(encriptPassword.length());
+//            ps = getConexion().prepareStatement(sql);
+//            
+//            ps.setString(1, correo);
+//            ps.setString(2, encriptPassword);
+//            ps.setInt(3, rol);
+//            
+//            if (ps.executeUpdate() == 1) {
+//               return true;
+//            }
+//            
+//        } catch (Exception e) {
+//            System.out.println("ERRORES ANTES DE CERRAR: " + e.getMessage());
+//        }
+//        finally {
+//            if (getConexion() != null) {
+//                try {
+//                    getConexion().close();
+//                    if (ps != null) {
+//                        ps.close();
+//                        System.out.println("CERRANDO LAS CONEXIONES");
+//                    }
+//                } catch (Exception ex) {
+//                    System.out.println("ERRORES: " + ex.getMessage());
+//                }
+//            } else {
+//            }
+//        }
+        return false;
     }
 }

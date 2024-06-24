@@ -1,4 +1,4 @@
-package config;
+package modelo;
 
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import java.sql.CallableStatement;
