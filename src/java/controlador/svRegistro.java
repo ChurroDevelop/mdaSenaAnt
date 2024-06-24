@@ -13,18 +13,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.PasswordEncryptionUtil;
-import modelo.Usuario;
-import modelo.UsuarioDAO;
+import modelo.UsuarioDao;
 
-/**
- *
- * @author Propietario
- */
 @WebServlet(name = "svRegistro", urlPatterns = {"/svRegistro"})
 public class svRegistro extends HttpServlet {
-    UsuarioDAO usuDao = new UsuarioDAO();
-    Usuario u = new Usuario();
+    UsuarioDao userDao = new UsuarioDao();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,51 +32,45 @@ public class svRegistro extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String correo = request.getParameter("txtCorreo");
+        String clave = request.getParameter("txtPass");
+        String confirm = request.getParameter("txtConfirm");
         
-        final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b"; // Regex para el aprendiz
-        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@misena\\.edu\\.co\\b"; // Regex para el instructor
-        final Pattern pAprendiz = Pattern.compile(expAprendiz); // Compilador de los regex
-        final Pattern pInstructor = Pattern.compile(expInstructor); // Compilador de los regex
+        final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b";
+        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@misena\\.edu\\.co\\b";
         
-        String correo = request.getParameter("txtCorreo"); // Toma el correo entrante
-        String pass = request.getParameter("txtPass"); // Toma la contraseña entrante
-        String confirm = request.getParameter("txtConfirm"); // Toma la confirmacion de la contraseña entrante
+        final Pattern pAprendiz = Pattern.compile(expAprendiz);
+        final Pattern pInstructor = Pattern.compile(expInstructor);
         
-        Matcher mAprendiz = pAprendiz.matcher(correo); // Se valida si coincide con el correo del aprendiz
-        Matcher mInstructor = pInstructor.matcher(correo); // Se valida si coincide con el correo del instructor
+        Matcher mAprendiz = pAprendiz.matcher(correo);
+        Matcher mInstructor = pInstructor.matcher(correo);
         
-        int rol = 0;
+        int rol;
         
-        if (pass.equals(confirm)) {
+        if (clave.equals(confirm)) {
             System.out.println("Las contraseñas coinciden");
-            String encriptPassword = PasswordEncryptionUtil.encriptar(pass);
             try {
                 if (mAprendiz.matches()) {
                     rol = 1;
-                    
-                    u.setCorreoInstitucional(correo);
-                    u.setContrasena(encriptPassword);
-//                    u.setId_rol_fk();
-                    usuDao.registro(u);
-//                    boolean ola = usuDao.registroUsuario(correo, pass, rol);
-//                    usuDao.registro(user);
-//                    System.out.println(ola);
-                    System.out.println("El correo registrado es del aprendiz");
+                    userDao.registrarUsuario(correo, clave, rol);
+                    System.out.println("Se mando a crear un nuevo aprendiz");
                 }
                 else{
                     if (mInstructor.matches()) {
                         rol = 2;
-                        System.out.println("El correo registrado es del instructor");
-                    }
-                    else{
-                        System.out.println("No se permiten correos aparte de los institucionales");
+                        userDao.registrarUsuario(correo, clave, rol);
+                        System.out.println("Se mando a crear un nuevo instructor");
+                    } else {
+                        System.out.println("No se permiten otros correos");
+                        response.sendRedirect("views/registro.jsp");
                     }
                 }
             } catch (Exception e) {
-                System.out.println("ERROR: " + e.getMessage());
             }
-        } else {
+        }
+        else{
             System.out.println("Las contraseñas no coinciden");
+            response.sendRedirect("views/registro.jsp");
         }
         
     }

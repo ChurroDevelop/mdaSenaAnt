@@ -1,4 +1,3 @@
-<%@page import="config.Conexion"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -42,7 +41,7 @@
         </h1>
       </div>
     </div>
-    <form action="/svLogin?accion=verificar" method="POST" class="grid">
+    <form action="/svLogin" method="POST" class="grid">
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
             class="w-4 h-4 opacity-70">
@@ -65,9 +64,9 @@
       <p class="text-sm text-right mt-1 text-mdaGreen hover:underline">
         <a href="#">¿Olvidó su contraseña?</a>
       </p>
-      <button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen" name="verificar" value="verificar">
-        Ingresar
-      </button>
+      <!--<button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen" name="verificar" value="verificar">-->
+      <input type="submit" value="Ingresar" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
+      <!--</button>-->
     </form>
     <div class="flex justify-center gap-2 text-xs">
       <p class="text-sm text-center mt-1 text-mdaBlack">
