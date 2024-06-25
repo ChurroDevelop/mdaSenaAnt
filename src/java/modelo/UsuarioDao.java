@@ -50,7 +50,7 @@ public class UsuarioDao extends Conexion{
         
         try {
             String encript = PasswordEncryptionUtil.encriptar(pass);
-            
+
             String sql = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES (?,?,?)";
             ps = getConexion().prepareStatement(sql);
             ps.setString(1, correo);
