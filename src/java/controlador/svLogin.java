@@ -48,6 +48,8 @@ public class svLogin extends HttpServlet {
         }
         else{
             System.out.println("No se encuentra");
+            // Redireccionar a una página de error o mostrar un mensaje de error
+            response.sendRedirect("error.jsp");
         }
     }
 
