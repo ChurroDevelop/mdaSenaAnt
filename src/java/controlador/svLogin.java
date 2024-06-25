@@ -10,14 +10,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import modelo.PasswordEncryptionUtil;
-import modelo.UsuarioDao;
+import modelo.UsuarioDAO;
+import modelo.objetos.Usuario;
 
-/**
- *
- * @author Propietario
- */
 public class svLogin extends HttpServlet {
+    UsuarioDAO userDao = new UsuarioDAO();
+    Usuario u = new Usuario();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,13 +33,18 @@ public class svLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        HttpSession sesion = request.getSession();
         String correo = request.getParameter("txtCorreo");
         String password = request.getParameter("txtClave");
+        String encript = PasswordEncryptionUtil.encriptar(password);
         
-        UsuarioDao userDao = new UsuarioDao();
+        u.setCorreoInst(correo);
+        u.setPassword(encript);
         
-        if (userDao.autenticacion(correo, password)) {
-            response.sendRedirect("views/viewsAprendiz/inicio.jsp");
+        if (userDao.autenticacion(u) == true) {
+            userDao.obtenerId(u);
+            sesion.setAttribute("userEmail", u.getCorreoInst());
+            response.sendRedirect("views/inicio.jsp");
         }
         else{
             System.out.println("No se encuentra");

@@ -13,11 +13,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.UsuarioDao;
+import javax.servlet.http.HttpSession;
+import modelo.Conexion;
+import modelo.PasswordEncryptionUtil;
+import modelo.UsuarioDAO;
+import modelo.objetos.Usuario;
 
 @WebServlet(name = "svRegistro", urlPatterns = {"/svRegistro"})
 public class svRegistro extends HttpServlet {
-    UsuarioDao userDao = new UsuarioDao();
+    UsuarioDAO userDao = new UsuarioDAO();
+    Usuario u = new Usuario();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,6 +37,8 @@ public class svRegistro extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession sesion = request.getSession();
         String correo = request.getParameter("txtCorreo");
         String clave = request.getParameter("txtPass");
         String confirm = request.getParameter("txtConfirm");
@@ -44,21 +51,27 @@ public class svRegistro extends HttpServlet {
         
         Matcher mAprendiz = pAprendiz.matcher(correo);
         Matcher mInstructor = pInstructor.matcher(correo);
-        
+
         int rol;
+        boolean insertado;
         
         if (clave.equals(confirm)) {
             System.out.println("Las contraseñas coinciden");
+            String encript = PasswordEncryptionUtil.encriptar(clave);
+            u.setCorreoInst(correo);
+            u.setPassword(encript);
             try {
                 if (mAprendiz.matches()) {
                     rol = 1;
-                    userDao.registrarUsuario(correo, clave, rol);
+                    insertado = userDao.registrarUsuario(u, rol);
                     System.out.println("Se mando a crear un nuevo aprendiz");
+                    sesion.setAttribute("UsuarioAprendiz", u.getCorreoInst());
+                    response.sendRedirect("views/crearPerfil.jsp");
                 }
                 else{
                     if (mInstructor.matches()) {
                         rol = 2;
-                        userDao.registrarUsuario(correo, clave, rol);
+                        insertado = userDao.registrarUsuario(u, rol);
                         System.out.println("Se mando a crear un nuevo instructor");
                     } else {
                         System.out.println("No se permiten otros correos");

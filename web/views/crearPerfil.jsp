@@ -101,6 +101,16 @@
           Crear perfil
         </button>
       </form>
+      <h1>
+          <%
+              HttpSession sesionPerfil = request.getSession(false);
+              if (sesionPerfil != null) {
+                      String emailAprendiz = (String) sesionPerfil.getAttribute("UsuarioAprendiz");
+                      out.println("<p>Correo del usuario: " + emailAprendiz + "</p>");
+                  }
+          %>
+      </h1>
+      
     </section>
     <!-- Enlace para manejo del DOM -->
     <script src="../scripts/script.js"></script>
