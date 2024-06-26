@@ -12,15 +12,18 @@
 
       <body>
         <h1>Bienvenido a la página de inicio</h1>
-        <% // Recuperar el correo del usuario desde la sesión HttpSession sessionInicio=request.getSession(false); if
-          (sessionInicio !=null) { String userEmail=(String) sessionInicio.getAttribute("userEmail"); if (userEmail
-          !=null) { out.println("<p>Correo del usuario: " + userEmail + "</p>");
-          } else {
-          out.println("<p>No hay un usuario logueado.</p>");
-          }
-          } else {
-          out.println("<p>No hay una sesión activa.</p>");
-          }
+        <% // Recuperar el correo del usuario desde la sesión 
+           HttpSession sessionInicio=request.getSession(false); 
+           if (sessionInicio !=null) { 
+                String userEmail=(String) sessionInicio.getAttribute("userEmail"); 
+                if (userEmail != null) { 
+                    out.println("<p>Correo del usuario: " + userEmail + "</p>");
+                } else {
+                    out.println("<p>No hay un usuario logueado.</p>");
+                }
+            } else {
+            out.println("<p>No hay una sesión activa.</p>");
+            }
           %>
       </body>
 

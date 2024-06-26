@@ -87,9 +87,9 @@ public class UsuarioDAO extends Conexion{
             rs = ps.executeQuery();
             if (rs.next()) {
                 idUser = rs.getInt("id_usuario");
-                System.out.println("Se obtuvo el usuario");
-            }
+            }                System.out.println("Se obtuvo el usuario");
             
+
         } catch (Exception e) {
             System.out.println("ERROR EN LA CONSULTA: " + e.getMessage());
         } finally {
