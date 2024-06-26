@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import modelo.Conexion;
 import modelo.PasswordEncryptionUtil;
 import modelo.UsuarioDAO;
 import modelo.objetos.Usuario;
@@ -65,7 +64,7 @@ public class svRegistro extends HttpServlet {
                     rol = 1;
                     insertado = userDao.registrarUsuario(u, rol);
                     System.out.println("Se mando a crear un nuevo aprendiz");
-                    sesion.setAttribute("UsuarioAprendiz", u.getCorreoInst());
+                    sesion.setAttribute("UsuarioAprendiz", u.getId_usuario());
                     response.sendRedirect("views/crearPerfil.jsp");
                 }
                 else{

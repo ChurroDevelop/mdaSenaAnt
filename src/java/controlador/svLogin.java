@@ -42,8 +42,7 @@ public class svLogin extends HttpServlet {
         u.setPassword(encript);
         
         if (userDao.autenticacion(u) == true) {
-            userDao.obtenerId(u);
-            sesion.setAttribute("userEmail", u.getCorreoInst());
+            sesion.setAttribute("userEmail", u.getId_usuario());
             response.sendRedirect("views/inicio.jsp");
         }
         else{
