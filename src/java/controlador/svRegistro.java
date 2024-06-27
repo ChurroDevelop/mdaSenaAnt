@@ -5,28 +5,27 @@
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.mail.internet.AddressException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import modelo.PasswordEncryptionUtil;
+import modelo.EncriptarContraseña;
+import modelo.EnviarCodigo;
 import modelo.UsuarioDAO;
 import modelo.objetos.Usuario;
 
 @WebServlet(name = "svRegistro", urlPatterns = {"/svRegistro"})
 public class svRegistro extends HttpServlet {
-    UsuarioDAO userDao = new UsuarioDAO();
-    Usuario u = new Usuario();
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
+    UsuarioDAO userDao = new UsuarioDAO(); // Instanciando un controlador del CRUD para el usuario
+    Usuario u = new Usuario(); // Instanciando un nuevo usuario para colocarle sus atributos
+    EnviarCodigo mensaje = new EnviarCodigo();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,59 +36,26 @@ public class svRegistro extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession sesion = request.getSession();
-        String correo = request.getParameter("txtCorreo");
-        String clave = request.getParameter("txtPass");
-        String confirm = request.getParameter("txtConfirm");
-        
-        final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b";
-        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@misena\\.edu\\.co\\b";
-        
-        final Pattern pAprendiz = Pattern.compile(expAprendiz);
-        final Pattern pInstructor = Pattern.compile(expInstructor);
-        
-        Matcher mAprendiz = pAprendiz.matcher(correo);
-        Matcher mInstructor = pInstructor.matcher(correo);
-
-        int rol;
-        boolean insertado;
+        HttpSession sesion = request.getSession(); // Sesion para atrapar la session
+        String correo = request.getParameter("txtCorreo"); // Tomar el correo del formulario
+        String clave = request.getParameter("txtPass"); // Tomar la contraseña del formulario
+        String confirm = request.getParameter("txtConfirm"); // Tomar la confirmacion de la contraseña del formulario
+        String codigo = mensaje.getRandom();
         
         if (clave.equals(confirm)) {
-            System.out.println("Las contraseñas coinciden");
-            String encript = PasswordEncryptionUtil.encriptar(clave);
             u.setCorreoInst(correo);
-            u.setPassword(encript);
+            u.setPassword(clave);
+            u.setCodigo(codigo);
+            
             try {
-                if (mAprendiz.matches()) {
-                    rol = 1;
-                    insertado = userDao.registrarUsuario(u, rol);
-                    System.out.println("Se mando a crear un nuevo aprendiz");
-                    sesion.setAttribute("UsuarioAprendiz", u.getId_usuario());
-                    response.sendRedirect("views/crearPerfil.jsp");
-                }
-                else{
-                    if (mInstructor.matches()) {
-                        rol = 2;
-                        insertado = userDao.registrarUsuario(u, rol);
-                        System.out.println("Se mando a crear un nuevo instructor");
-                    } else {
-                        System.out.println("No se permiten otros correos");
-                        response.sendRedirect("views/registro.jsp");
-                    }
-                }
-            } catch (Exception e) {
+                mensaje.enviarEmail(u);
+                sesion.setAttribute("Verificacion", u);
+                response.sendRedirect("verificacion.jsp");
+            } catch (AddressException ex) {
+                Logger.getLogger(svRegistro.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else{
-            System.out.println("Las contraseñas no coinciden");
-            response.sendRedirect("views/registro.jsp");
         }
         
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

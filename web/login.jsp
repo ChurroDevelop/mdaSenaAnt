@@ -14,15 +14,22 @@
   <script src="../scripts/tailwind.js"></script>
   <!-- Enlace con la libería DaisyUI -->
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
-  <title>MDA Sena - Inicio</title>
+  <!-- Enlace para iconos de Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>MDA Sena - Ingreso</title>
 </head>
 
-<body class="bg-mdaWhite grid content-center justify-center min-h-screen w-full p-2.5">
+<body class="bg-mdaWhite grid content-center justify-center min-h-screen w-full p-2.5 bg-background2 bg-cover">
   <!-- Ingrese aquí la estrucuta de la página -->
 
+  <!-- Filtro imagen -->
+  <div class="absolute top-0 left-0 min-h-screen w-full bg-mdaBlack_600"></div>
+
   <!-- Contenedor de login -->
-  <section class="grid bg-white p-7 rounded-lg shadow-md w-full">
-    <!--  -->
+  <section class="container grid bg-white p-7 rounded-lg shadow-md w-full md:w-96 z-10">
+    <!-- Texto informativo -->
     <h3 class="text-mdaBlack text-xl text-center mb-2.5">
       Ingrese a nuestra plataforma!
     </h3>
@@ -41,37 +48,28 @@
         </h1>
       </div>
     </div>
-    <form action="svLogin" method="POST" class="grid">
-      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-            class="w-4 h-4 opacity-70">
-            <path
-                d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-            <path
-                d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-        </svg>
-        <input type="text" name="txtCorreo" class="grow text-mdaBlack" placeholder="Correo institucional" />
+    <form class="validarFormulario grid">
+      <label class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
+        <i class="fa-solid fa-envelope text-gray-400"></i>
+        <input type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional"
+          autocomplete="off" autofocus required />
       </label>
-      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-            class="w-4 h-4 opacity-70">
-            <path fill-rule="evenodd"
-                d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-                clip-rule="evenodd" />  
-        </svg>
-        <input type="password" name="txtClave" class="grow text-mdaBlack" placeholder="Contraseña" />
+      <label class="validarLabelContrasena bg-white text-mdaBlack input input-bordered flex items-center gap-2">
+        <i class="fa-solid fa-lock text-gray-400"></i>
+        <input type="password" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off"
+          required />
       </label>
       <p class="text-sm text-right mt-1 text-mdaGreen hover:underline">
-        <a href="#">¿Olvidó su contraseña?</a>
+        <a href="crearPerfil.jsp">¿Olvidó su contraseña?</a>
       </p>
-      <!--<button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen" name="verificar" value="verificar">-->
-      <input type="submit" value="Ingresar" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
-      <!--</button>-->
+      <button type="submit" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
+        Ingresar
+      </button>
     </form>
     <div class="flex justify-center gap-2 text-xs">
       <p class="text-sm text-center mt-1 text-mdaBlack">
         ¿Aún no posee una cuenta?
-        <a class="text-mdaGreen hover:underline" href="registro.jsp">Regístrese</a>
+        <a class="text-mdaGreen hover:underline" href="registro.html">Regístrese</a>
       </p>
   </section>
   <!-- Enlace para manejo del DOM -->

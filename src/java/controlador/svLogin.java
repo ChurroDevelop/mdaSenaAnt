@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import modelo.PasswordEncryptionUtil;
+import modelo.EncriptarContraseña;
 import modelo.UsuarioDAO;
 import modelo.objetos.Usuario;
 
@@ -36,7 +36,7 @@ public class svLogin extends HttpServlet {
         HttpSession sesion = request.getSession();
         String correo = request.getParameter("txtCorreo");
         String password = request.getParameter("txtClave");
-        String encript = PasswordEncryptionUtil.encriptar(password);
+        String encript = EncriptarContraseña.encriptar(password);
         
         u.setCorreoInst(correo);
         u.setPassword(encript);

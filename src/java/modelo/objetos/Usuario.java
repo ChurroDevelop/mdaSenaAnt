@@ -4,15 +4,17 @@ public class Usuario {
     private int id_usuario;
     private String correoInst;
     private String password;
+    private String codigo;
     private Rol id_rol_fk;
 
     public Usuario() {
     }
 
-    public Usuario(int id_usuario, String correoInst, String password, Rol id_rol_fk) {
+    public Usuario(int id_usuario, String correoInst, String password, String codigo, Rol id_rol_fk) {
         this.id_usuario = id_usuario;
         this.correoInst = correoInst;
         this.password = password;
+        this.codigo = codigo;
         this.id_rol_fk = id_rol_fk;
     }
 
@@ -40,6 +42,14 @@ public class Usuario {
         this.password = password;
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     public Rol getId_rol_fk() {
         return id_rol_fk;
     }
@@ -47,4 +57,6 @@ public class Usuario {
     public void setId_rol_fk(Rol id_rol_fk) {
         this.id_rol_fk = id_rol_fk;
     }
+
+    
 }

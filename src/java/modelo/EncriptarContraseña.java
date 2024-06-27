@@ -3,7 +3,7 @@ package modelo;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class PasswordEncryptionUtil {
+public class EncriptarContraseña {
     
     public static String encriptar(String password){
         try {

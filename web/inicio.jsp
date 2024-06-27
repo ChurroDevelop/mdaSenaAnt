@@ -1,4 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%-- Document : inicio Created on : 25 jun 2024, 16:39:29 Author : Propietario --%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,11 +8,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Enlace para estilos personalizados -->
-  <link rel="stylesheet" href="../../styles/style.css" />
+  <link rel="stylesheet" href="styles/style.css" />
   <!-- Enlace con la librería Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Enlace para personalización de colores en Tailwind -->
-  <script src="../../scripts/tailwind.js"></script>
+  <script src="scripts/tailwind.js"></script>
   <!-- Enlace con la libería DaisyUI -->
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
   <!-- Enlace para iconos de Font Awesome -->
@@ -24,13 +26,13 @@
   <!-- Ingrese aquí la estrucuta de la página -->
 
   <!-- Barra lateral izquierda -->
-  <nav class="bg-white p-7 shadow-md sticky top-0 h-screen">
+  <nav class="bg-white p-7 shadow-md sticky top-0 h-screen z-10">
     <div class="grid gap-y-5">
       <!-- Logo Sena y nombre del proyecto -->
       <div class="flex flex-row w-full h-32">
         <!-- Logo -->
         <div class="grid flex-grow place-items-center w-full">
-          <img src="../../images/LogoNegro.svg" alt="" />
+          <img src="images/LogoNegro.svg" alt="" />
         </div>
         <!-- HR -->
         <div class="divider divider-horizontal"></div>
@@ -59,14 +61,30 @@
       </div>
       <!-- Botones navegación -->
       <div>
-        <a href="inicio.html">
+        <!-- Inicio -->
+        <a href="inicio.jsp">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
             <i class="fa-solid fa-house"></i>
             Inicio
           </button>
         </a>
-        <a href="editarPerfilAprendiz.html">
+        <!-- Asignar monitor -->
+        <a href="asignarMonitor.html">
+          <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-solid fa-user-plus"></i>
+            Asignar monitor
+          </button>
+        </a>
+        <a href="#">
+          <button id="showModal-2"
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-solid fa-bell"></i>
+            Notificaciones
+          </button>
+        </a>
+        <a href="editarPerfilInstructor.html">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
             <i class="fa-regular fa-address-card"></i>
@@ -75,7 +93,30 @@
         </a>
       </div>
     </div>
+    <!-- Barra notificaciones -->
+    <nav id="modal-2" class="hidden bg-white p-7 shadow-md absolute top-0 left-full h-screen w-full">
+      <div class="grid gap-y-5">
+        <button id="closeModal-2" class="btn btn-sm btn-circle btn-ghost text-mdaGreen">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <!-- HR -->
+        <div class="flex flex-col w-full">
+          <div class="divider m-0 h-0"></div>
+        </div>
+        <div>
+          <p class="text-mdaBlack text-sm">
+            Daniel Acetaminofén, ha cargado una evidencia
+          </p>
+          <button class="btn btn-sm bg-mdaGreen border-none text-white mt-2 hover:bg-mdaGreen w-full">
+            Ver evidencia
+          </button>
+        </div>
+      </div>
+    </nav>
   </nav>
+
+  <div id="modal-2__background" class="hidden bg-mdaBlack_400 w-full min-h-screen absolute"></div>
+
   <!-- Contenedor para los artículos -->
   <section class="m-auto flex w-full max-w-screen-2xl min-h-screen justify-center p-5 gap-5 flex-wrap content-start">
     <!-- Artículo -->
@@ -95,11 +136,11 @@
   </section>
   <!-- Indicador de rol -->
   <button class="bg-white btn btn-sm border-none text-mdaBlack absolute top-0 right-0 m-2.5 hover:bg-white">
-    <i class="fa-solid fa-user"></i>Aprendiz
+    <i class="fa-solid fa-user"></i>Instructor
   </button>
 
   <!-- Enlace para manejo del DOM -->
-  <script src="../../scripts/script.js"></script>
+  <script src="scripts/script.js"></script>
 </body>
 
 </html>
