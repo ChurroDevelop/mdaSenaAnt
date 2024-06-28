@@ -5,7 +5,6 @@
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +18,6 @@ public class svLogin extends HttpServlet {
     UsuarioDao userDao = new UsuarioDao();
     Usuario u = new Usuario();
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,6 +28,8 @@ public class svLogin extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession sesion = request.getSession();
+        request.setCharacterEncoding("UTF-8");
+        
         String correo = request.getParameter("txtCorreo");
         String password = request.getParameter("txtClave");
         String encript = EncriptarContraseña.encriptar(password);
@@ -43,7 +39,7 @@ public class svLogin extends HttpServlet {
         
         if (userDao.autenticacion(u) == true) {
             sesion.setAttribute("userEmail", u.getId_usuario());
-            response.sendRedirect("views/inicio.jsp");
+            response.sendRedirect("inicio.jsp");
         }
         else{
             System.out.println("No se encuentra");
@@ -51,10 +47,5 @@ public class svLogin extends HttpServlet {
             response.sendRedirect("error.jsp");
         }
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

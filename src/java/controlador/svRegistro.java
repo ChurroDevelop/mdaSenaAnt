@@ -25,7 +25,10 @@ public class svRegistro extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession sesionUser = request.getSession();
+        HttpSession sesionUser = request.getSession(); // Sesion para el usuario
+        HttpSession sesionId = request.getSession(); // Session para el id del usuario
+        request.setCharacterEncoding("UTF-8");
+        
         Usuario user = (Usuario) sesionUser.getAttribute("autenticacion");
         
         String autenticacion = request.getParameter("txtCodigo");
@@ -40,32 +43,34 @@ public class svRegistro extends HttpServlet {
         Matcher mInstructor = pInstructor.matcher(user.getCorreoInst());
         
         int rol; // Setear el rol dependiendo del regex
-        boolean insertado;
+        boolean insertado; // Setear el estado del usuario creado para poder redireccionarlo a las vistas
+        int idUser; // Para obtener el id
         
         if (autenticacion.equals(user.getCodigo())) {
             try {
                 if (mAprendiz.matches()) {
                     rol = 1;
                     insertado = userDao.registrarUsuario(user, rol);
-                    System.out.println("Aprendiz creado");
+                    idUser = userDao.obtenerId(user.getCorreoInst());
+                    user.setId_usuario(idUser);
+                    sesionId.setAttribute("UsuarioId", user);
                     if (insertado != false) {
+                        System.out.println("Se creo el usuario");
                         response.sendRedirect("crearPerfil.jsp");
                     }
                     else{
-                        System.out.println("Hubo un error en el usuario DAO");
+                        System.out.println("Hubo problemas en el usuario DAO");
                     }
                 }
                 else{
                     if (mInstructor.matches()) {
                         rol = 2;
                         insertado = userDao.registrarUsuario(user, rol);
-                        System.out.println("Instructor creado");
-                        if (insertado != false) {
-                            response.sendRedirect("crearPerfil.jsp");
-                        }
-                        else{
-                            System.out.println("Hubo un error en el usuario DAO");
-                        }
+                        idUser = userDao.obtenerId(user.getCorreoInst());
+                    }
+                    else {
+                        response.sendRedirect("registro.jsp");
+                        System.out.println("No se pudo crear el usuario ya que no cumple con las condiciones del correo institucional");
                     }
                 }
             } catch (Exception e) {

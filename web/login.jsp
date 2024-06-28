@@ -48,7 +48,7 @@
         </h1>
       </div>
     </div>
-    <form class="validarFormulario grid">
+    <form action="svLogin" class="validarFormulario grid" method="POST">
       <label class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <i class="fa-solid fa-envelope text-gray-400"></i>
         <input type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional"

@@ -14,12 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import modelo.EncriptarContraseña;
 import modelo.EnviarCodigo;
-import modelo.objetos.Rol;
+import modelo.UsuarioDao;
 import modelo.objetos.Usuario;
 
 @WebServlet(name = "svCodigo", urlPatterns = {"/svCodigo"})
 public class svCodigo extends HttpServlet {
     Usuario user = new Usuario(); // Instanciando un nuevo usuario para colocarle sus atributos
+    UsuarioDao userDao = new UsuarioDao();
     EnviarCodigo mensaje = new EnviarCodigo();
 
     @Override
@@ -32,11 +33,12 @@ public class svCodigo extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession sesion = request.getSession(); // Sesion para atrapar la session
+        request.setCharacterEncoding("UTF-8");
         
         String correo = request.getParameter("txtCorreo"); // Tomar el correo del formulario
         String clave = request.getParameter("txtPass"); // Tomar la contraseña del formulario
         String confirm = request.getParameter("txtConfirm"); // Tomar la confirmacion de la contraseña del formulario
-        String codigo = mensaje.getRandom();
+        String codigo = mensaje.getRandom(); // Metodo de mensaje par apoder obtener el numero random que sera el codigo para la autenticacion
         
         final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b"; // Regex para el aprendiz
         final String expInstructor = "\\b[A-Za-z0-9._%+-]+@misena\\.edu\\.co\\b"; // Regex para el instructor
@@ -47,40 +49,45 @@ public class svCodigo extends HttpServlet {
         Matcher mAprendiz = pAprendiz.matcher(correo);
         Matcher mInstructor = pInstructor.matcher(correo);
         
-        if (clave.equals(confirm)) {
+        if (clave.equals(confirm)) { // Si las contraseñas son iguales
             
-            String encript = EncriptarContraseña.encriptar(clave);
+            String encript = EncriptarContraseña.encriptar(clave); // Encripta la contraseña
             
-            user.setCorreoInst(correo);
-            user.setPassword(encript);
-            user.setCodigo(codigo);
+            user.setCorreoInst(correo); // Se setea el correo institucional
+            user.setPassword(encript); // Se setea la contraseña encriptada
+            user.setCodigo(codigo); // Se setea el codigo aleatorio
+            
+            boolean encontrado = userDao.buscarUser(user); // Hace la validacion si existe o no un usuario en la base de datos
+            
             try {
-                if (mAprendiz.matches()) {
-                    mensaje.enviarEmail(user);
-                    sesion.setAttribute("autenticacion", user);
-                    System.out.println("Es un Aprendiz");
-                    response.sendRedirect("autenticacion.jsp");
-                }
-                else{
-                    if (mInstructor.matches()) {
-                        mensaje.enviarEmail(user);
-                        sesion.setAttribute("autenticacion", user);
-                        System.out.println("Es un instructor");
-                        response.sendRedirect("autenticacion.jsp");
+                if (encontrado != true) { // Si no s eencuentra un usuario con ese correo electronicp creado en la base de datos
+                    if (mAprendiz.matches()) { // Si cumple con las condiciones del regex del aprendiz
+                        mensaje.enviarEmail(user); // Envia el codigo de verificacion al correo que registro el usuario
+                        sesion.setAttribute("autenticacion", user); // Atrapa la session que se le coloca como valor el objeto user
+                        System.out.println("Es un Aprendiz");
+                        response.sendRedirect("autenticacion.jsp"); // Redirije a la autenticacion del codigo enviado por email
                     }
                     else{
-                        System.out.println("No puedes ingresar ningun otro correo aparte del institucional");
-                        response.sendRedirect("registro.jsp");
+                        if (mInstructor.matches()) { // Si cumple con las condiciones del regex del instructor
+                            mensaje.enviarEmail(user); // Envia el codigo de verificacion al correo que registro el usuario
+                            sesion.setAttribute("autenticacion", user); // Atrapa la session que se le colocara como valor el objeto user
+                            System.out.println("Es un Instructor");
+                            response.sendRedirect("autenticacion.jsp"); // Redirije a la autenticacion del codigo enviado por email
+                        }
+                        else{
+                            System.out.println("No se puede registrar ningun correo diferente al institucional"); // Debe registrar un correo institucional
+                            response.sendRedirect("registro.jsp"); // Lo redirije a que haga otra vez el registro
+                        }
                     }
                 }
-            } catch (AddressException ex) {
+            } 
+            catch (AddressException ex) {
                 Logger.getLogger(svCodigo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else{
-            System.out.println("Las contraseñas no coinciden");
-            response.sendRedirect("registro.jsp");
+            System.out.println("Las contraseñas no coinciden"); //  Si las contraseñas no coinciden
+            response.sendRedirect("registro.jsp"); // Lo manda a que realize otra vez el registro
         }
     }
-
 }

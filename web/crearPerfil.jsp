@@ -36,7 +36,7 @@
     <div class="flex flex-row w-full h-20 mb-2.5">
       <!-- Logo -->
       <div class="grid flex-grow place-items-center justify-end w-full">
-        <img class="w-12" src="../images/LogoNegro.svg" alt="" />
+        <img class="w-12" src="images/LogoNegro.svg" alt="" />
       </div>
       <!-- HR -->
       <div class="divider divider-horizontal"></div>
@@ -48,30 +48,30 @@
         </h1>
       </div>
     </div>
-    <form class="validarFormulario grid">
+    <form action="svPerfil" class="validarFormulario grid" method="POST">
       <!-- Nombre -->
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <i class="fa-solid fa-user text-gray-400"></i>
         <input id="inputNombre" type="text" class="grow text-mdaBlack" placeholder="Nombre" autocomplete="off" autofocus
-          required />
+               required name="txtNombre"/>
       </label>
       <!-- Apellidos -->
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <i class="fa-solid fa-user text-gray-400"></i>
         <input id="inputApellidos" type="text" class="grow text-mdaBlack" placeholder="Apellidos" autocomplete="off"
-          required />
+               required name="txtApellidos"/>
       </label>
       <!-- Número de documento -->
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <i class="fa-solid fa-id-card text-gray-400"></i>
         <input id="inputDocumento" type="text" class="grow text-mdaBlack" placeholder="Número de documento"
-          autocomplete="off" required maxlength="20" />
+               autocomplete="off" required maxlength="20" name="txtDocumento"/>
       </label>
       <!-- Centro de formación -->
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2">
         <i class="fa-solid fa-hospital text-gray-400"></i>
         <input id="inputCentro" type="text" class="grow text-mdaBlack" placeholder="Centro de formación"
-          autocomplete="off" />
+               autocomplete="off" name="txtCentro"/>
       </label>
       <button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
         Crear perfil

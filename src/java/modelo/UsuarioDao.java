@@ -83,4 +83,29 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
         }
         return id; // Retorna el id
     }
+    
+    // Metodo para validar que el usuario ya existe, tendra como parametros un objeto de tipo usuario
+    public boolean buscarUser(Usuario user){ 
+        boolean encontrado = false; // Estado para saber si se encuentra o no el usuario registrado, por defecto false
+        PreparedStatement ps = null; // Prepared statement para el manejo de los Scripts SQL
+        ResultSet rs = null; // ResultSet para el manejo del retorno de las consultas
+        try {
+            this.conectar(); // Metodo para conectar con la base de datos
+            String sql = "SELECT COUNT(*) FROM tb_usuarios WHERE correo_inst = ?"; // Script SQL que buscara si existe un usuario con ese correo institucional
+            ps = getCon().prepareStatement(sql); // Se prepara el Script SQL para ser ejecutado
+            ps.setString(1, user.getCorreoInst()); // Se setea en String el correo institucional
+            rs = ps.executeQuery(); // Se ejecuta la consulta y el RS tomara el valor de retorno de esa consulta
+            if (rs.next()) { // si se encuentra un usuario
+                System.out.println("Se encontro un usuario");
+                int contador = rs.getInt(1); // se debera devolver el id del usuario
+                encontrado = (contador > 0); // si contador es mayor a 0 devuelve true, se le asignara al encontrado y eso retornara
+            }
+        } catch (Exception e) {
+            System.out.println("Error encontrando el usuario: " + e.getMessage());
+        }
+        finally {
+            this.desconectar(); // Metodo para desconectar la base de datos
+        }
+        return encontrado; // Retorna la variable encontrad, que depende del recorrido de todo el metodo
+    }
 }
