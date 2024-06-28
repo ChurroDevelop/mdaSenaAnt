@@ -7,11 +7,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Enlace para estilos personalizados -->
-  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="styles/style.css">
   <!-- Enlace con la librería Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Enlace para personalización de colores en Tailwind -->
-  <script src="../scripts/tailwind.js"></script>
+  <script src="scripts/tailwind.js"></script>
   <!-- Enlace con la libería DaisyUI -->
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
   <!-- Enlace para iconos de Font Awesome -->
@@ -37,7 +37,7 @@
     <div class="flex flex-row w-full h-20 mb-2.5">
       <!-- Logo -->
       <div class="grid flex-grow place-items-center justify-end w-full">
-        <img class="w-12" src="../images/LogoNegro.svg" alt="">
+        <img class="w-12" src="images/LogoNegro.svg" alt="">
       </div>
       <!-- HR -->
       <div class="divider divider-horizontal"></div>
@@ -69,11 +69,11 @@
     <div class="flex justify-center gap-2 text-xs">
       <p class="text-sm text-center mt-1 text-mdaBlack">
         ¿Aún no posee una cuenta?
-        <a class="text-mdaGreen hover:underline" href="registro.html">Regístrese</a>
+        <a class="text-mdaGreen hover:underline" href="registro.jsp">Regístrese</a>
       </p>
   </section>
   <!-- Enlace para manejo del DOM -->
-  <script src="../scripts/script.js"></script>
+  <script src="scripts/script.js"></script>
 </body>
 
 </html>

@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import modelo.EncriptarContraseña;
-import modelo.UsuarioDAO;
+import modelo.UsuarioDao;
 import modelo.objetos.Usuario;
 
 public class svLogin extends HttpServlet {
-    UsuarioDAO userDao = new UsuarioDAO();
+    UsuarioDao userDao = new UsuarioDao();
     Usuario u = new Usuario();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

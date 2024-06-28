@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import modelo.objetos.Usuario;
 
-public class UsuarioDAO extends Conexion{ // Hereda todo de la clase Conexion
+public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
 
     // Metodo publico que retornara true o false, recibira como parametros un objeto usuario y el rol que se esta seteando en el Servlet de Registro
     public boolean registrarUsuario(Usuario user, int id_rol) throws SQLException{

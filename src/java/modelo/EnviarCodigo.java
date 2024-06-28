@@ -64,6 +64,7 @@ public class EnviarCodigo {
             // Enviar el menasje a email
             Transport.send(mensaje);
         } catch (Exception e) {
+            System.out.println("Error mandando email en: " + e.getMessage());
         }
         
         
