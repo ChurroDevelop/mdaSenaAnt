@@ -2,11 +2,8 @@ package modelo;
 
 import java.util.Properties;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -17,12 +14,14 @@ import modelo.objetos.Usuario;
 
 public class EnviarCodigo {
     
+    // Metodo para obtener el numero random para el codigo de verificaicon
     public String getRandom(){
         Random r = new Random();
         int numero = r.nextInt(999999);
         return String.format("%06d", numero);
     }
     
+    // Metodo para enviar el email al correo institucuonal del usuario
     public static void enviarEmail(Usuario user) throws AddressException{
         try {
             // Correo de verificacion

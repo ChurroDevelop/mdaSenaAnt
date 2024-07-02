@@ -20,8 +20,8 @@ import modelo.objetos.Usuario;
 @WebServlet(name = "svCodigo", urlPatterns = {"/svCodigo"})
 public class svCodigo extends HttpServlet {
     Usuario user = new Usuario(); // Instanciando un nuevo usuario para colocarle sus atributos
-    UsuarioDao userDao = new UsuarioDao();
-    EnviarCodigo mensaje = new EnviarCodigo();
+    UsuarioDao userDao = new UsuarioDao(); // instancia de un usuarioDao que manejara los procesos CRUD
+    EnviarCodigo mensaje = new EnviarCodigo(); // Instancia de enviarCodigo para el manejo de los codigos de verificacion
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
