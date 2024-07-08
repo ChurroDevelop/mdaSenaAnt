@@ -80,6 +80,10 @@ public class svCodigo extends HttpServlet {
                         }
                     }
                 }
+                else{
+                    System.out.println("No se puede crear nuevo usuario");
+                    response.sendRedirect("registro.jsp");
+                }
             } 
             catch (AddressException ex) {
                 Logger.getLogger(svCodigo.class.getName()).log(Level.SEVERE, null, ex);

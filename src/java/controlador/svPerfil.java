@@ -44,7 +44,8 @@ public class svPerfil extends HttpServlet {
         
         try { // Manejo de errores
             profileDao.registroPerfil(profile, user.getId_usuario()); // Se registra el perfil y se le pasa el ID del usuario que se seteo
-            System.out.println("Se registro el perfil");
+            System.out.println("Se registro el perfil"); // Muestra mensaje por consola que se pudo registar el nuevo perfil asociado al usuario
+            response.sendRedirect("inicio.jsp"); // Redirije a la vista que se va a manejar
         } catch (Exception e) {
             System.out.println("Error en el Perfil DAO: " +e.getMessage());
         }

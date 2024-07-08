@@ -10,12 +10,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import modelo.RolDAO;
 import modelo.UsuarioDao;
+import modelo.objetos.Rol;
 import modelo.objetos.Usuario;
 
 @WebServlet(name = "svRegistro", urlPatterns = {"/svRegistro"})
 public class svRegistro extends HttpServlet {
     UsuarioDao userDao = new UsuarioDao();
+    RolDAO rolDao = new RolDAO();
+    Rol rol = new Rol();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,7 +46,7 @@ public class svRegistro extends HttpServlet {
         Matcher mAprendiz = pAprendiz.matcher(user.getCorreoInst());
         Matcher mInstructor = pInstructor.matcher(user.getCorreoInst());
         
-        int rol; // Setear el rol dependiendo del regex
+        int id_rol; // Setear el rol dependiendo del regex
         boolean insertado; // Setear el estado del usuario creado para poder redireccionarlo a las vistas
         int idUser; // Para obtener el id
         
@@ -50,11 +54,14 @@ public class svRegistro extends HttpServlet {
             
             try { // Manejo de errores
                 if (mAprendiz.matches()) { // Si el correo coincide con el regex del aprendiz 
-                    rol = 1; // Se le asignara el rol 1
-                    insertado = userDao.registrarUsuario(user, rol); // Se mandara el usuario para el registro de usuarios
+                    id_rol = 1; // Se le asignara el rol 1
+                    insertado = userDao.registrarUsuario(user, id_rol); // Se mandara el usuario para el registro de usuarios
                     idUser = userDao.obtenerId(user.getCorreoInst()); // Se mandara el correo del usuario y se obtendra el id del usuario para poder asociarlo con el perfil
                     user.setId_usuario(idUser); // Se setea el id del usuario en la clase usuario
-                    sesionId.setAttribute("UsuarioId", user); // Se atrapa el usuario con el nombre "UsuarioId"
+                    rol = rolDao.getIdRol(user);
+                    System.out.println(rol.getNombre_rol() + " Este es el nombre del rol");
+                    user.setId_rol_fk(rol);
+                    sesionId.setAttribute("UsuarioAprendiz", user); // Se atrapa el usuario con el nombre "UsuarioId"
                     
                     if (insertado != false) { // Verificacion si se creo el usuario
                         System.out.println("Se creo el usuario");
@@ -66,11 +73,11 @@ public class svRegistro extends HttpServlet {
                 }
                 else{
                     if (mInstructor.matches()) {
-                        rol = 2;
-                        insertado = userDao.registrarUsuario(user, rol);
+                        id_rol = 2;
+                        insertado = userDao.registrarUsuario(user, id_rol);
                         idUser = userDao.obtenerId(user.getCorreoInst());
                         user.setId_usuario(idUser);
-                        sesionId.setAttribute("UsuarioId", user);
+                        sesionId.setAttribute("UsuarioInstructor", user);
                         
                         if (insertado != false) {
                             System.out.println("Se creo el usuario instructor");
