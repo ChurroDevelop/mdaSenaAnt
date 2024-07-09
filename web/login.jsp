@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%--<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,12 +51,12 @@
     <form action="svLogin" class="validarFormulario grid" method="POST">
       <label class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <i class="fa-solid fa-envelope text-gray-400"></i>
-        <input type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional"
+        <input name="txtCorreo" type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional"
           autocomplete="off" autofocus required />
       </label>
       <label class="validarLabelContrasena bg-white text-mdaBlack input input-bordered flex items-center gap-2">
         <i class="fa-solid fa-lock text-gray-400"></i>
-        <input type="password" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off"
+        <input name="txtClave" type="text" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off"
           required />
       </label>
       <p class="text-sm text-right mt-1 text-mdaGreen hover:underline">

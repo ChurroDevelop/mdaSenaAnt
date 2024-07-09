@@ -49,6 +49,7 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
             ps.setString(2, user.getPassword()); // La segunda columna tomara la contraseña de manera que ya esta encriptada, la cual la buscara en la base de datos
             rs = ps.executeQuery(); // ejecuta la consulta
             if (rs.absolute(1)) { // Si encuentra el correo institucional y coinciden la contraseña 
+                System.out.println("Se encontro el usuario y se logeo");
                 accion = true; // devolvera true
             }
         } catch (Exception e) {

@@ -93,7 +93,7 @@ public class svRegistro extends HttpServlet {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Error en el usuario DAO");
+                System.out.println("Error en el usuario DAO ESTE");
             }
             
         }
