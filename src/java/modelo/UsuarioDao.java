@@ -4,6 +4,7 @@ import config.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import modelo.objetos.Rol;
 import modelo.objetos.Usuario;
 
 public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
@@ -108,5 +109,37 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
             this.desconectar(); // Metodo para desconectar la base de datos
         }
         return encontrado; // Retorna la variable encontrad, que depende del recorrido de todo el metodo
+    }
+    
+    // Metodo para obtener todos los datos del usuario
+    public Usuario getDataUser(Usuario user){
+        RolDAO rolDao = new RolDAO();
+        Usuario u = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            this.conectar();
+            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios";
+            ps = getCon().prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                u = new Usuario();
+                int idUser = rs.getInt("id_usuario");
+                String correo = rs.getString("correo_inst");
+                String password = rs.getString("password");
+                u.setCorreoInst(correo);
+                u.setId_usuario(idUser);
+                u.setPassword(password);
+                Rol rol = rolDao.getIdRol(user);
+                u.setId_rol_fk(rol);
+                System.out.println("Se pudo obtener todos los datos del usuario desde el Login");
+            }
+        } catch (Exception e) {
+            System.out.println("Error en obtener los datos del usuario: " + e.getMessage());
+        }
+        finally {
+            this.desconectar();
+        }
+        return u;
     }
 }

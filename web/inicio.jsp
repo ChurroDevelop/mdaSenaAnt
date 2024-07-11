@@ -1,5 +1,18 @@
-<%--<%@page import="modelo.objetos.Usuario"%>--%>
+<%@page import="modelo.objetos.Perfil"%>
+<%@page import="modelo.objetos.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    HttpSession sesion = request.getSession(false);
+    HttpSession sesionPerfil = request.getSession(false);
+    if (sesion == null || sesion.getAttribute("dataUser") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+    }
+    System.out.println("Entre al inicio jsp");
+    Perfil perfil = (Perfil)  sesionPerfil.getAttribute("dataPerfil");
+    Usuario user = (Usuario) sesion.getAttribute("dataUser");
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,6 +71,35 @@
       <div class="flex flex-col w-full">
         <div class="divider m-0 h-0"></div>
       </div>
+      
+      <%
+          if ("Aprendiz".equals(user.getId_rol_fk().getNombre_rol())) {
+      %>
+      
+      <!-- Botones navegación -->
+      <div>
+        <!-- Inicio -->
+        <a href="inicio.jsp">
+          <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-solid fa-house"></i>
+            Inicio
+          </button>
+        </a>
+        <a href="editarPerfil.jsp">
+          <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-regular fa-address-card"></i>
+            Perfil
+          </button>
+        </a>
+      </div>
+    </div>
+      
+      <%
+          } else if ("Instructor".equals(user.getId_rol_fk().getNombre_rol())) {
+      %>
+      
       <!-- Botones navegación -->
       <div>
         <!-- Inicio -->
@@ -83,7 +125,7 @@
             Notificaciones
           </button>
         </a>
-        <a href="views/instructor/editarPerfil.jsp">
+        <a href="editarPerfil.jsp">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
             <i class="fa-regular fa-address-card"></i>
@@ -92,6 +134,50 @@
         </a>
       </div>
     </div>
+    
+    <%
+      } else if ("Monitor".equals(user.getId_rol_fk().getNombre_rol())) {
+    %>
+    
+     <!-- Botones navegación -->
+      <div>
+        <!-- Inicio -->
+        <a href="inicio.jsp">
+          <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-solid fa-house"></i>
+            Inicio
+          </button>
+        </a>
+        <!-- Crear post -->
+        <a href="views/instructor/asignarMonitor.jsp">
+          <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-solid fa-user-plus"></i>
+            Crear post
+          </button>
+        </a>
+        <a href="#">
+          <button id="showModal-2"
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-solid fa-bell"></i>
+            Notificaciones
+          </button>
+        </a>
+        <a href="editarPerfil.jsp">
+          <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-regular fa-address-card"></i>
+            Perfil
+          </button>
+        </a>
+      </div>
+    </div>
+        
+    <%
+        }
+    %>
+    
     <!-- Barra notificaciones -->
     <nav id="modal-2" class="hidden bg-white p-7 shadow-md absolute top-0 left-full h-screen w-full">
       <div class="grid gap-y-5">
@@ -114,7 +200,7 @@
     </nav>
   </nav>
   <div id="modal-2__background" class="hidden bg-mdaBlack_400 w-full min-h-screen absolute"></div>
-
+  
   <!-- Contenedor para los artículos -->
   <section class="m-auto flex w-full max-w-screen-2xl min-h-screen justify-center p-5 gap-5 flex-wrap content-start">
     <!-- Artículo -->
@@ -134,7 +220,7 @@
   </section>
   <!-- Indicador de rol -->
   <button class="bg-white btn btn-sm border-none text-mdaBlack absolute top-0 right-0 m-2.5 hover:bg-white">
-    <i class="fa-solid fa-user"></i> Instuctor
+    <i class="fa-solid fa-user"></i> <%= user.getId_rol_fk().getNombre_rol() %>
   </button>
 
   <!-- Enlace para manejo del DOM -->

@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%--<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,13 +51,11 @@
     <form action="svLogin" class="validarFormulario grid" method="POST">
       <label class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <i class="fa-solid fa-envelope text-gray-400"></i>
-        <input name="txtCorreo" type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional"
-          autocomplete="off" autofocus required />
+        <input name="txtCorreo" type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional" autocomplete="off" autofocus />
       </label>
       <label class="validarLabelContrasena bg-white text-mdaBlack input input-bordered flex items-center gap-2">
         <i class="fa-solid fa-lock text-gray-400"></i>
-        <input name="txtClave" type="text" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off"
-          required />
+        <input name="txtClave" type="text" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off" />
       </label>
       <p class="text-sm text-right mt-1 text-mdaGreen hover:underline">
         <a href="crearPerfil.jsp">¿Olvidó su contraseña?</a>
@@ -71,6 +69,7 @@
         ¿Aún no posee una cuenta?
         <a class="text-mdaGreen hover:underline" href="registro.jsp">Regístrese</a>
       </p>
+    </div>
   </section>
   <!-- Enlace para manejo del DOM -->
   <script src="scripts/script.js"></script>
