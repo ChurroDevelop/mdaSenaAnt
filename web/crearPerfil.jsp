@@ -48,38 +48,38 @@
         </h1>
       </div>
     </div>
-    <form action="svPerfil" class="validarFormulario grid" method="POST">
+    <form action="svPerfil" class="validarFormulario grid" method="POST" id="formularioPerfil">
       <!-- Nombre -->
-      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
+      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4" id="labelName">
         <i class="fa-solid fa-user text-gray-400"></i>
         <input id="inputNombre" type="text" class="grow text-mdaBlack" placeholder="Nombre" autocomplete="off" autofocus
-               required name="txtNombre"/>
+               name="txtNombre"/>
       </label>
       <!-- Apellidos -->
-      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
+      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4" id="labelLast">
         <i class="fa-solid fa-user text-gray-400"></i>
-        <input id="inputApellidos" type="text" class="grow text-mdaBlack" placeholder="Apellidos" autocomplete="off"
-               required name="txtApellidos"/>
+        <input id="inputApellido" type="text" class="grow text-mdaBlack" placeholder="Apellidos" autocomplete="off"
+               name="txtApellidos"/>
       </label>
       <!-- Número de documento -->
-      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
+      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4" id="labelDocumento">
         <i class="fa-solid fa-id-card text-gray-400"></i>
         <input id="inputDocumento" type="text" class="grow text-mdaBlack" placeholder="Número de documento"
-               autocomplete="off" required maxlength="20" name="txtDocumento"/>
+               autocomplete="off" maxlength="20" name="txtDocumento"/>
       </label>
       <!-- Centro de formación -->
-      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2">
+      <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2" id="labelCentro">
         <i class="fa-solid fa-hospital text-gray-400"></i>
         <input id="inputCentro" type="text" class="grow text-mdaBlack" placeholder="Centro de formación"
                autocomplete="off" name="txtCentro"/>
       </label>
-      <button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
+      <button class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen" type="submit" id="btnForm">
         Crear perfil
       </button>
     </form>
   </section>
   <!-- Enlace para manejo del DOM -->
-  <script src="../scripts/script.js"></script>
+  <script src="../scripts/validacionesPerfil.js"></script>
 </body>
 
 </html>

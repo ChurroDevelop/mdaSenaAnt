@@ -36,7 +36,7 @@
     <div class="flex flex-row w-full h-20 mb-2.5">
       <!-- Logo -->
       <div class="grid flex-grow place-items-center justify-end w-full">
-        <img class="w-12" src=images/LogoNegro.svg" alt="">
+        <img class="w-12" src="images/LogoNegro.svg" alt="">
       </div>
       <!-- HR -->
       <div class="divider divider-horizontal"></div>
@@ -48,24 +48,24 @@
       </div>
     </div>
     <!-- Formulario -->
-    <form action="svCodigo" class="validarFormulario grid" method="POST">
+    <form action="svCodigo" class="validarFormulario grid" method="POST" id="formularioRegistro">
       <!-- Input correo instittcional -->
-      <label class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
+      <label class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4" id="labelCorreo">
         <i class="fa-solid fa-envelope text-gray-400"></i>
         <input type="text" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional"
-               autocomplete="off" autofocus required name="txtCorreo"/>
+               autocomplete="off" name="txtCorreo" id="inputCorreo"/>
       </label>
       <!-- Input contraseña -->
-      <label class="validarLabelContrasena bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
+      <label class="validarLabelContrasena bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4" id="labelClave">
         <i class="fa-solid fa-lock text-gray-400"></i>
         <input type="password" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off"
-               required name="txtPass"/>
+               name="txtPass" id="inputClave"/>
       </label>
       <!-- Input confirmar contraseña -->
-      <label class="validarLabelContrasena2 bg-white text-mdaBlack input input-bordered flex items-center gap-2">
+      <label class="validarLabelContrasena2 bg-white text-mdaBlack input input-bordered flex items-center gap-2" id="labelConfirm">
         <i class="fa-solid fa-lock text-gray-400"></i>
         <input type="password" class="validarContrasena2 grow text-mdaBlack" placeholder="Confirmar contraseña"
-               autocomplete="off" required name="txtConfirm"/>
+               autocomplete="off" name="txtConfirm" id="inputConfirm"/>
       </label>
       <button type="submit" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
         Registrar
@@ -78,7 +78,7 @@
       </p>
   </section>
   <!-- Enlace para manejo del DOM -->
-  <script src="scripts/script.js"></script>
+  <script src="scripts/registro.js"></script>
 </body>
 
 </html>

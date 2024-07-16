@@ -34,11 +34,11 @@
       Ingrese el código de verificación <br />
       enviado al correo registrado
     </p>
-    <form action="svRegistro" class="validarFormulario grid" method="POST">
-      <label class="validarLabelCodigo bg-white text-mdaBlack input input-bordered flex items-center gap-2">
+    <form action="svRegistro" class="validarFormulario grid" method="POST" id="formularioCodigo">
+        <label class="validarLabelCodigo bg-white text-mdaBlack input input-bordered flex items-center gap-2" id="labelCodigo">
         <i class="fa-solid fa-unlock-keyhole text-gray-400"></i>
         <input type="text" class="validarCodigo grow text-mdaBlack" placeholder="Código de verificación" autofocus
-               required name="txtCodigo"/>
+               name="txtCodigo" id="inputCodigo" maxlength="6"/>
       </label>
       <button type="submit" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
         Verificar
@@ -46,7 +46,7 @@
     </form>
   </section>
   <!-- Enlace para manejo del DOM -->
-  <script src="scripts/script.js"></script>
+  <script src="scripts/autenticacion.js"></script>
 </body>
 
 </html>
