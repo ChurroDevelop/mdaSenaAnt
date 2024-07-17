@@ -1,4 +1,19 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="modelo.objetos.Perfil"%>
+<%@page import="modelo.objetos.Usuario"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    HttpSession sesion = request.getSession(false);
+    HttpSession sesionPerfil = request.getSession(false);
+    if ((sesion == null || sesion.getAttribute("dataUser") == null)) {
+            System.out.println("Error en la vista de editar perfil");
+            response.sendRedirect("login.jsp");
+            return;
+    }
+    Perfil perfil = (Perfil) sesionPerfil.getAttribute("dataPerfil");
+    Usuario user = (Usuario) sesion.getAttribute("dataUser");
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,7 +86,7 @@
         <a href="asignarMonitor.jsp">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-solid fa-user-plus"></i>
+            <i class="fa-solid fa-plus-minus"></i>
             Asignar monitor
           </button>
         </a>
@@ -82,7 +97,7 @@
             Notificaciones
           </button>
         </a>
-        <a href="editarPerfil.jsp">
+        <a href="../../editarPerfil.jsp">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
             <i class="fa-regular fa-address-card"></i>

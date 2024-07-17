@@ -15,20 +15,16 @@ const labelCentro = document.querySelector("#labelCentro");
 
 // Evento para que los input tipo text se puedan ingresar nada mas letras
 let inputText = (event) => {
-    let input = event.target;
-    let valor = input.value;
-    let regex = /^[a-zA-ZñÑ\s]+$/g;
-    let cambiar = valor.replace(regex, "");
-    input.value = cambiar;
+    if (!/[A-Za-zàáâãéêíóôõúüñÑ\s]/.test(event.key)) {
+        event.preventDefault();
+    }
 };
 
 // Funcion para que los input tipo numbre se puedan ingresar nada mas numeros
 let inputNumber = (event) => {
-    let input = event.target;
-    let valor = input.value;
-    let regex = /[^0-9]/g;
-    let cambiar = valor.replace(regex, "");
-    input.value = cambiar;
+    if (!/[0-9]/.test(event.key)) {
+        event.preventDefault();
+    }
 };
 
 // Funcion para validar todos los input dentro del formulario
@@ -96,7 +92,7 @@ let validarForm = (event) => {
 
 // Eventos para el formulario y los input
 form.addEventListener("submit", validarForm);
-inputName.addEventListener("input", inputText);
-inputLast.addEventListener("input", inputText);
-inputCentro.addEventListener("input", inputText);
-inputDocumento.addEventListener("input", inputNumber);
+inputName.addEventListener("keypress", inputText);
+inputLast.addEventListener("keypress", inputText);
+inputCentro.addEventListener("keypress", inputText);
+inputDocumento.addEventListener("keypress", inputNumber);

@@ -83,7 +83,7 @@ public class PerfilDAO extends Conexion{
             ps.setInt(5, p.getId_perfil());
             int modificado = ps.executeUpdate();
             if (modificado > 0) {
-                
+                System.out.println("Usuario modificado");
                 return per;
             }
         } catch (Exception e) {

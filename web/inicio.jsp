@@ -9,7 +9,6 @@
             response.sendRedirect("login.jsp");
             return;
     }
-    System.out.println("Entre al inicio jsp");
     Perfil perfil = (Perfil)  sesionPerfil.getAttribute("dataPerfil");
     Usuario user = (Usuario) sesion.getAttribute("dataUser");
 %>
@@ -114,7 +113,7 @@
         <a href="views/instructor/asignarMonitor.jsp">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-solid fa-user-plus"></i>
+            <i class="fa-solid fa-plus-minus"></i>
             Asignar monitor
           </button>
         </a>

@@ -52,7 +52,7 @@
       <!-- Nombre -->
       <label class="bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4" id="labelName">
         <i class="fa-solid fa-user text-gray-400"></i>
-        <input id="inputNombre" type="text" class="grow text-mdaBlack" placeholder="Nombre" autocomplete="off" autofocus
+        <input id="inputNombre" type="text" class="grow text-mdaBlack" placeholder="Nombre" autocomplete="off"
                name="txtNombre"/>
       </label>
       <!-- Apellidos -->
@@ -79,7 +79,7 @@
     </form>
   </section>
   <!-- Enlace para manejo del DOM -->
-  <script src="../scripts/validacionesPerfil.js"></script>
+  <script src="scripts/validacionesPerfil.js"></script>
 </body>
 
 </html>

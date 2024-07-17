@@ -4,6 +4,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    
     HttpSession sesion = request.getSession(false);
     HttpSession sesionPerfil = request.getSession(false);
     if ((sesion == null || sesion.getAttribute("dataUser") == null)) {

@@ -41,7 +41,7 @@ public class svCodigo extends HttpServlet {
         String codigo = mensaje.getRandom(); // Metodo de mensaje par apoder obtener el numero random que sera el codigo para la autenticacion
         
         final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b"; // Regex para el aprendiz
-        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@misena\\.edu\\.co\\b"; // Regex para el instructor
+        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@sena\\.edu\\.co\\b"; // Regex para el instructor
         
         final Pattern pAprendiz = Pattern.compile(expAprendiz); // Compilador para el regex del aprendiz
         final Pattern pInstructor = Pattern.compile(expInstructor); // Compilador para el regex del instructor
@@ -56,6 +56,7 @@ public class svCodigo extends HttpServlet {
             user.setCorreoInst(correo); // Se setea el correo institucional
             user.setPassword(encript); // Se setea la contraseña encriptada
             user.setCodigo(codigo); // Se setea el codigo aleatorio
+            System.out.println(codigo);
             
             boolean encontrado = userDao.buscarUser(user); // Hace la validacion si existe o no un usuario en la base de datos
             

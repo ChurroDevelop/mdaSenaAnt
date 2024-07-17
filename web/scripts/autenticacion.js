@@ -8,12 +8,10 @@ const inputCodigo = document.querySelector("#inputCodigo");
 const labelCodigo = document.querySelector("#labelCodigo");
 
 // Funcion para que permita ingresar nada mas numeros
-let inputNumber = () => {
-    let input = event.target;
-    let valor = input.value;
-    let regex = /[^0-9]/g;
-    let cambiar = valor.replace(regex, "");
-    input.value = cambiar;
+let inputNumber = (event) => {
+    if (!/[0-9]/.test(event.key)) {
+        event.preventDefault();
+    }
 };
 
 // Funcion para validar el formulario
@@ -44,4 +42,4 @@ let validarForm = (event) => {
 
 // Manejo de eventos para el formulario y el input
 form.addEventListener("submit", validarForm);
-inputCodigo.addEventListener("input", inputNumber);
+inputCodigo.addEventListener("keypress", inputNumber);

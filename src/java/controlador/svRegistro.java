@@ -38,7 +38,7 @@ public class svRegistro extends HttpServlet {
         String autenticacion = request.getParameter("txtCodigo"); // Atrapa el codigo de verificacion que se le dio al usuario en el formulario
         
         final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b"; // Regex para el aprendiz
-        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@misena\\.edu\\.co\\b"; // Regex para el instructor
+        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@sena\\.edu\\.co\\b"; // Regex para el instructor
         
         final Pattern pAprendiz = Pattern.compile(expAprendiz); // Compilador para el regex del aprendiz
         final Pattern pInstructor = Pattern.compile(expInstructor); // Compilador para el regex del instructor
@@ -77,11 +77,14 @@ public class svRegistro extends HttpServlet {
                         insertado = userDao.registrarUsuario(user, id_rol);
                         idUser = userDao.obtenerId(user.getCorreoInst());
                         user.setId_usuario(idUser);
+                        rol = rolDao.getIdRol(user);
+                        System.out.println(rol.getNombre_rol() + " Este es el nombre del rol");
+                        user.setId_rol_fk(rol);
                         sesionId.setAttribute("UsuarioInstructor", user);
                         
                         if (insertado != false) {
                             System.out.println("Se creo el usuario instructor");
-                            response.sendRedirect("crearPerfil.jps");
+                            response.sendRedirect("crearPerfil.jsp");
                         }
                         else{
                             System.out.println("Hubo problemas en el usuario DAO");
