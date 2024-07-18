@@ -42,20 +42,21 @@ public class svLogin extends HttpServlet {
         u.setCorreoInst(correo); // Se le setea el correo institucional al usuario
         u.setPassword(encript); // Se le setea la contraseña encriptada al usuario
         
+        System.out.println("Usuario inicial: " + u.getCorreoInst());
+        
         Usuario newUser = new Usuario(); // Se instancia un nuevo usuario para obtener todos los datos segun el registro
         newUser = userDao.getDataUser(u); // Se le asigna a newUser, el metodo ya que este metodo retorna un objeto usuario
         
+        System.out.println(newUser.getCorreoInst());
+        
         profile = profileDao.dataPerfil(newUser);
-        System.out.println(profile.getNombre_usuario());
         
         if (userDao.autenticacion(u) == true) { // Si la autenticacion devuelve true
             sesion.setAttribute("dataUser", newUser); // Se atrapara el id del usuario en una sesion
             sesionPerfil.setAttribute("dataPerfil", profile); 
-            System.out.println("Mandando al jsp"); // Mensaje para saber si se mando al inicio o no
             response.sendRedirect("inicio.jsp"); // Lo redirije al inicio
         }
         else{
-            System.out.println("No se encuentra"); // Arroja mensaje por consola de que no se encuentra el usuario registrado
             response.sendRedirect("login.jsp");
         }
     }

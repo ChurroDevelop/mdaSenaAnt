@@ -119,8 +119,9 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
         ResultSet rs = null;
         try {
             this.conectar();
-            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios";
+            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios WHERE correo_inst = ?";
             ps = getCon().prepareStatement(sql);
+            ps.setString(1, user.getCorreoInst());
             rs = ps.executeQuery();
             if (rs.next()) {
                 u = new Usuario();

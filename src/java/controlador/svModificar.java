@@ -18,7 +18,6 @@ import modelo.objetos.Perfil;
 @WebServlet(name = "svModificar", urlPatterns = {"/svModificar"})
 public class svModificar extends HttpServlet {
     
-    Perfil p = new Perfil();
     PerfilDAO pDao = new PerfilDAO();
 
     @Override
@@ -32,21 +31,30 @@ public class svModificar extends HttpServlet {
         HttpSession sesion = request.getSession();
         request.setCharacterEncoding("UTF-8");
         
+        Perfil p = (Perfil) sesion.getAttribute("dataPerfil");
+        
         String idPerfil = request.getParameter("txtIdPerfil");
         String nombre = request.getParameter("txtNombre");
         String apellido = request.getParameter("txtApellido");
         String numero = request.getParameter("txtDocumento");
         String centro = request.getParameter("txtCentro");
         
+        int idProfile = Integer.parseInt(idPerfil);
+        
+        p.setId_perfil(idProfile);
         p.setNombre_usuario(nombre);
         p.setApellido_usuario(apellido);
-        p.setNombre_usuario(nombre);
+        p.setNum_documento(numero);
         p.setCentro_formacion(centro);
         
-        Perfil newPerfil = new Perfil();
-        newPerfil = pDao.actualizarPerfil(p);
-        
-        int idProfile = Integer.parseInt(idPerfil);
+        boolean isUpdate = pDao.actualizarPerfil(p);
+        if (isUpdate) {
+            System.out.println("Se modifico el usuario");
+            sesion.getAttribute("user");
+            response.sendRedirect("editarPerfil.jsp");
+        } else {
+            System.out.println("No se envio al metodo de modificar");
+        }
         
     }
 }

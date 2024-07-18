@@ -1,4 +1,4 @@
-package modelo;
+    package modelo;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -47,6 +47,7 @@ public class PerfilDAO extends Conexion{
             if (rs.next()) {
                 profile = new Perfil();
                 int id_perfil = rs.getInt("id_perfil");
+                System.out.println(user.getCorreoInst() + " Correo");
                 String nombre = rs.getString("nombre_usuario");
                 String apellido = rs.getString("apellido_usuario");
                 String numero = rs.getString("num_documento");
@@ -68,12 +69,13 @@ public class PerfilDAO extends Conexion{
         return profile;
     }
     
-    public Perfil actualizarPerfil(Perfil p){
-        Perfil per = null;
+    public boolean actualizarPerfil(Perfil p){
+        boolean estado= false;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             this.conectar();
+            System.out.println("Preparando consulta");
             String sql = "UPDATE tb_perfil SET nombre_usuario = ?, apellido_usuario = ?, num_documento = ?, centro_formacion = ? WHERE id_perfil = ?";
             ps = getCon().prepareStatement(sql);
             ps.setString(1, p.getNombre_usuario());
@@ -81,16 +83,18 @@ public class PerfilDAO extends Conexion{
             ps.setString(3, p.getNum_documento());
             ps.setString(4, p.getCentro_formacion());
             ps.setInt(5, p.getId_perfil());
+            System.out.println(p.getId_perfil());
             int modificado = ps.executeUpdate();
             if (modificado > 0) {
                 System.out.println("Usuario modificado");
-                return per;
+                estado = true;
+                return estado;
             }
         } catch (Exception e) {
             System.out.println("Error actualizando el perfil: " + e.getMessage());
         } finally {
             this.desconectar();
         }
-        return per;
+        return estado;
     }
 }

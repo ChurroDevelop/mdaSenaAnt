@@ -48,19 +48,19 @@
         </h1>
       </div>
     </div>
-    <form action="svLogin" class="validarFormulario grid" method="POST">
-      <label class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
+    <form action="svLogin" class="validarFormulario grid" method="POST" id="formLogin">
+      <label id="labelCorreo" class="validarLabelInput bg-white text-mdaBlack input input-bordered flex items-center gap-2 mb-4">
         <i class="fa-solid fa-envelope text-gray-400"></i>
-        <input name="txtCorreo" type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional" autocomplete="off" autofocus />
+        <input name="txtCorreo" id="inputCorreo" type="email" class="validarCorreo grow text-mdaBlack" placeholder="Correo institucional" autocomplete="off" autofocus />
       </label>
-      <label class="validarLabelContrasena bg-white text-mdaBlack input input-bordered flex items-center gap-2">
+      <label id="labelClave" class="validarLabelContrasena bg-white text-mdaBlack input input-bordered flex items-center gap-2">
         <i class="fa-solid fa-lock text-gray-400"></i>
-        <input name="txtClave" type="text" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off" />
+        <input name="txtClave" id="inpuClave" type="password" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off" />
       </label>
       <p class="text-sm text-right mt-1 text-mdaGreen hover:underline">
         <a href="crearPerfil.jsp">¿Olvidó su contraseña?</a>
       </p>
-      <button type="submit" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
+      <button id="btnForm" type="submit" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
         Ingresar
       </button>
     </form>
@@ -72,7 +72,7 @@
     </div>
   </section>
   <!-- Enlace para manejo del DOM -->
-  <script src="scripts/script.js"></script>
+  <script src="scripts/login.js"></script>
 </body>
 
 </html>
