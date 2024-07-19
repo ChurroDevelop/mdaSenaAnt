@@ -15,6 +15,8 @@ const labelConfirm = document.querySelector("#labelConfirm");
 const regexAprendiz = /^[\w\.-]+@soy\.sena\.edu\.co$/;
 const regexInstructor = /^[\w\.-]+@sena\.edu\.co$/;
 
+
+
 // Funcion para validar el formulario
 let validarForm = (event) => {
     // Estado para manejar el envio del formulario

@@ -21,6 +21,7 @@ public class svCerrarSesion extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession sesion = request.getSession(false);
+        System.out.println(sesion);
         if (sesion == null) {
             sesion.invalidate();
         }

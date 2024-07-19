@@ -11,6 +11,7 @@ const regexAprendiz = /^[\w\.-]+@soy\.sena\.edu\.co$/;
 const regexInstructor = /^[\w\.-]+@sena\.edu\.co$/;
 
 let validarForm = (event) => {
+    let $sesion = true;
     let estadoForm = true;
     
     if ($inputCorreo.value.trim() === '') {
@@ -18,18 +19,6 @@ let validarForm = (event) => {
         $labelCorreo.classList.remove("border-green-500", "border-2");
         $labelCorreo.classList.add("border-red-500", "border-2");
         estadoForm = false;
-    }
-    else {
-        if (!regexAprendiz.test($inputCorreo.value) || !regexInstructor.test($inputCorreo.value)) {
-            console.log("Debe que ser un correo institucional");
-            $labelCorreo.classList.remove("border-green-500", "border-2");
-            $labelCorreo.classList.add("border-red-500", "border-2");
-            estadoForm = false;
-        }
-        else {
-            $labelCorreo.classList.remove("border-red-500", "border-2");
-            $labelCorreo.classList.add("border-green-500", "border-2");
-        }
     }
     
     if ($inputClave.value.trim() === '') {
@@ -43,6 +32,7 @@ let validarForm = (event) => {
         event.preventDefault();
     }
     else {
+        localStorage.setItem("sesion", $sesion);
         console.log("No se ha enviado el formulario");
     }
 };

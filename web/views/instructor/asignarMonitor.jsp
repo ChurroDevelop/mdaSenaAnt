@@ -200,7 +200,7 @@
   <!-- Indicador de rol -->
 
   <!-- Enlace para manejo del DOM -->
-  <script src="../../scripts/script.js"></script>
+  <script src="../../scripts/instructor.js"></script>
 </body>
 
 </html>

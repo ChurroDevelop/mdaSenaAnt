@@ -223,7 +223,7 @@
   </button>
 
   <!-- Enlace para manejo del DOM -->
-  <script src="scripts/script.js"></script>
+  <script src="scripts/inicio.js"></script>
 </body>
 
 </html>

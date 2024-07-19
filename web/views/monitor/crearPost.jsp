@@ -142,7 +142,7 @@
   </button>
 
   <!-- Enlace para manejo del DOM -->
-  <script src="../../scripts/script.js"></script>
+  <script src="../../scripts/monitor.js"></script>
 </body>
 
 </html>

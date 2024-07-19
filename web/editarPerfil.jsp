@@ -204,13 +204,13 @@
         Actualiza tus datos personales
       </p>
       <!-- Foto de perfil -->
-      <div class="flex items-center flex-col mb-4">
+<!--      <div class="flex items-center flex-col mb-4">
         <h2 class="text-mdaBlack text-center mb-1">Foto de perfil</h2>
         <img class="w-24" src="../../images/fotoPerfil.svg" alt="" />
-      </div>
-      <form action="svModificar" class="grid w-full" method="POST">
+      </div>-->
+    <form action="svModificar" class="grid w-full" method="POST" id="formCerrar">
           
-        <p class="text-center text-mdaBlack mb-4">Datos básicos del perfil</p>
+        <!--<p class="text-center text-mdaBlack mb-4">Datos básicos del perfil</p>-->
         <!-- Id del perfil -->
         <input type="number" name="txtIdPerfil" class="hidden" value="<%= perfil.getId_perfil() %>">
         <!-- Nombre -->
@@ -237,11 +237,14 @@
           Modificar datos
         </button>
       </form>
-      <form action="svCerrarSesion" method="POST" class="grid w-full">
+        <a id="btnCerrar" href="login.jsp" class="btn bg-transparent border border-mdaRed text-mdaRed mt-2 hover:bg-mdaRed hover:text-mdaWhite hover:border-mdaRed">
+            Cerrar session
+        </a>
+<!--        <form action="svCerrarSesion" method="POST" class="grid w-full">
           <button class="btn bg-transparent border border-mdaRed text-mdaRed mt-2 hover:bg-mdaRed hover:text-mdaWhite hover:border-mdaRed" type="submit">
                 Cerrar sesion
           </button>
-      </form>
+      </form>-->
     </section>
   </section>
   <!-- Indicador de rol -->
@@ -250,7 +253,7 @@
   </button>
 
   <!-- Enlace para manejo del DOM -->
-  <script src="../../scripts/script.js"></script>
+  <script src="scripts/cerrar.js"></script>
 </body>
 
 </html>
