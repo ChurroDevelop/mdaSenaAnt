@@ -26,9 +26,9 @@ public class svBuscarAprendiz extends HttpServlet {
             throws ServletException, IOException {
         String numero = request.getParameter("txtNumero");
         System.out.println(numero);
-//        JsonObject info = pDao.buscarAprendiz(numero);
-//        response.setContentType("application/json");
-//        response.getWriter().write(info.toString());
+        JsonObject info = pDao.buscarAprendiz(numero);
+        response.setContentType("application/json");
+        response.getWriter().write(info.toString());
         
         
     }

@@ -141,7 +141,7 @@
           ✕
         </button>
       </div>
-        <form action="/svBuscarAprendiz" method="POST" id="buscarForm">
+        <form action="" method="" id="buscarForm">
             <label class="input input-bordered flex items-center gap-2 bg-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
                   <path fill-rule="evenodd"
@@ -213,24 +213,29 @@
   <script src="../../scripts/instructor.js"></script>
   <script src="../../scripts/script.js"></script>
   <script>
-      $(document).ready(function () {
-          $("#buscarForm").on("submit", function (event) {
-              event.preventDefault();
-              let numDocumento = $("#numAprendiz").val();
-              console.log(numDocumento);
-              $.post("/svBuscarAprendiz", {numDocumento: numDocumento}, function(data) {
-                  console.log(data);
-                  if (data) {
-                      $("#infoAprendiz").show();
-                      $("#detallesAprendiz").html(data.details);
-                      $("#userId").val(data.userId);
-                    }
-                    else {
-                        $("#infoAprendiz").hide();
-                        alert("Aprendiz no encontrado");
-                    }
-                }, "json");
-          });
+      document.getElementById("buscarForm").addEventListener("submit", function(event) {
+        event.preventDefault(); 
+        let numeroDocumento = document.getElementById("numAprendiz").value;
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', "/svBuscarAprendiz", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencode");
+        alert(numeroDocumento);
+        xhr.onload = function () {
+            console.log(xhr.status);
+            if (xhr.status === 200) {
+                let response = JSON.parse(xhr.response);
+                console.log(response);
+                if (response) {
+                   document.getElementById("infoAprendiz");
+                   document.getElementById("detalles aprendiz").innerHTML = response.details;
+                }
+                else {
+                   console.log("No se encontro el usuario");
+                }
+            };
+        };
+        xhr.send("txtNumero="+numeroDocumento);
+
       });
   </script>
 </body>
