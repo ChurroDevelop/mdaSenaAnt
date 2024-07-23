@@ -6,6 +6,7 @@ import modelo.objetos.Perfil;
 import config.Conexion;
 import java.sql.ResultSet;
 import modelo.objetos.Usuario;
+import com.google.gson.JsonObject;
 
 public class PerfilDAO extends Conexion{
     // Metodo para realizar el nuevo registro del perfil con el usuario asociado
@@ -96,5 +97,38 @@ public class PerfilDAO extends Conexion{
             this.desconectar();
         }
         return estado;
+    }
+    
+    public JsonObject buscarAprendiz(String numDocumento){
+     JsonObject informacionAprendiz = new JsonObject();
+     PreparedStatement ps = null;
+     ResultSet rs = null;
+        System.out.println("Preparando la consulta");
+        try {
+            this.conectar();
+            String sql = "SELECT tb_perfil.nombre_usuario, tb_perfil.apellido_usuario, tb_perfil.num_documento, tb_perfil.centro_formacion, tb_usuarios.id_usuario FROM tb_perfil JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario WHERE tb_perfil.num_documento = ? AND tb_usuarios.id_rol_fk = 1;";
+            ps = getCon().prepareStatement(sql);
+            System.out.println("Agregando el numero a la consulta");
+            ps.setString(1, numDocumento);
+            rs = ps.executeQuery();
+            System.out.println("Numero de documento dentro del perfilDao: " + numDocumento);
+            System.out.println("Intentando encontrar un usuario");
+            if (rs.next()) {
+                System.out.println("agregando al JSON OBJECT");
+                informacionAprendiz.addProperty("details", "Nombre: " + rs.getString("nombre_usuario") + "<br>"
+                + "Apellido: " + rs.getString("apellido_usuario") + "<br>" + "Numero de documento: " + rs.getString("num_documento")
+                + "<br>" + "Centro de formacion" + rs.getString("centro_formacion")
+                );
+                informacionAprendiz.addProperty("userId", rs.getInt("id_usuario"));
+            }
+            else {
+                System.out.println("No se pudo agregar ni chimba");
+            }
+        } catch (Exception e) {
+            System.out.println("Error buscando el aprendiz");
+        } finally {
+            this.desconectar();
+        }
+     return informacionAprendiz;
     }
 }

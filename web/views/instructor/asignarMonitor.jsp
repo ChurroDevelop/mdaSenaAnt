@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <title>MDA Sena - Asignar monitor</title>
 </head>
 
@@ -140,17 +141,26 @@
           ✕
         </button>
       </div>
-      <form action="">
-        <label class="input input-bordered flex items-center gap-2 bg-white">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
-            <path fill-rule="evenodd"
-              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-              clip-rule="evenodd" />
-          </svg>
-          <input type="text" class="grow text-mdaBlack" placeholder="Search" />
-        </label>
-        <button class="btn bg-mdaGreen border-none text-white hover:bg-mdaGreen w-full mt-4">Agregar</button>
-      </form>
+        <form action="/svBuscarAprendiz" method="POST" id="buscarForm">
+            <label class="input input-bordered flex items-center gap-2 bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
+                  <path fill-rule="evenodd"
+                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                    clip-rule="evenodd" />
+                </svg>
+                <input type="text" class="grow text-mdaBlack" placeholder="Search" id="numAprendiz" name="txtNumero"/>
+            </label>
+            <button class="btn bg-mdaGreen border-none text-white hover:bg-mdaGreen w-full mt-4" type="submit">Agregar</button>
+        </form>
+        <div id="infoAprendiz">
+            <p id="detallesAprendiz"></p>
+<!--            <form id="cambiarRol" action="">
+                <input type="hidden" id="userId" name="userId">
+                <button type="submit">
+                    Cambiar rol
+                </button>
+            </form>-->
+        </div>
     </article>
   </section>
 
@@ -166,14 +176,14 @@
         </button>
       </div>
       <!-- Buscar monitor -->
-      <form action="">
+      <form action="" method="">
         <label class="input input-bordered flex items-center gap-2 bg-white">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
             <path fill-rule="evenodd"
               d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
               clip-rule="evenodd" />
           </svg>
-          <input type="text" class="grow text-mdaBlack" placeholder="Search" />
+          <input type="text" class="grow text-mdaBlack" placeholder="Search"/>
         </label>
       </form>
       <!-- HR -->
@@ -201,6 +211,28 @@
 
   <!-- Enlace para manejo del DOM -->
   <script src="../../scripts/instructor.js"></script>
+  <script src="../../scripts/script.js"></script>
+  <script>
+      $(document).ready(function () {
+          $("#buscarForm").on("submit", function (event) {
+              event.preventDefault();
+              let numDocumento = $("#numAprendiz").val();
+              console.log(numDocumento);
+              $.post("/svBuscarAprendiz", {numDocumento: numDocumento}, function(data) {
+                  console.log(data);
+                  if (data) {
+                      $("#infoAprendiz").show();
+                      $("#detallesAprendiz").html(data.details);
+                      $("#userId").val(data.userId);
+                    }
+                    else {
+                        $("#infoAprendiz").hide();
+                        alert("Aprendiz no encontrado");
+                    }
+                }, "json");
+          });
+      });
+  </script>
 </body>
 
 </html>

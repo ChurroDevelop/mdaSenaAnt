@@ -7,4 +7,4 @@ let comprobar = () => {
 
 setInterval(() => {
     comprobar();
-}, 1000);
+}, 200);

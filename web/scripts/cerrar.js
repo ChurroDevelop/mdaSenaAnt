@@ -10,7 +10,7 @@ let comprobar = () => {
 
 setInterval(() => {
     comprobar();
-}, 1000);
+}, 200);
 
 $btnCerrar.addEventListener("click", function cerrar(){
     console.log($sesion + "hola");
