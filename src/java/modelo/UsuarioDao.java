@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import modelo.objetos.Rol;
 import modelo.objetos.Usuario;
 
-public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
+public class UsuarioDao extends Conexion { // Hereda todo de la clase Conexion
 
     // Metodo publico que retornara true o false, recibira como parametros un objeto usuario y el rol que se esta seteando en el Servlet de Registro
-    public boolean registrarUsuario(Usuario user, int id_rol) throws SQLException{
+    public boolean registrarUsuario(Usuario user, int id_rol) throws SQLException {
         boolean insertado = false; // Por defecto retornara false
         PreparedStatement ps = null; // PreparedStatement para el manejo de los scripts de SQL
         try { // Manejo de excepciones
@@ -19,7 +19,7 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
             IMPORTANTE:
                 Dependiendo la cantidad de columnas a la cual le vamos a agregar los valores, en el values se colocan signos de interrogacion es decir
                 En este caso se estan manejando que se van a insertar 3 datos, entonces de colocan 3 signos de interrogacion, si simplemente fuera 1 solo 1 signo de interrogacion
-            */
+             */
             String sqlUser = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES (?,?,?)"; // Se prepara en String el script que se va a ejecutar, de acuerdo con la base de datos
             ps = getCon().prepareStatement(sqlUser); // Compila y prepara la consulta como codigo SQL
             ps.setString(1, user.getCorreoInst());  // Se setea la primera columna como String, dependiendo de la base de datos
@@ -31,7 +31,7 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
             System.out.println("Usuario creado");
         } catch (SQLException e) {
             System.out.println("Error creando el usuario"); // Manejo del error por si no crea el usuario
-        } finally{
+        } finally {
             this.desconectar(); // Siempre se debera manejar el metodo desconectar la base de datos
         }
         return insertado; // Returna true o false dependiendo del recorrido que hizo en el metodo
@@ -60,9 +60,9 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
         }
         return accion; // Retorna true o false dependiendo del recorrido
     }
-    
+
     // Metodo para obtener el id del usuario con el correo que ingrese
-    public int obtenerId(String correo) throws SQLException{
+    public int obtenerId(String correo) throws SQLException {
         int id = 0; // Variable que por defecto sera 0
         PreparedStatement ps = null; // Prepared statement para el manejo de los Scripts SQL
         ResultSet rs = null; // Result set para poder obtener eel valor de las consultas SQL
@@ -74,8 +74,7 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
             rs = ps.executeQuery(); // Ejecuta la consulta para poder obtener el id del usuario
             if (rs.next()) { // Si existe algun usuario con ese correo devolvera el id
                 id = rs.getInt("id_usuario"); // a la variable id, se le asigna el valor que retorne la consulta
-           }
-            else{
+            } else {
                 System.out.println("No se encuentra el correo");
             }
         } catch (Exception e) {
@@ -85,9 +84,9 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
         }
         return id; // Retorna el id
     }
-    
+
     // Metodo para validar que el usuario ya existe, tendra como parametros un objeto de tipo usuario
-    public boolean buscarUser(Usuario user){ 
+    public boolean buscarUser(Usuario user) {
         boolean encontrado = false; // Estado para saber si se encuentra o no el usuario registrado, por defecto false
         PreparedStatement ps = null; // Prepared statement para el manejo de los Scripts SQL
         ResultSet rs = null; // ResultSet para el manejo del retorno de las consultas
@@ -98,21 +97,28 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
             ps.setString(1, user.getCorreoInst()); // Se setea en String el correo institucional
             rs = ps.executeQuery(); // Se ejecuta la consulta y el RS tomara el valor de retorno de esa consulta
             if (rs.next()) { // si se encuentra un usuario
-                System.out.println("Se encontro un usuario");
                 int contador = rs.getInt(1); // se debera devolver el id del usuario
-                encontrado = (contador > 0); // si contador es mayor a 0 devuelve true, se le asignara al encontrado y eso retornara
+                if (encontrado = (contador > 0)) {
+                    System.out.println("Se encontro un usuario");
+
+                    return true;
+                } else {
+                    System.out.println("No se encontro un usuario");
+
+                    return false;
+                }
+//                encontrado = (contador > 0); // si contador es mayor a 0 devuelve true, se le asignara al encontrado y eso retornara
             }
         } catch (Exception e) {
             System.out.println("Error encontrando el usuario: " + e.getMessage());
-        }
-        finally {
+        } finally {
             this.desconectar(); // Metodo para desconectar la base de datos
         }
         return encontrado; // Retorna la variable encontrad, que depende del recorrido de todo el metodo
     }
-    
+
     // Metodo para obtener todos los datos del usuario
-    public Usuario getDataUser(Usuario user){
+    public Usuario getDataUser(Usuario user) {
         RolDAO rolDao = new RolDAO();
         Usuario u = null;
         PreparedStatement ps = null;
@@ -137,13 +143,12 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
             }
         } catch (Exception e) {
             System.out.println("Error en obtener los datos del usuario: " + e.getMessage());
-        }
-        finally {
+        } finally {
             this.desconectar();
         }
         return u;
     }
-    
+
     public boolean asignarRolMonitor(String userId) {
         boolean estado = false;
         PreparedStatement ps = null;

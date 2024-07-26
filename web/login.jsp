@@ -58,7 +58,7 @@
         <input name="txtClave" id="inpuClave" type="password" class="validarContrasena grow text-mdaBlack" placeholder="Contraseña" autocomplete="off" />
       </label>
       <p class="text-sm text-right mt-1 text-mdaGreen hover:underline">
-        <a href="crearPerfil.jsp">¿Olvidó su contraseña?</a>
+          <a href="correoRecuperacion.jsp">¿Olvidó su contraseña?</a>
       </p>
       <button id="btnForm" type="submit" class="btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
         Ingresar

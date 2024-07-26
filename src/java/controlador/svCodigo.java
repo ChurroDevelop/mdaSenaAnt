@@ -38,7 +38,7 @@ public class svCodigo extends HttpServlet {
         String correo = request.getParameter("txtCorreo"); // Tomar el correo del formulario
         String clave = request.getParameter("txtPass"); // Tomar la contraseña del formulario
         String confirm = request.getParameter("txtConfirm"); // Tomar la confirmacion de la contraseña del formulario
-        String codigo = mensaje.getRandom(); // Metodo de mensaje par apoder obtener el numero random que sera el codigo para la autenticacion
+        String codigo = mensaje.getRandom(); // Metodo de mensaje para poder obtener el numero random que sera el codigo para la autenticacion
         
         final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b"; // Regex para el aprendiz
         final String expInstructor = "\\b[A-Za-z0-9._%+-]+@sena\\.edu\\.co\\b"; // Regex para el instructor
