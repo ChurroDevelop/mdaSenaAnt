@@ -143,4 +143,26 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
         }
         return u;
     }
+    
+    public boolean asignarRolMonitor(String userId) {
+        boolean estado = false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            this.conectar();
+            String sql = "UPDATE tb_usuarios SET id_rol_fk = 3 WHERE id_usuario = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setString(1, userId);
+            int columnas = ps.executeUpdate();
+            if (columnas > 0) {
+                estado = true;
+                System.out.println("Se pudo hacer la actualizacion de rol del usuario: " + userId);
+            }
+        } catch (Exception e) {
+            System.out.println("Error actualizando rol: " + e.getMessage());
+        } finally {
+            this.desconectar();
+        }
+        return estado;
+    }
 }

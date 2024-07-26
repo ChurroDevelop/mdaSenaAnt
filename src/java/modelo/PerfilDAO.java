@@ -42,7 +42,7 @@ public class PerfilDAO extends Conexion{
         try {
             this.conectar();
             String sql = "SELECT id_perfil, nombre_usuario, apellido_usuario, num_documento, centro_formacion FROM tb_perfil JOIN  tb_usuarios on tb_usuarios.id_usuario = id_usuario_fk WHERE tb_usuarios.correo_inst = ?";
-            ps = getCon().prepareCall(sql);
+            ps = getCon().prepareStatement(sql);
             ps.setString(1, user.getCorreoInst());
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -103,22 +103,16 @@ public class PerfilDAO extends Conexion{
      JsonObject informacionAprendiz = new JsonObject();
      PreparedStatement ps = null;
      ResultSet rs = null;
-        System.out.println("Preparando la consulta");
         try {
             this.conectar();
             String sql = "SELECT tb_perfil.nombre_usuario, tb_perfil.apellido_usuario, tb_perfil.num_documento, tb_perfil.centro_formacion, tb_usuarios.id_usuario FROM tb_perfil JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario WHERE tb_perfil.num_documento = ? AND tb_usuarios.id_rol_fk = 1;";
             ps = getCon().prepareStatement(sql);
-            System.out.println("Agregando el numero a la consulta");
             ps.setString(1, numDocumento);
             rs = ps.executeQuery();
             System.out.println("Numero de documento dentro del perfilDao: " + numDocumento);
-            System.out.println("Intentando encontrar un usuario");
             if (rs.next()) {
-                System.out.println("agregando al JSON OBJECT");
-                informacionAprendiz.addProperty("details", "Nombre: " + rs.getString("nombre_usuario") + "<br>"
-                + "Apellido: " + rs.getString("apellido_usuario") + "<br>" + "Numero de documento: " + rs.getString("num_documento")
-                + "<br>" + "Centro de formacion" + rs.getString("centro_formacion")
-                );
+                informacionAprendiz.addProperty("details", "Nombre: " + rs.getString("nombre_usuario")
+                + "<br>" + "Numero de documento: " + rs.getString("num_documento"));
                 informacionAprendiz.addProperty("userId", rs.getInt("id_usuario"));
             }
             else {

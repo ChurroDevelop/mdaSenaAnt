@@ -152,14 +152,8 @@
             </label>
             <button class="btn bg-mdaGreen border-none text-white hover:bg-mdaGreen w-full mt-4" type="submit">Agregar</button>
         </form>
-        <div id="infoAprendiz">
-            <p id="detallesAprendiz"></p>
-<!--            <form id="cambiarRol" action="">
-                <input type="hidden" id="userId" name="userId">
-                <button type="submit">
-                    Cambiar rol
-                </button>
-            </form>-->
+        <div id="infoAprendiz" class="flex justify-around items-center">
+            <p id="detallesAprendiz" class="text-mdaBlack"></p>
         </div>
     </article>
   </section>
@@ -212,32 +206,6 @@
   <!-- Enlace para manejo del DOM -->
   <script src="../../scripts/instructor.js"></script>
   <script src="../../scripts/script.js"></script>
-  <script>
-      document.getElementById("buscarForm").addEventListener("submit", function(event) {
-        event.preventDefault(); 
-        let numeroDocumento = document.getElementById("numAprendiz").value;
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', "/svBuscarAprendiz", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencode");
-        alert(numeroDocumento);
-        xhr.onload = function () {
-            console.log(xhr.status);
-            if (xhr.status === 200) {
-                let response = JSON.parse(xhr.response);
-                console.log(response);
-                if (response) {
-                   document.getElementById("infoAprendiz");
-                   document.getElementById("detalles aprendiz").innerHTML = response.details;
-                }
-                else {
-                   console.log("No se encontro el usuario");
-                }
-            };
-        };
-        xhr.send("txtNumero="+numeroDocumento);
-
-      });
-  </script>
 </body>
 
 </html>
