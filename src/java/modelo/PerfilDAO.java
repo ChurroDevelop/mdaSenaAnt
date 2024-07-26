@@ -11,11 +11,11 @@ import com.google.gson.JsonObject;
 public class PerfilDAO extends Conexion{
     // Metodo para realizar el nuevo registro del perfil con el usuario asociado
     public boolean registroPerfil(Perfil profile, int id_user) throws SQLException{
-        boolean insert = false;
-        PreparedStatement ps = null;
+        boolean insert = false; // Manejo del estado para saber si se registro el perfil o no
+        PreparedStatement ps = null; // Variable para preparar las consultas
         try {
-            this.conectar();
-            String sql = "INSERT INTO tb_perfil(nombre_usuario, apellido_usuario, num_documento, centro_formacion, id_usuario_fk) VALUES (?,?,?,?,?)";
+            this.conectar(); // Metodo para conectar a la base de datos
+            String sql = "INSERT INTO tb_perfil(nombre_usuario, apellido_usuario, num_documento, centro_formacion, id_usuario_fk) VALUES (?,?,?,?,?)"; // Insert into del nuevo perfil asociado al usuario
             ps = getCon().prepareStatement(sql);
             ps.setString(1, profile.getNombre_usuario());
             ps.setString(2, profile.getApellido_usuario());

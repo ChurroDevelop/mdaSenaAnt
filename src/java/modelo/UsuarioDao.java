@@ -113,55 +113,56 @@ public class UsuarioDao extends Conexion{ // Hereda todo de la clase Conexion
     
     // Metodo para obtener todos los datos del usuario
     public Usuario getDataUser(Usuario user){
-        RolDAO rolDao = new RolDAO();
-        Usuario u = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        RolDAO rolDao = new RolDAO(); // Instancia de un nuevo rolDao para obtener los datos del perfil de dicho usuario
+        Usuario u = null; // Nuevo objeto u para hacerle seteo de las nuevas propiedades
+        PreparedStatement ps = null; // Prepared statement para prepara la consulta SQL
+        ResultSet rs = null; // Result set 
         try {
-            this.conectar();
-            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios WHERE correo_inst = ?";
-            ps = getCon().prepareStatement(sql);
-            ps.setString(1, user.getCorreoInst());
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                u = new Usuario();
-                int idUser = rs.getInt("id_usuario");
+            this.conectar(); // Metodo para conectar a la base de datos
+            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios WHERE correo_inst = ?"; // Consulta sql para obtener todos los datos del usuario
+            ps = getCon().prepareStatement(sql); // Preparar Consulta para ejecutarla
+            ps.setString(1, user.getCorreoInst()); // Setear el correo entrante
+            rs = ps.executeQuery(); // Ejecutar consulta sql
+            if (rs.next()) { // Si existe algun usuario con ese correo electronico
+                u = new Usuario(); // Instancia de un nuevo usuario
+                int idUser = rs.getInt("id_usuario"); // Se toma el id del usuario como un entero
                 String correo = rs.getString("correo_inst");
                 String password = rs.getString("password");
+                
+                // Se setean los datos al usuario, es para poder obtener el manejo de las sessiones
                 u.setCorreoInst(correo);
                 u.setId_usuario(idUser);
                 u.setPassword(password);
+                // Se hace un callback a un metodo del rol, para poder obtener el id y el nombre del rol de dicho usuario
                 Rol rol = rolDao.getIdRol(user);
                 u.setId_rol_fk(rol);
-                System.out.println("Se pudo obtener todos los datos del usuario desde el Login");
             }
         } catch (Exception e) {
             System.out.println("Error en obtener los datos del usuario: " + e.getMessage());
         }
         finally {
-            this.desconectar();
+            this.desconectar(); // Metodo para desconectar la base de datos
         }
         return u;
     }
     
+    // Metodo para que el instructor pueda asignar el rol de monitor a un aprendiz, que recibe el id del usuario a darle el rol
     public boolean asignarRolMonitor(String userId) {
-        boolean estado = false;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        boolean estado = false; // Manejo de estado para saber si se actualizo o no el rol de dicho usuario
+        PreparedStatement ps = null; // Variable para preparar la consulta
         try {
-            this.conectar();
-            String sql = "UPDATE tb_usuarios SET id_rol_fk = 3 WHERE id_usuario = ?";
-            ps = getCon().prepareStatement(sql);
-            ps.setString(1, userId);
-            int columnas = ps.executeUpdate();
+            this.conectar(); // Metodo para conectar con la base de datos
+            String sql = "UPDATE tb_usuarios SET id_rol_fk = 3 WHERE id_usuario = ?"; // Consulta SQL para realizar el update del rol de dicho usuario
+            ps = getCon().prepareStatement(sql); // Preparar la consulta para ejecutarla
+            ps.setString(1, userId); // Se setea el id del usuuario para realizarle su modificacion
+            int columnas = ps.executeUpdate(); // executeUpdate devuelve un entero, lo cual es para saber si se modifico o no
             if (columnas > 0) {
-                estado = true;
-                System.out.println("Se pudo hacer la actualizacion de rol del usuario: " + userId);
+                estado = true; // Vuelve true el estado y lo modifica
             }
         } catch (Exception e) {
             System.out.println("Error actualizando rol: " + e.getMessage());
         } finally {
-            this.desconectar();
+            this.desconectar(); // Metodo para desconectar la base de datos
         }
         return estado;
     }
