@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
@@ -49,14 +45,13 @@ public class svLogin extends HttpServlet {
         
         profile = profileDao.dataPerfil(newUser);
         
-        if (userDao.autenticacion(u) == true) { // Si la autenticacion devuelve true
+        response.setContentType("text/plain");
+        if (userDao.autenticacion(u)) { // Si la autenticacion devuelve true
             sesion.setAttribute("dataUser", newUser); // Se atrapara el id del usuario en una sesion
             sesionPerfil.setAttribute("dataPerfil", profile); 
-            response.sendRedirect("inicio.jsp"); // Lo redirije al inicio
-        }
-        else{
-            response.sendRedirect("login.jsp");
+            response.getWriter().write("success"); // Escribe 'success' en la respuesta
+        } else {
+            response.getWriter().write("error"); // Escribe 'error' en la respuesta
         }
     }
-
 }
