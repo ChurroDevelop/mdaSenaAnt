@@ -47,8 +47,6 @@ public class svLogin extends HttpServlet {
         Usuario newUser = new Usuario(); // Se instancia un nuevo usuario para obtener todos los datos segun el registro
         newUser = userDao.getDataUser(u); // Se le asigna a newUser, el metodo ya que este metodo retorna un objeto usuario
         
-        System.out.println(newUser.getCorreoInst());
-        
         profile = profileDao.dataPerfil(newUser);
         
         if (userDao.autenticacion(u) == true) { // Si la autenticacion devuelve true

@@ -80,7 +80,7 @@
             Notificaciones
           </button>
         </a>
-        <a href="editarPerfil.jsp">
+          <a href="../../editarPerfil.jsp">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
             <i class="fa-regular fa-address-card"></i>

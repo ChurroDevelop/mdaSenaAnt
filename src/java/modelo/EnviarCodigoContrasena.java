@@ -12,8 +12,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import modelo.objetos.Usuario;
 
-public class EnviarCodigo {
-    
+public class EnviarCodigoContrasena {
     // Metodo para obtener el numero random para el codigo de verificaicon
     public String getRandom(){
         Random r = new Random();
@@ -22,15 +21,15 @@ public class EnviarCodigo {
     }
     
     // Metodo para enviar el email al correo institucuonal del usuario
-    public static void enviarEmail(Usuario user) throws AddressException{
+    public static void enviarCodigoRecuperacion(Usuario user) throws AddressException{
         try {
             // Correo de verificacion
             String destinatario = user.getCorreoInst(); // Correo destinatario
-            String remitente = "mdasena00@outlook.com"; // Correo remitente
+            String remitente = "mdasena01@outlook.com"; // Correo remitente
             
             // Datos del proveedor
-            final String usuario = "mdasena00@outlook.com";
-            final String password = "ijjbcdmrvpekpvtn";
+            final String usuario = "mdasena01@outlook.com";
+            final String password = "abydxdxkercgjrtb";
             
             // Host para el envio del email
             final String host = "smtp-mail.outlook.com";
@@ -57,7 +56,7 @@ public class EnviarCodigo {
             mensaje.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
             
             // Asuntos y cuerpo del correo
-            mensaje.setSubject("Codigo de verificacion de la plataforma MdaSena");
+            mensaje.setSubject("Codigo para cambiar contraseña");
             mensaje.setText("El codigo de verificacion es: " + user.getCodigo());
             
             // Enviar el menasje a email

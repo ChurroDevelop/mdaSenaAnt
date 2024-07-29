@@ -149,10 +149,10 @@
           </button>
         </a>
         <!-- Crear post -->
-        <a href="views/instructor/asignarMonitor.jsp">
+        <a href="views/monitor/crearPost.jsp">
           <button
             class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-solid fa-user-plus"></i>
+            <i class="fa-solid fa-plus-minus"></i>
             Crear post
           </button>
         </a>
