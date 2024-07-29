@@ -24,70 +24,61 @@ public class svCorreoRecuperacion extends HttpServlet {
     UsuarioDao userDao = new UsuarioDao(); // instancia de un usuarioDao que manejara los procesos CRUD
     EnviarCodigoContrasena mensaje = new EnviarCodigoContrasena();
 
-//    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-//        try (PrintWriter out = response.getWriter()) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet svCorreoRecuperacion</title>");
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet svCorreoRecuperacion at " + request.getContextPath() + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
-//    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
-        HttpSession sesion = request.getSession(); // Sesion para atrapar la session
-        request.setCharacterEncoding("UTF-8");
+        HttpSession sesion = request.getSession(); // Obtiene la sesión actual
+        request.setCharacterEncoding("UTF-8"); // Configura la codificación de caracteres para evitar problemas con acentos y caracteres especiales
 
-        String correo = request.getParameter("txtCorreo"); // Tomar el correo del formulario
-        String codigo = mensaje.getRandom(); // Metodo de mensaje para poder obtener el numero random que sera el codigo para la autenticacion
+        String correo = request.getParameter("txtCorreo"); // Obtiene el correo electrónico ingresado por el usuario en el formulario
+        String codigo = mensaje.getRandom(); // Genera un código aleatorio para la autenticación
 
-        final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b"; // Regex para el aprendiz
-        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@sena\\.edu\\.co\\b"; // Regex para el instructor
+        // Expresiones regulares para validar correos de aprendices e instructores
+        final String expAprendiz = "\\b[A-Za-z0-9._%+-]+@soy\\.sena\\.edu\\.co\\b"; // Regex para el correo de aprendiz
+        final String expInstructor = "\\b[A-Za-z0-9._%+-]+@sena\\.edu\\.co\\b"; // Regex para el correo de instructor
 
-        final Pattern pAprendiz = Pattern.compile(expAprendiz); // Compilador para el regex del aprendiz
-        final Pattern pInstructor = Pattern.compile(expInstructor); // Compilador para el regex del instructor
+        // Compiladores para las expresiones regulares
+        final Pattern pAprendiz = Pattern.compile(expAprendiz); // Compila el regex para aprendiz
+        final Pattern pInstructor = Pattern.compile(expInstructor); // Compila el regex para instructor
 
+        // Matchers para comprobar si el correo cumple con los patrones definidos
         Matcher mAprendiz = pAprendiz.matcher(correo);
         Matcher mInstructor = pInstructor.matcher(correo);
 
+        // Configura el correo y el código en el objeto usuario
         user.setCorreoInst(correo);
-        user.setCodigo(codigo); // Se setea el codigo aleatorio
+        user.setCodigo(codigo); // Establece el código aleatorio en el usuario
 
-        boolean encontrado = userDao.buscarUser(user); // Hace la validacion si existe o no un usuario en la base de datos
+        // Verifica si el usuario existe en la base de datos
+        boolean encontrado = userDao.buscarUser(user); // Hace la validación si existe o no un usuario en la base de datos
 
+        // Si el correo cumple con alguno de los patrones y el usuario existe en la base de datos
         if (mInstructor.matches() || mAprendiz.matches()) {
             if (encontrado == true) {
                 System.out.println("Correo: " + correo);
                 try {
+                    // Envía el código de recuperación al usuario
                     mensaje.enviarCodigoRecuperacion(user);
                     System.out.println("Se le envió el código");
-                    sesion.setAttribute("autenticacion", user); // Atrapa la session que se le coloca como valor el objeto user
-                    response.sendRedirect("codigoContrasena.jsp"); // Redirije a la autenticacion del codigo enviado por email
+                    System.out.println("Código: " + codigo);
+
+                    // Establece el objeto usuario en la sesión
+                    sesion.setAttribute("autenticacion", user); // Guarda el usuario en la sesión
+                    response.sendRedirect("codigoContrasena.jsp"); // Redirige al usuario a la página para ingresar el código enviado por email
                 } catch (AddressException ex) {
                     Logger.getLogger(svCorreoRecuperacion.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                System.out.println("El usuario no existe");
+                System.out.println("El usuario no existe"); // Mensaje si el usuario no se encuentra en la base de datos
             }
         } else {
-            System.out.println("La extensión del correo no es válida");
+            System.out.println("La extensión del correo no es válida"); // Mensaje si el correo no tiene una extensión válida
         }
-
     }
 
 }

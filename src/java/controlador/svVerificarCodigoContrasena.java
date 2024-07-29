@@ -16,49 +16,30 @@ public class svVerificarCodigoContrasena extends HttpServlet {
 
     UsuarioDao userDao = new UsuarioDao();
 
-//    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-//        try (PrintWriter out = response.getWriter()) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet svVerificarCodigoContrasena</title>");
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet svVerificarCodigoContrasena at " + request.getContextPath() + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
-//    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
 
-        HttpSession sesionUser = request.getSession(); // Sesion para el usuario
-        request.setCharacterEncoding("UTF-8"); // Cotejamiento para el tema de los acentos en la base de datos
+        HttpSession sesionUser = request.getSession(); // Obtiene la sesión del usuario
+        request.setCharacterEncoding("UTF-8"); // Configura la codificación de caracteres para evitar problemas con acentos y caracteres especiales
 
-        Usuario user = (Usuario) sesionUser.getAttribute("autenticacion"); // Atrapa el valor de lo que hay en la session de autenticacion
-        String autenticacion = request.getParameter("txtCodigo"); // Atrapa el codigo de verificacion que se le dio al usuario en el formulario
+        Usuario user = (Usuario) sesionUser.getAttribute("autenticacion"); // Recupera el objeto Usuario de la sesión
+        String autenticacion = request.getParameter("txtCodigo"); // Obtiene el código de verificación enviado por el usuario en el formulario
 
+        // Verifica si el código ingresado por el usuario coincide con el código almacenado en el objeto Usuario
         if (autenticacion.equals(user.getCodigo())) {
             System.out.println("El código coincide");
-            sesionUser.setAttribute("autenticacion", user);
-            response.sendRedirect("cambiarContrasena.jsp");
+            sesionUser.setAttribute("autenticacion", user); // Actualiza la sesión con el objeto Usuario
+            response.sendRedirect("cambiarContrasena.jsp"); // Redirige al usuario a la página para cambiar la contraseña
         } else {
             System.out.println("El código no coincide");
-            response.sendRedirect("codigoContrasen.jsp");
-
+            response.sendRedirect("codigoContrasen.jsp"); // Redirige al usuario a la página de verificación del código
         }
-
     }
 
 }

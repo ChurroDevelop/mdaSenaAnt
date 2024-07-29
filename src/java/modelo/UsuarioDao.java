@@ -170,4 +170,26 @@ public class UsuarioDao extends Conexion { // Hereda todo de la clase Conexion
         }
         return estado;
     }
+    
+    // Método para cambiar la contraseña
+    public boolean cambiarContrasena(int userId, String nuevaPassword) {
+        boolean actualizado = false; // Por defecto retornara false
+        PreparedStatement ps = null; // PreparedStatement para el manejo de los scripts de SQL
+        try {
+            this.conectar(); // Se llama al metodo conectar para que conecte con la base de datos
+            String sqlUpdate = "UPDATE tb_usuarios SET password = ? WHERE id_usuario = ?"; // Script SQL para actualizar la contraseña del usuario
+            ps = getCon().prepareStatement(sqlUpdate); // Compila y prepara la consulta como código SQL
+            ps.setString(1, nuevaPassword); // Se setea la nueva contraseña
+            ps.setInt(2, userId); // Se setea el id del usuario
+            if (ps.executeUpdate() == 1) { // Si la ejecución del Script es 1 es decir "True"
+                actualizado = true; // Cambia el valor de actualizado a true y es lo que devolverá el método
+                System.out.println("Contraseña actualizada");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error actualizando la contraseña: " + e.getMessage()); // Manejo del error por si no actualiza la contraseña
+        } finally {
+            this.desconectar(); // Siempre se deberá manejar el método desconectar la base de datos
+        }
+        return actualizado; // Retorna true o false dependiendo del recorrido que hizo en el método
+    }
 }
