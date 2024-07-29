@@ -1,17 +1,18 @@
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="modelo.objetos.Perfil"%>
 <%@page import="modelo.objetos.Usuario"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
     HttpSession sesion = request.getSession(false);
-    HttpSession sesionPerfil = request.getSession(false);
     if ((sesion == null || sesion.getAttribute("dataUser") == null)) {
             System.out.println("Error en la vista de editar perfil");
             response.sendRedirect("login.jsp");
             return;
     }
-    Perfil perfil = (Perfil) sesionPerfil.getAttribute("dataPerfil");
+    Perfil perfil = (Perfil) sesion.getAttribute("dataPerfil");
     Usuario user = (Usuario) sesion.getAttribute("dataUser");
+    List<Perfil> monitores = (List<Perfil>) sesion.getAttribute("listMonitores");
 %>
 
 <!DOCTYPE html>
@@ -85,11 +86,13 @@
         </a>
         <!-- Asignar monitor -->
         <a href="asignarMonitor.jsp">
-          <button
-            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-solid fa-plus-minus"></i>
-            Asignar monitor
-          </button>
+            <form action="/svListarMonitores" method="POST">
+                <button
+                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                    <i class="fa-solid fa-plus-minus"></i>
+                    Asignar monitor
+                </button>
+            </form>
         </a>
         <a href="#">
           <button id="showModal-2"
@@ -119,7 +122,7 @@
         </div>
         <div>
           <p class="text-mdaBlack text-sm">
-            Daniel Acetaminofén, ha cargado una evidencia
+              Daniel Acetaminofen
           </p>
           <button class="btn btn-sm bg-mdaGreen border-none text-white mt-2 hover:bg-mdaGreen w-full">
             Ver evidencia
@@ -154,6 +157,7 @@
         </form>
         <div id="infoAprendiz" class="flex justify-around items-center">
             <p id="detallesAprendiz" class="text-mdaBlack"></p>
+            <input type="hidden" id="idInstructor" value="<%= user.getId_usuario() %>">
         </div>
     </article>
   </section>
@@ -185,19 +189,26 @@
         <div class="divider m-0 h-0"></div>
       </div>
       <!-- Quitar monitor -->
-      <div class="w-full bg-mdaWhite rounded-lg p-1">
+      <div class="w-full bg-mdaWhite rounded-lg p-1 flex flex-col gap-2">
         <!-- Monitor #1 -->
+        <% 
+        for (Perfil p : monitores) {
+        %>
         <div class="flex justify-between items-center">
           <div class="text-mdaBlack">
             <i class="fa-solid fa-user-minus mx-2.5"></i>
-            <p class="inline-block">Daniel Acetaminofén</p>
+            <p class="inline-block"> <%= p.getNombre_usuario() + " " + p.getApellido_usuario() %> </p>
           </div>
-          <form action="">
+          <form action="/svEliminarMonitor" method="POST">
+              <input type="hidden" value="<%= p.getId_perfil() %>" name="txtIdMonitor">
             <button class="btn bg-mdaRed border-none text-white hover:bg-mdaRed">
               Quitar monitor
             </button>
           </form>
         </div>
+        <% 
+        }
+        %>
       </div>
     </article>
   </section>

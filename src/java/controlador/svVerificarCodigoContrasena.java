@@ -38,7 +38,7 @@ public class svVerificarCodigoContrasena extends HttpServlet {
             response.sendRedirect("cambiarContrasena.jsp"); // Redirige al usuario a la página para cambiar la contraseña
         } else {
             System.out.println("El código no coincide");
-            response.sendRedirect("codigoContrasen.jsp"); // Redirige al usuario a la página de verificación del código
+            response.sendRedirect("codigoContrasena.jsp"); // Redirige al usuario a la página de verificación del código
         }
     }
 
