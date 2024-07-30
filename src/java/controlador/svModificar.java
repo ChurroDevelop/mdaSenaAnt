@@ -60,7 +60,6 @@ public class svModificar extends HttpServlet {
         // Si fue actualizado sobreEscribe la session y no se pierde al momento de la vista
         if (isUpdate) {
             System.out.println("Se modifico el usuario");
-//            sesion.setAttribute("user", p);
             response.sendRedirect("editarPerfil.jsp");
         } else {
             System.out.println("No se envio al metodo de modificar");

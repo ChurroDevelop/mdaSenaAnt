@@ -17,34 +17,31 @@ import modelo.objetos.Perfil;
 public class svAsignacion extends HttpServlet {
     // Instancia de un nuevo usuarioDao para todos los metodos a la base de datos
     UsuarioDao userDao = new UsuarioDao();
+    // Instancia de un nuevo MonitorDao para todos los metodos a la base de datos
     MonitorDAO mDao = new MonitorDAO();
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Establecer una nueva sesion para obtener los datos en otra vista
         HttpSession sesion = request.getSession();
         
         // Tomar el id al momento de dar click en asignar rol monitor
         String idAsignacion = request.getParameter("txtAsignacion");
         String idInstructor = request.getParameter("txtIdInstructor");
         
-        System.out.println("El id del instructor es: " + idInstructor);
-        
         // Hacer la actualizacion en la base de datos, manejando metodo booleano para saber si se actualizo o no
         boolean actualizacion = userDao.asignarRolMonitor(idAsignacion, idInstructor);
         
         // Si actualizo redirije a la vista de asignar monitor, donde se vera el nuevo monitor
         if (actualizacion) {
-            List<Perfil> monitores = mDao.obtenerMonitores();
-            sesion.setAttribute("listMonitores", monitores);
-            sesion.setAttribute("", request);
+            List<Perfil> monitores = mDao.obtenerMonitores(idInstructor); // Lista de los aprendices monitores
+            sesion.setAttribute("listMonitores", monitores); // Setearle un valor a la session y poder obtenerlos en otra vista
             response.sendRedirect("views/instructor/asignarMonitor.jsp");
         } else {
             System.out.println("No se puedo hacer la modificacion");

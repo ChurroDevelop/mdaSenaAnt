@@ -11,14 +11,15 @@ import modelo.objetos.Usuario;
 public class MonitorDAO extends Conexion{
     
     // Metodo para obtener la lista de los monitores de la base de datos que retornara un arrayList
-    public List<Perfil> obtenerMonitores(){
+    public List<Perfil> obtenerMonitores(String idInstructor){
         List<Perfil> monitores = new ArrayList<>(); // Se instancia una nueva arrayList
         PreparedStatement ps = null; //  Variable para el manejo de la consulta SQL
         ResultSet rs = null; // Variable para obtener lo que retorna la consulta SQL
         try {
             this.conectar(); // Metodo para conectar con la base de datos
-            String sql = "SELECT * FROM tb_perfil INNER JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario WHERE tb_usuarios.id_rol_fk = 3;"; // Consulta para obtener todos los usuarios que tengan el rol de monitor
+            String sql = "SELECT * FROM tb_perfil INNER JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario WHERE tb_usuarios.id_rol_fk = 3 AND id_instructor_asig = ?"; // Consulta para obtener todos los usuarios que tengan el rol de monitor
             ps = getCon().prepareStatement(sql); // Preparar la consulta SQL
+            ps.setString(1, idInstructor);
             rs = ps.executeQuery(); // Ejecutar la consulta SQL
             
             // Realizar bucle para que retorne aprendiz por aprendiz que cumpla con la consulta SQL
@@ -44,26 +45,27 @@ public class MonitorDAO extends Conexion{
         return monitores;
     }
     
+    // Metodo para quitarle el rol de monitor a un aprendiz que recibe como parametro el id del usuario a modificar
     public boolean eliminarMonitor(String idUser) {
-        boolean modificacion = false;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        boolean modificacion = false; // Manejo de estado para saber si se modifico o no el rol del aprendiz
+        PreparedStatement ps = null; // Variable para la consulta sql
         try {
-            this.conectar();
-            String sql = "UPDATE tb_usuarios SET id_rol_fk = 1, id_instructor_asig = null WHERE id_usuario = ?";
-            ps = getCon().prepareStatement(sql);
-            ps.setString(1, idUser);
-            int modificado = ps.executeUpdate();
+            this.conectar(); // Metodo para conectar a la base de datos
+            String sql = "UPDATE tb_usuarios SET id_rol_fk = 1, id_instructor_asig = null WHERE id_usuario = ?"; // Consulta SQL para actualizar el rol del usuario
+            ps = getCon().prepareStatement(sql); // Preparar la consulta para ejecutar en el gestor de base de datos
+            ps.setString(1, idUser); // Pasarle el parametro que es el id del usuario
+            int modificado = ps.executeUpdate(); // Ejecutar la consulta, devuelve un entero
+            
+            // Si lo que a sido modificado es mayor a 0 entonces ejecuta lo siguient
             if (modificado > 0) {
-                System.out.println("SE A MODIFICADO EL ROL, YA NO ES MONITOR");
-                modificacion = true;
+                modificacion = true; // Cambia el estado a true, es decir que modifico el usuario
             } else {
                 System.out.println("NO SE PUDO REALIZAR LA MODIFICACION DE ROL");
             }
         } catch (Exception e) {
             System.out.println("ERROR QUITANDO EL ROL MONITOR: " + e.getMessage());
         } finally {
-            this.desconectar();
+            this.desconectar(); // Metodo para desconectar la base de datos
         }
         return modificacion;
     }

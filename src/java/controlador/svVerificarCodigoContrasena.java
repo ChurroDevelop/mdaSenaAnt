@@ -13,7 +13,7 @@ import modelo.objetos.Usuario;
 
 @WebServlet(name = "svVerificarCodigoContrasena", urlPatterns = {"/svVerificarCodigoContrasena"})
 public class svVerificarCodigoContrasena extends HttpServlet {
-
+    // Instancia de un nuevo UsuarioDao para manejo de base de datos
     UsuarioDao userDao = new UsuarioDao();
 
     @Override

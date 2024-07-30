@@ -157,7 +157,7 @@
         </form>
         <div id="infoAprendiz" class="flex justify-around items-center">
             <p id="detallesAprendiz" class="text-mdaBlack"></p>
-            <input type="hidden" id="idInstructor" value="<%= user.getId_usuario() %>">
+            <input type="hidden" id="idInstructor" value="<%= user.getId_usuario() %>" name="idInstructorTxt">
         </div>
     </article>
   </section>

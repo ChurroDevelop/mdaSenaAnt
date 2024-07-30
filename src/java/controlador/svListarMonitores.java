@@ -14,15 +14,19 @@ import modelo.objetos.Perfil;
 
 @WebServlet(name = "svListarMonitores", urlPatterns = {"/svListarMonitores"})
 public class svListarMonitores extends HttpServlet {
+    // Instancia de un nuevo MonitorDao para el manejo de la base de datos
     MonitorDAO mDao = new MonitorDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Crear una nueva session para el manejo de datos en otras vistas
         HttpSession sesion = request.getSession();
-        System.out.println("METODO GET EN EL SERVLET");
-        List<Perfil> monitores = mDao.obtenerMonitores();
-        sesion.setAttribute("listMonitores", monitores);
+        
+        // Tomar el id del instructor para visualizar que monitores tiene asignado
+        String id = request.getParameter("txtIdInstructor");
+        List<Perfil> monitores = mDao.obtenerMonitores(id); // Lista de los monitores que asigno dicho instructor
+        sesion.setAttribute("listMonitores", monitores); // Se sobre escribe la sesion
         response.sendRedirect("views/instructor/asignarMonitor.jsp");
     }
 

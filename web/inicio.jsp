@@ -112,6 +112,7 @@
         <!-- Asignar monitor -->
         <a href="">
             <form action="/svListarMonitores" method="GET">
+                <input type="hidden" value="<%= user.getId_usuario() %> " name="txtIdInstructor">
                 <button
                     class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
                     <i class="fa-solid fa-plus-minus"></i>

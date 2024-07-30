@@ -17,8 +17,13 @@ import modelo.objetos.Usuario;
 
 @WebServlet(name = "svRegistro", urlPatterns = {"/svRegistro"})
 public class svRegistro extends HttpServlet {
+    // Instancia de un nuevo UsuarioDao para manejo de base de datos
     UsuarioDao userDao = new UsuarioDao();
+    
+    // Instancia de un nuevo RolDao para manejo de base de datos
     RolDAO rolDao = new RolDAO();
+    
+    // Instancia de un nuevo objeto Rol
     Rol rol = new Rol();
 
     @Override
@@ -59,12 +64,10 @@ public class svRegistro extends HttpServlet {
                     idUser = userDao.obtenerId(user.getCorreoInst()); // Se mandara el correo del usuario y se obtendra el id del usuario para poder asociarlo con el perfil
                     user.setId_usuario(idUser); // Se setea el id del usuario en la clase usuario
                     rol = rolDao.getIdRol(user);
-                    System.out.println(rol.getNombre_rol() + " Este es el nombre del rol");
                     user.setId_rol_fk(rol);
                     sesionId.setAttribute("UsuarioAprendiz", user); // Se atrapa el usuario con el nombre "UsuarioId"
                     
                     if (insertado != false) { // Verificacion si se creo el usuario
-                        System.out.println("Se creo el usuario");
                         response.sendRedirect("crearPerfil.jsp");
                     }
                     else{ // Si no hubo error en el usuario DAO
@@ -92,7 +95,6 @@ public class svRegistro extends HttpServlet {
                     }
                     else {
                         response.sendRedirect("registro.jsp");
-                        System.out.println("No se pudo crear el usuario ya que no cumple con las condiciones del correo institucional");
                     }
                 }
             } catch (Exception e) {
