@@ -46,6 +46,7 @@ public class svCambiarContrasena extends HttpServlet {
                 System.out.println("Las contraseñas coinciden"); // Mensaje de confirmación en consola
                 // Cambia la contraseña del usuario en la base de datos
                 userDao.cambiarContrasena(userDao.obtenerId(user.getCorreoInst()), encript);
+                response.sendRedirect("login.jsp");
             } catch (SQLException ex) {
                 Logger.getLogger(svCambiarContrasena.class.getName()).log(Level.SEVERE, null, ex); // Manejo de excepciones de SQL
             }

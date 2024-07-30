@@ -1,7 +1,6 @@
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,15 +30,15 @@ public class svVerificarCodigoContrasena extends HttpServlet {
         Usuario user = (Usuario) sesionUser.getAttribute("autenticacion"); // Recupera el objeto Usuario de la sesión
         String autenticacion = request.getParameter("txtCodigo"); // Obtiene el código de verificación enviado por el usuario en el formulario
 
+        response.setContentType("text/plain");
+
         // Verifica si el código ingresado por el usuario coincide con el código almacenado en el objeto Usuario
         if (autenticacion.equals(user.getCodigo())) {
             System.out.println("El código coincide");
-            sesionUser.setAttribute("autenticacion", user); // Actualiza la sesión con el objeto Usuario
-            response.sendRedirect("cambiarContrasena.jsp"); // Redirige al usuario a la página para cambiar la contraseña
+            response.getWriter().write("success"); // Escribe 'success' en la respuesta
         } else {
             System.out.println("El código no coincide");
-            response.sendRedirect("codigoContrasen.jsp"); // Redirige al usuario a la página de verificación del código
+            response.getWriter().write("code_mismatch"); // Escribe 'code_mismatch' en la respuesta
         }
     }
-
 }

@@ -57,9 +57,10 @@ public class svCorreoRecuperacion extends HttpServlet {
         // Verifica si el usuario existe en la base de datos
         boolean encontrado = userDao.buscarUser(user); // Hace la validación si existe o no un usuario en la base de datos
 
+        response.setContentType("text/plain");
         // Si el correo cumple con alguno de los patrones y el usuario existe en la base de datos
         if (mInstructor.matches() || mAprendiz.matches()) {
-            if (encontrado == true) {
+            if (encontrado) {
                 System.out.println("Correo: " + correo);
                 try {
                     // Envía el código de recuperación al usuario
@@ -69,16 +70,17 @@ public class svCorreoRecuperacion extends HttpServlet {
 
                     // Establece el objeto usuario en la sesión
                     sesion.setAttribute("autenticacion", user); // Guarda el usuario en la sesión
-                    response.sendRedirect("codigoContrasena.jsp"); // Redirige al usuario a la página para ingresar el código enviado por email
+                    response.getWriter().write("success"); // Escribe 'success' en la respuesta
                 } catch (AddressException ex) {
                     Logger.getLogger(svCorreoRecuperacion.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 System.out.println("El usuario no existe"); // Mensaje si el usuario no se encuentra en la base de datos
+                response.getWriter().write("user_not_found"); // Escribe 'user_not_found' en la respuesta
             }
         } else {
             System.out.println("La extensión del correo no es válida"); // Mensaje si el correo no tiene una extensión válida
+            // response.getWriter().write("invalid_email"); // Escribe 'invalid_email' en la respuesta
         }
     }
-
 }
