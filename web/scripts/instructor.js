@@ -2,6 +2,8 @@
 const form = document.getElementById("buscarForm");
 const detalles = document.getElementById("detallesAprendiz");
 const informacion = document.getElementById("infoAprendiz");
+const idIntructor = document.getElementById("idInstructor").value;
+console.log(idIntructor);
 
 form.addEventListener("submit", function(event) {
     event.preventDefault(); 
@@ -22,10 +24,15 @@ form.addEventListener("submit", function(event) {
                 hiddenId.setAttribute("type", "hidden");
                 hiddenId.setAttribute("value", response.userId);
                 hiddenId.setAttribute("name", "txtAsignacion");
+                const hiddenIdInstructor = document.createElement("input");
+                hiddenIdInstructor.setAttribute("type", "hidden");
+                hiddenIdInstructor.setAttribute("value", idIntructor);
+                hiddenIdInstructor.setAttribute("name", "txtIdInstructor");
                 const btn = document.createElement("button");
                 btn.textContent = "Asignar rol monitor";
                 btn.setAttribute("type", "submit");
                 formAsignacion.appendChild(hiddenId);
+                formAsignacion.appendChild(hiddenIdInstructor);
                 formAsignacion.appendChild(btn);
                 informacion.appendChild(formAsignacion);
                 detalles.innerHTML = response.details;

@@ -17,9 +17,13 @@ import modelo.objetos.Usuario;
 
 @WebServlet(name = "svRegistro", urlPatterns = {"/svRegistro"})
 public class svRegistro extends HttpServlet {
-
+    // Instancia de un nuevo UsuarioDao para manejo de base de datos
     UsuarioDao userDao = new UsuarioDao();
+    
+    // Instancia de un nuevo RolDao para manejo de base de datos
     RolDAO rolDao = new RolDAO();
+    
+    // Instancia de un nuevo objeto Rol
     Rol rol = new Rol();
 
     @Override

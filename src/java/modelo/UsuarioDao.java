@@ -4,6 +4,7 @@ import config.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import modelo.objetos.Perfil;
 import modelo.objetos.Rol;
 import modelo.objetos.Usuario;
 
@@ -153,14 +154,15 @@ public class UsuarioDao extends Conexion { // Hereda todo de la clase Conexion
     }
     
     // Metodo para que el instructor pueda asignar el rol de monitor a un aprendiz, que recibe el id del usuario a darle el rol
-    public boolean asignarRolMonitor(String userId) {
+    public boolean asignarRolMonitor(String userId, String idInstructor) {
         boolean estado = false; // Manejo de estado para saber si se actualizo o no el rol de dicho usuario
         PreparedStatement ps = null; // Variable para preparar la consulta
         try {
             this.conectar(); // Metodo para conectar con la base de datos
-            String sql = "UPDATE tb_usuarios SET id_rol_fk = 3 WHERE id_usuario = ?"; // Consulta SQL para realizar el update del rol de dicho usuario
+            String sql = "UPDATE tb_usuarios SET id_rol_fk = 3, id_instructor_asig = ? WHERE id_usuario = ?"; // Consulta SQL para realizar el update del rol de dicho usuario
             ps = getCon().prepareStatement(sql); // Preparar la consulta para ejecutarla
-            ps.setString(1, userId); // Se setea el id del usuuario para realizarle su modificacion
+            ps.setString(1, idInstructor);
+            ps.setString(2, userId); // Se setea el id del usuuario para realizarle su modificacion
             int columnas = ps.executeUpdate(); // executeUpdate devuelve un entero, lo cual es para saber si se modifico o no
             if (columnas > 0) {
                 estado = true; // Vuelve true el estado y lo modifica
