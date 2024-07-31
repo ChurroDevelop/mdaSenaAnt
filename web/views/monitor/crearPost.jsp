@@ -143,6 +143,7 @@
 
   <!-- Enlace para manejo del DOM -->
   <script src="../../scripts/monitor.js"></script>
+  <script src="../../scripts/script.js"></script>
 </body>
 
 </html>

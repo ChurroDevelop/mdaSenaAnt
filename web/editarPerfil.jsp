@@ -258,6 +258,7 @@
         <!-- Enlace para manejo del DOM -->
         <script type="module" src="scripts/validacionFormularios/editarPerfil.js"></script>
         <script src="scripts/cerrar.js"></script>
+        <script src="scripts/script.js"></script>
     </body>
 
 </html>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import modelo.MonitorDAO;
+import modelo.NotificacionDAO;
 import modelo.UsuarioDao;
 import modelo.objetos.Perfil;
 
@@ -19,6 +20,8 @@ public class svAsignacion extends HttpServlet {
     UsuarioDao userDao = new UsuarioDao();
     // Instancia de un nuevo MonitorDao para todos los metodos a la base de datos
     MonitorDAO mDao = new MonitorDAO();
+    // Instancia de una nueva notificacionDao para todos los metodos a la base de datos
+    NotificacionDAO nDao = new NotificacionDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +37,11 @@ public class svAsignacion extends HttpServlet {
         // Tomar el id al momento de dar click en asignar rol monitor
         String idAsignacion = request.getParameter("txtAsignacion");
         String idInstructor = request.getParameter("txtIdInstructor");
+        
+        boolean noti = nDao.registrarNotificacion(idAsignacion);
+        if (noti) {
+            System.out.println("SI SE REGISTRO LA NOTIFICACION");
+        }
         
         // Hacer la actualizacion en la base de datos, manejando metodo booleano para saber si se actualizo o no
         boolean actualizacion = userDao.asignarRolMonitor(idAsignacion, idInstructor);

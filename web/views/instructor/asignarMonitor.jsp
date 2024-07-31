@@ -86,7 +86,8 @@
         </a>
         <!-- Asignar monitor -->
         <a href="asignarMonitor.jsp">
-            <form action="/svListarMonitores" method="POST">
+            <form action="/svListarMonitores" method="GET">
+                <input type="hidden" value="<%= perfil.getId_perfil() %>" name="txtIdInstructor">
                 <button
                     class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
                     <i class="fa-solid fa-plus-minus"></i>
@@ -200,10 +201,10 @@
             <p class="inline-block"> <%= p.getNombre_usuario() + " " + p.getApellido_usuario() %> </p>
           </div>
           <form action="/svEliminarMonitor" method="POST">
-              <input type="hidden" value="<%= p.getId_perfil() %>" name="txtIdMonitor">
-            <button class="btn bg-mdaRed border-none text-white hover:bg-mdaRed">
-              Quitar monitor
-            </button>
+                <input type="hidden" value="<%= p.getId_perfil() %>" name="txtIdMonitor">
+                <button class="btn bg-mdaRed border-none text-white hover:bg-mdaRed">
+                  Quitar monitor
+                </button>
           </form>
         </div>
         <% 

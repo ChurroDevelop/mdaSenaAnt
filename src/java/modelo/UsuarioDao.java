@@ -21,7 +21,7 @@ public class UsuarioDao extends Conexion { // Hereda todo de la clase Conexion
                 Dependiendo la cantidad de columnas a la cual le vamos a agregar los valores, en el values se colocan signos de interrogacion es decir
                 En este caso se estan manejando que se van a insertar 3 datos, entonces de colocan 3 signos de interrogacion, si simplemente fuera 1 solo 1 signo de interrogacion
              */
-            String sqlUser = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES (?,?,?)"; // Se prepara en String el script que se va a ejecutar, de acuerdo con la base de datos
+            String sqlUser = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk, estado_usuario) VALUES (?,?,?,true)"; // Se prepara en String el script que se va a ejecutar, de acuerdo con la base de datos
             ps = getCon().prepareStatement(sqlUser); // Compila y prepara la consulta como codigo SQL
             ps.setString(1, user.getCorreoInst());  // Se setea la primera columna como String, dependiendo de la base de datos
             ps.setString(2, user.getPassword()); // Se sete la segunda columna como String, dependiendo la base de datos

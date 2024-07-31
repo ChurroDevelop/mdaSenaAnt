@@ -227,6 +227,7 @@
 
   <!-- Enlace para manejo del DOM -->
   <script src="scripts/inicio.js"></script>
+  <script src="scripts/script.js"></script>
 </body>
 
 </html>
