@@ -12,46 +12,67 @@ import modelo.UsuarioDao;
 import modelo.objetos.Perfil;
 import modelo.objetos.Usuario;
 
+/**
+ * Servlet para manejar el inicio de sesión de usuarios. Valida las credenciales
+ * proporcionadas por el usuario y establece la sesión correspondiente.
+ */
 public class svLogin extends HttpServlet {
-    UsuarioDao userDao = new UsuarioDao(); // Instancia de un usuarioDao que manejara los Procesos del CRUD
-    Usuario u = new Usuario(); // Instancia de nuevo usuario para setearle sus atributos
-    Perfil profile = new Perfil();
-    PerfilDAO profileDao = new PerfilDAO();
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
+    // Instancias de los DAOs y objetos necesarios para la autenticación
+    private final UsuarioDao userDao = new UsuarioDao(); // DAO para manejar operaciones de usuario
+    private final PerfilDAO profileDao = new PerfilDAO(); // DAO para manejar operaciones de perfil
+    private final Usuario u = new Usuario(); // Objeto Usuario para almacenar credenciales
+    private Perfil profile = new Perfil(); // Objeto Perfil para almacenar la información del perfil del usuario
 
+    /**
+     * Maneja las solicitudes POST para autenticar al usuario y establecer la
+     * sesión.
+     *
+     * @param request Solicitud HTTP que contiene las credenciales del usuario.
+     * @param response Respuesta HTTP que indica el resultado de la
+     * autenticación.
+     * @throws ServletException Si ocurre un error durante el procesamiento de
+     * la solicitud.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession sesion = request.getSession(); // Instancia para poder atrapar la sesion del usuario que se logea
+        // Obtiene la sesión actual para almacenar los datos del usuario y del perfil
+        HttpSession sesion = request.getSession();
         HttpSession sesionPerfil = request.getSession();
-        request.setCharacterEncoding("UTF-8"); // Toma cotejamiento para poder obtener los acentos latinos
-        
-        String correo = request.getParameter("txtCorreo"); // Toma del formulario el correo que ingresa el usuario
-        String password = request.getParameter("txtClave"); // Toma del formulario la clave que ingresa el usuario
-        String encript = EncriptarContraseña.encriptar(password); // Encripta la contraseña para despues compararla con la contraseña que ingreso en el registro
-        
-        u.setCorreoInst(correo); // Se le setea el correo institucional al usuario
-        u.setPassword(encript); // Se le setea la contraseña encriptada al usuario
-        
+
+        // Configura la codificación de caracteres para manejar acentos y caracteres especiales
+        request.setCharacterEncoding("UTF-8");
+
+        // Recupera el correo y la contraseña proporcionados por el usuario en el formulario
+        String correo = request.getParameter("txtCorreo");
+        String password = request.getParameter("txtClave");
+
+        // Encripta la contraseña para compararla con la almacenada en la base de datos
+        String encript = EncriptarContraseña.encriptar(password);
+
+        // Configura el objeto Usuario con el correo y la contraseña encriptada
+        u.setCorreoInst(correo);
+        u.setPassword(encript);
+
         System.out.println("Usuario inicial: " + u.getCorreoInst());
-        
-        Usuario newUser = new Usuario(); // Se instancia un nuevo usuario para obtener todos los datos segun el registro
-        newUser = userDao.getDataUser(u); // Se le asigna a newUser, el metodo ya que este metodo retorna un objeto usuario
-        
+
+        // Obtiene la información del usuario desde la base de datos
+        Usuario newUser = userDao.getDataUser(u);
         profile = profileDao.dataPerfil(newUser);
-        
+
+        // Configura el tipo de respuesta como texto plano
         response.setContentType("text/plain");
-        if (userDao.autenticacion(u)) { // Si la autenticacion devuelve true
-            sesion.setAttribute("dataUser", newUser); // Se atrapara el id del usuario en una sesion
-            sesionPerfil.setAttribute("dataPerfil", profile); 
+
+        // Verifica las credenciales del usuario
+        if (userDao.autenticacion(u)) {
+            // Si la autenticación es exitosa, almacena los datos del usuario y del perfil en la sesión
+            sesion.setAttribute("dataUser", newUser);
+            sesionPerfil.setAttribute("dataPerfil", profile);
             response.getWriter().write("success"); // Escribe 'success' en la respuesta
         } else {
-            response.getWriter().write("error"); // Escribe 'error' en la respuesta
+            response.getWriter().write("error"); // Escribe 'error' en la respuesta si las credenciales son incorrectas
         }
     }
 }

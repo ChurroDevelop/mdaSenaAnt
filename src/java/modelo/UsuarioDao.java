@@ -8,192 +8,256 @@ import modelo.objetos.Perfil;
 import modelo.objetos.Rol;
 import modelo.objetos.Usuario;
 
-public class UsuarioDao extends Conexion { // Hereda todo de la clase Conexion
+/**
+ * Data Access Object (DAO) para operaciones relacionadas con los usuarios. Esta
+ * clase proporciona métodos para registrar usuarios, autenticarlos, obtener su
+ * ID, verificar su existencia, y realizar otras operaciones relacionadas con
+ * los usuarios en la base de datos.
+ */
+public class UsuarioDao extends Conexion {
 
-    // Metodo publico que retornara true o false, recibira como parametros un objeto usuario y el rol que se esta seteando en el Servlet de Registro
+    /**
+     * Registra un nuevo usuario en la base de datos.
+     *
+     * @param user El objeto Usuario que contiene la información del usuario a
+     * registrar.
+     * @param id_rol El ID del rol asignado al usuario.
+     * @return true si el usuario fue registrado exitosamente, false en caso
+     * contrario.
+     * @throws SQLException Si ocurre un error en la operación SQL.
+     */
     public boolean registrarUsuario(Usuario user, int id_rol) throws SQLException {
-        boolean insertado = false; // Por defecto retornara false
-        PreparedStatement ps = null; // PreparedStatement para el manejo de los scripts de SQL
-        try { // Manejo de excepciones
-            this.conectar(); // Se llama al metodo conectar para que conecte con la base de datos
-            /*
-            IMPORTANTE:
-                Dependiendo la cantidad de columnas a la cual le vamos a agregar los valores, en el values se colocan signos de interrogacion es decir
-                En este caso se estan manejando que se van a insertar 3 datos, entonces de colocan 3 signos de interrogacion, si simplemente fuera 1 solo 1 signo de interrogacion
-             */
-            String sqlUser = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES (?,?,?)"; // Se prepara en String el script que se va a ejecutar, de acuerdo con la base de datos
-            ps = getCon().prepareStatement(sqlUser); // Compila y prepara la consulta como codigo SQL
-            ps.setString(1, user.getCorreoInst());  // Se setea la primera columna como String, dependiendo de la base de datos
-            ps.setString(2, user.getPassword()); // Se sete la segunda columna como String, dependiendo la base de datos
-            ps.setInt(3, id_rol); // Se setea la tercera columna como Int, dependiendo la base de datos
-            if (ps.executeUpdate() == 1) { // Si la ejecucion del Script es 1 es decir "True"
-                insertado = true; // cambia el valor del insertado a true y es lo que devolvera el metodo
+        boolean insertado = false; // Por defecto, el usuario no se ha insertado.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
+        try {
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para insertar un nuevo usuario en la base de datos.
+            String sqlUser = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES (?,?,?)";
+            ps = getCon().prepareStatement(sqlUser); // Preparar la consulta SQL.
+            // Establecer los valores para la consulta.
+            ps.setString(1, user.getCorreoInst());
+            ps.setString(2, user.getPassword());
+            ps.setInt(3, id_rol);
+            // Ejecutar la consulta y verificar si se insertó un registro.
+            if (ps.executeUpdate() == 1) {
+                insertado = true; // El usuario fue insertado exitosamente.
             }
             System.out.println("Usuario creado");
         } catch (SQLException e) {
-            System.out.println("Error creando el usuario"); // Manejo del error por si no crea el usuario
+            System.out.println("Error creando el usuario: " + e.getMessage());
         } finally {
-            this.desconectar(); // Siempre se debera manejar el metodo desconectar la base de datos
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return insertado; // Returna true o false dependiendo del recorrido que hizo en el metodo
+        return insertado; // Retornar true o false dependiendo del éxito de la operación.
     }
 
-    // Metodo publico que retornara true o false, recibira como parametro un objeto usuario el cual se setea en el servlet del login
+    /**
+     * Autentica a un usuario basándose en su correo electrónico y contraseña.
+     *
+     * @param user El objeto Usuario con el correo electrónico y la contraseña
+     * para autenticación.
+     * @return true si el usuario es autenticado exitosamente, false en caso
+     * contrario.
+     */
     public boolean autenticacion(Usuario user) {
-        boolean accion = false; // Variable accion que por defecto sera false
-        PreparedStatement ps = null; // Variable para el manejo de los Scripts SQL
-        ResultSet rs = null; // Variable para manejar los resultados de las consultas 
+        boolean accion = false; // Por defecto, la autenticación falla.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
+        ResultSet rs = null; // Variable para manejar los resultados de la consulta.
         try {
-            this.conectar(); // Metodo para conectar con la base de datos
-            String sql = "SELECT * FROM tb_usuarios WHERE correo_inst = ? and password = ?"; // Consulta SQL que aceptara el correo institucional y la contraseña entrante
-            ps = getCon().prepareStatement(sql); // Manejo para la conexion a la base de datos
-            ps.setString(1, user.getCorreoInst()); // La primera coolumna tomara el correo entrante 
-            ps.setString(2, user.getPassword()); // La segunda columna tomara la contraseña de manera que ya esta encriptada, la cual la buscara en la base de datos
-            rs = ps.executeQuery(); // ejecuta la consulta
-            if (rs.absolute(1)) { // Si encuentra el correo institucional y coinciden la contraseña 
-                System.out.println("Se encontro el usuario y se logeo");
-                accion = true; // devolvera true
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para verificar el correo electrónico y la contraseña del usuario.
+            String sql = "SELECT * FROM tb_usuarios WHERE correo_inst = ? and password = ?";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            // Establecer los valores para la consulta.
+            ps.setString(1, user.getCorreoInst());
+            ps.setString(2, user.getPassword());
+            rs = ps.executeQuery(); // Ejecutar la consulta SQL.
+            // Verificar si se encontró un usuario con el correo electrónico y contraseña proporcionados.
+            if (rs.absolute(1)) {
+                System.out.println("Se encontró el usuario y se logeó");
+                accion = true; // La autenticación fue exitosa.
             }
         } catch (Exception e) {
             System.out.println("ERROR AL LOGIN: " + e.getMessage());
         } finally {
-            this.desconectar(); // Metodo para desconectar
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return accion; // Retorna true o false dependiendo del recorrido
+        return accion; // Retornar true o false dependiendo del éxito de la autenticación.
     }
 
-    // Metodo para obtener el id del usuario con el correo que ingrese
+    /**
+     * Obtiene el ID del usuario basado en su correo electrónico.
+     *
+     * @param correo El correo electrónico del usuario.
+     * @return El ID del usuario si se encuentra, 0 si no se encuentra.
+     * @throws SQLException Si ocurre un error en la operación SQL.
+     */
     public int obtenerId(String correo) throws SQLException {
-        int id = 0; // Variable que por defecto sera 0
-        PreparedStatement ps = null; // Prepared statement para el manejo de los Scripts SQL
-        ResultSet rs = null; // Result set para poder obtener eel valor de las consultas SQL
+        int id = 0; // Por defecto, el ID del usuario es 0.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
+        ResultSet rs = null; // Variable para manejar los resultados de la consulta.
         try {
-            this.conectar(); // Se conecta a la base de datos
-            String sql = "SELECT * FROM tb_usuarios WHERE correo_inst = ?"; // Consulta SQL para poder obtener el id del usuario que ingreso el correo
-            ps = getCon().prepareStatement(sql); // Preparar el Script SQL
-            ps.setString(1, correo); // en la primera columna se le coloca el correo entrante del metod 
-            rs = ps.executeQuery(); // Ejecuta la consulta para poder obtener el id del usuario
-            if (rs.next()) { // Si existe algun usuario con ese correo devolvera el id
-                id = rs.getInt("id_usuario"); // a la variable id, se le asigna el valor que retorne la consulta
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para obtener el ID del usuario basado en su correo electrónico.
+            String sql = "SELECT * FROM tb_usuarios WHERE correo_inst = ?";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            // Establecer el valor del correo electrónico en la consulta.
+            ps.setString(1, correo);
+            rs = ps.executeQuery(); // Ejecutar la consulta SQL.
+            // Verificar si se encontró un usuario con el correo electrónico proporcionado.
+            if (rs.next()) {
+                id = rs.getInt("id_usuario"); // Obtener el ID del usuario.
             } else {
                 System.out.println("No se encuentra el correo");
             }
         } catch (Exception e) {
             System.out.println("Error obteniendo el ID: " + e.getMessage());
         } finally {
-            this.desconectar(); // Metodo para desconectar la base de datos
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return id; // Retorna el id
+        return id; // Retornar el ID del usuario.
     }
 
-    // Metodo para validar que el usuario ya existe, tendra como parametros un objeto de tipo usuario
+    /**
+     * Verifica si un usuario ya existe en la base de datos.
+     *
+     * @param user El objeto Usuario con el correo electrónico para verificar.
+     * @return true si el usuario existe, false en caso contrario.
+     */
     public boolean buscarUser(Usuario user) {
-        boolean encontrado = false; // Estado para saber si se encuentra o no el usuario registrado, por defecto false
-        PreparedStatement ps = null; // Prepared statement para el manejo de los Scripts SQL
-        ResultSet rs = null; // ResultSet para el manejo del retorno de las consultas
+        boolean encontrado = false; // Por defecto, el usuario no se encuentra.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
+        ResultSet rs = null; // Variable para manejar los resultados de la consulta.
         try {
-            this.conectar(); // Metodo para conectar con la base de datos
-            String sql = "SELECT COUNT(*) FROM tb_usuarios WHERE correo_inst = ?"; // Script SQL que buscara si existe un usuario con ese correo institucional
-            ps = getCon().prepareStatement(sql); // Se prepara el Script SQL para ser ejecutado
-            ps.setString(1, user.getCorreoInst()); // Se setea en String el correo institucional
-            rs = ps.executeQuery(); // Se ejecuta la consulta y el RS tomara el valor de retorno de esa consulta
-            if (rs.next()) { // si se encuentra un usuario
-                int contador = rs.getInt(1); // se debera devolver el id del usuario
-                if (encontrado = (contador > 0)) {
-                    System.out.println("Se encontro un usuario");
-
-                    return true;
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para verificar si existe un usuario con el correo electrónico proporcionado.
+            String sql = "SELECT COUNT(*) FROM tb_usuarios WHERE correo_inst = ?";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            // Establecer el valor del correo electrónico en la consulta.
+            ps.setString(1, user.getCorreoInst());
+            rs = ps.executeQuery(); // Ejecutar la consulta SQL.
+            // Verificar si se encontró al menos un usuario con el correo electrónico proporcionado.
+            if (rs.next()) {
+                int contador = rs.getInt(1); // Obtener el conteo de usuarios encontrados.
+                if (contador > 0) {
+                    System.out.println("Se encontró un usuario");
+                    encontrado = true; // El usuario fue encontrado.
                 } else {
-                    System.out.println("No se encontro un usuario");
-
-                    return false;
+                    System.out.println("No se encontró un usuario");
                 }
-//                encontrado = (contador > 0); // si contador es mayor a 0 devuelve true, se le asignara al encontrado y eso retornara
             }
         } catch (Exception e) {
             System.out.println("Error encontrando el usuario: " + e.getMessage());
         } finally {
-            this.desconectar(); // Metodo para desconectar la base de datos
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return encontrado; // Retorna la variable encontrad, que depende del recorrido de todo el metodo
+        return encontrado; // Retornar true o false dependiendo de si el usuario fue encontrado.
     }
 
-    // Metodo para obtener todos los datos del usuario
-    public Usuario getDataUser(Usuario user){
-        RolDAO rolDao = new RolDAO(); // Instancia de un nuevo rolDao para obtener los datos del perfil de dicho usuario
-        Usuario u = null; // Nuevo objeto u para hacerle seteo de las nuevas propiedades
-        PreparedStatement ps = null; // Prepared statement para prepara la consulta SQL
-        ResultSet rs = null; // Result set 
+    /**
+     * Obtiene todos los datos de un usuario basado en su correo electrónico.
+     *
+     * @param user El objeto Usuario con el correo electrónico para buscar.
+     * @return El objeto Usuario con todos los datos encontrados, o null si no
+     * se encuentra.
+     */
+    public Usuario getDataUser(Usuario user) {
+        RolDAO rolDao = new RolDAO(); // Instanciar RolDAO para obtener el rol del usuario.
+        Usuario u = null; // Crear una nueva instancia de Usuario.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
+        ResultSet rs = null; // Variable para manejar los resultados de la consulta.
         try {
-            this.conectar(); // Metodo para conectar a la base de datos
-            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios WHERE correo_inst = ?"; // Consulta sql para obtener todos los datos del usuario
-            ps = getCon().prepareStatement(sql); // Preparar Consulta para ejecutarla
-            ps.setString(1, user.getCorreoInst()); // Setear el correo entrante
-            rs = ps.executeQuery(); // Ejecutar consulta sql
-            if (rs.next()) { // Si existe algun usuario con ese correo electronico
-                u = new Usuario(); // Instancia de un nuevo usuario
-                int idUser = rs.getInt("id_usuario"); // Se toma el id del usuario como un entero
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para obtener todos los datos del usuario basado en el correo electrónico.
+            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios WHERE correo_inst = ?";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            // Establecer el valor del correo electrónico en la consulta.
+            ps.setString(1, user.getCorreoInst());
+            rs = ps.executeQuery(); // Ejecutar la consulta SQL.
+            // Verificar si se encontró un usuario con el correo electrónico proporcionado.
+            if (rs.next()) {
+                u = new Usuario(); // Crear una nueva instancia de Usuario.
+                int idUser = rs.getInt("id_usuario"); // Obtener el ID del usuario.
                 String correo = rs.getString("correo_inst");
                 String password = rs.getString("password");
-                
-                // Se setean los datos al usuario, es para poder obtener el manejo de las sessiones
+
+                // Establecer los datos del usuario en la instancia.
                 u.setCorreoInst(correo);
                 u.setId_usuario(idUser);
                 u.setPassword(password);
-                // Se hace un callback a un metodo del rol, para poder obtener el id y el nombre del rol de dicho usuario
+                // Obtener el rol del usuario utilizando RolDAO.
                 Rol rol = rolDao.getIdRol(user);
                 u.setId_rol_fk(rol);
             }
         } catch (Exception e) {
             System.out.println("Error en obtener los datos del usuario: " + e.getMessage());
+        } finally {
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        finally {
-            this.desconectar(); // Metodo para desconectar la base de datos
-        }
-        return u;
+        return u; // Retornar el objeto Usuario con los datos obtenidos.
     }
-    
-    // Metodo para que el instructor pueda asignar el rol de monitor a un aprendiz, que recibe el id del usuario a darle el rol
+
+    /**
+     * Asigna el rol de monitor a un usuario específico.
+     *
+     * @param userId El ID del usuario al que se le asignará el rol de monitor.
+     * @param idInstructor El ID del instructor que asigna el rol.
+     * @return true si el rol fue asignado exitosamente, false en caso
+     * contrario.
+     */
     public boolean asignarRolMonitor(String userId, String idInstructor) {
-        boolean estado = false; // Manejo de estado para saber si se actualizo o no el rol de dicho usuario
-        PreparedStatement ps = null; // Variable para preparar la consulta
+        boolean estado = false; // Por defecto, el rol no se asigna.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
         try {
-            this.conectar(); // Metodo para conectar con la base de datos
-            String sql = "UPDATE tb_usuarios SET id_rol_fk = 3, id_instructor_asig = ? WHERE id_usuario = ?"; // Consulta SQL para realizar el update del rol de dicho usuario
-            ps = getCon().prepareStatement(sql); // Preparar la consulta para ejecutarla
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para actualizar el rol del usuario a "monitor" (ID = 3) y asignar el instructor.
+            String sql = "UPDATE tb_usuarios SET id_rol_fk = 3, id_instructor_asig = ? WHERE id_usuario = ?";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            // Establecer los valores para la consulta.
             ps.setString(1, idInstructor);
-            ps.setString(2, userId); // Se setea el id del usuuario para realizarle su modificacion
-            int columnas = ps.executeUpdate(); // executeUpdate devuelve un entero, lo cual es para saber si se modifico o no
+            ps.setString(2, userId);
+            // Ejecutar la consulta y verificar si se actualizó al menos un registro.
+            int columnas = ps.executeUpdate();
             if (columnas > 0) {
-                estado = true; // Vuelve true el estado y lo modifica
+                estado = true; // El rol fue asignado exitosamente.
             }
         } catch (Exception e) {
             System.out.println("Error actualizando rol: " + e.getMessage());
         } finally {
-            this.desconectar(); // Metodo para desconectar la base de datos
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return estado;
+        return estado; // Retornar true o false dependiendo del éxito de la asignación del rol.
     }
-    
-    // Método para cambiar la contraseña
+
+    /**
+     * Cambia la contraseña de un usuario.
+     *
+     * @param userId El ID del usuario cuya contraseña se cambiará.
+     * @param nuevaPassword La nueva contraseña del usuario.
+     * @return true si la contraseña fue actualizada exitosamente, false en caso
+     * contrario.
+     */
     public boolean cambiarContrasena(int userId, String nuevaPassword) {
-        boolean actualizado = false; // Por defecto retornara false
-        PreparedStatement ps = null; // PreparedStatement para el manejo de los scripts de SQL
+        boolean actualizado = false; // Por defecto, la contraseña no se actualiza.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
         try {
-            this.conectar(); // Se llama al metodo conectar para que conecte con la base de datos
-            String sqlUpdate = "UPDATE tb_usuarios SET password = ? WHERE id_usuario = ?"; // Script SQL para actualizar la contraseña del usuario
-            ps = getCon().prepareStatement(sqlUpdate); // Compila y prepara la consulta como código SQL
-            ps.setString(1, nuevaPassword); // Se setea la nueva contraseña
-            ps.setInt(2, userId); // Se setea el id del usuario
-            if (ps.executeUpdate() == 1) { // Si la ejecución del Script es 1 es decir "True"
-                actualizado = true; // Cambia el valor de actualizado a true y es lo que devolverá el método
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para actualizar la contraseña del usuario.
+            String sqlUpdate = "UPDATE tb_usuarios SET password = ? WHERE id_usuario = ?";
+            ps = getCon().prepareStatement(sqlUpdate); // Preparar la consulta SQL.
+            // Establecer los valores para la consulta.
+            ps.setString(1, nuevaPassword);
+            ps.setInt(2, userId);
+            // Ejecutar la consulta y verificar si se actualizó al menos un registro.
+            if (ps.executeUpdate() == 1) {
+                actualizado = true; // La contraseña fue actualizada exitosamente.
                 System.out.println("Contraseña actualizada");
             }
         } catch (SQLException e) {
-            System.out.println("Error actualizando la contraseña: " + e.getMessage()); // Manejo del error por si no actualiza la contraseña
+            System.out.println("Error actualizando la contraseña: " + e.getMessage());
         } finally {
-            this.desconectar(); // Siempre se deberá manejar el método desconectar la base de datos
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return actualizado; // Retorna true o false dependiendo del recorrido que hizo en el método
+        return actualizado; // Retornar true o false dependiendo del éxito de la actualización de la contraseña.
     }
 }

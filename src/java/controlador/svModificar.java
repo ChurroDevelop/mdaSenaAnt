@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
@@ -15,55 +11,65 @@ import javax.servlet.http.HttpSession;
 import modelo.PerfilDAO;
 import modelo.objetos.Perfil;
 
+/**
+ * Servlet para manejar la modificación de un perfil de usuario. Permite
+ * actualizar los datos del perfil del usuario en la base de datos.
+ */
 @WebServlet(name = "svModificar", urlPatterns = {"/svModificar"})
 public class svModificar extends HttpServlet {
-    // Instancia de un nuevo perfilDao para hacer la actualizacion del perfil de dicho usuario
-    PerfilDAO pDao = new PerfilDAO();
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
+    // Instancia de PerfilDAO para manejar operaciones de actualización de perfil en la base de datos
+    private final PerfilDAO pDao = new PerfilDAO();
 
+    /**
+     * Maneja las solicitudes POST para actualizar el perfil de un usuario.
+     *
+     * @param request Solicitud HTTP que contiene los datos del perfil del
+     * usuario a actualizar.
+     * @param response Respuesta HTTP que redirige al usuario después de la
+     * actualización.
+     * @throws ServletException Si ocurre un error durante el procesamiento de
+     * la solicitud.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Crear una nueva session para restablecer los datos del perfil desactualizado
+        // Obtiene la sesión actual para acceder a los datos del perfil del usuario
         HttpSession sesion = request.getSession();
-        
-        // Cotejamiento de los caracteres para acentos y Ñ
+
+        // Configura la codificación de caracteres para manejar acentos y caracteres especiales
         request.setCharacterEncoding("UTF-8");
-        
-        // Se castea la obtencion de los datos del perfil del usuario
+
+        // Recupera el objeto Perfil desde la sesión
         Perfil p = (Perfil) sesion.getAttribute("dataPerfil");
-        
-        // Obtener los datos del formulario para actualizarlos en la base de datos
+
+        // Obtiene los datos del formulario para actualizar el perfil
         String idPerfil = request.getParameter("txtIdPerfil");
         String nombre = request.getParameter("txtNombre");
         String apellido = request.getParameter("txtApellido");
         String numero = request.getParameter("txtDocumento");
         String centro = request.getParameter("txtCentro");
-        
-        // Convertir el idPerfil a entero
+
+        // Convierte el ID del perfil a entero
         int idProfile = Integer.parseInt(idPerfil);
-        
-        // Se setean los datos al objeto perfil
+
+        // Configura el objeto Perfil con los datos actualizados
         p.setId_perfil(idProfile);
         p.setNombre_usuario(nombre);
         p.setApellido_usuario(apellido);
         p.setNum_documento(numero);
         p.setCentro_formacion(centro);
-        
-        // Dato boolean para saber si fue actualizado o no, que se le pasa el perfil seteado
+
+        // Intenta actualizar el perfil en la base de datos
         boolean isUpdate = pDao.actualizarPerfil(p);
-        
-        // Si fue actualizado sobreEscribe la session y no se pierde al momento de la vista
+
+        // Verifica si la actualización fue exitosa y redirige al usuario
         if (isUpdate) {
-            System.out.println("Se modifico el usuario");
-            response.sendRedirect("editarPerfil.jsp");
+            System.out.println("Se modificó el perfil exitosamente");  // Mensaje en consola para confirmación
+            response.sendRedirect("editarPerfil.jsp");  // Redirige al usuario a la página de edición de perfil
         } else {
-            System.out.println("No se envio al metodo de modificar");
+            System.out.println("No se pudo actualizar el perfil");  // Mensaje en consola en caso de error
         }
-        
     }
 }

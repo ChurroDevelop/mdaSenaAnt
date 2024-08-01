@@ -8,58 +8,78 @@ import java.sql.ResultSet;
 import modelo.objetos.Usuario;
 import com.google.gson.JsonObject;
 
-public class PerfilDAO extends Conexion{
-    // Metodo para realizar el nuevo registro del perfil con el usuario asociado
-    public boolean registroPerfil(Perfil profile, int id_user) throws SQLException{
-        boolean insert = false; // Manejo del estado para saber si se registro el perfil o no
-        PreparedStatement ps = null; // Variable para preparar las consultas
+/**
+ * Data Access Object (DAO) para operaciones relacionadas con perfiles. Esta
+ * clase proporciona métodos para registrar, actualizar, obtener y buscar
+ * perfiles en la base de datos.
+ */
+public class PerfilDAO extends Conexion {
+
+    /**
+     * Registra un nuevo perfil en la base de datos asociado a un usuario.
+     *
+     * @param profile El objeto Perfil que contiene la información del perfil a
+     * registrar.
+     * @param id_user El ID del usuario asociado al perfil.
+     * @return true si el perfil fue registrado exitosamente, false en caso
+     * contrario.
+     * @throws SQLException Si ocurre un error en la operación SQL.
+     */
+    public boolean registroPerfil(Perfil profile, int id_user) throws SQLException {
+        boolean insert = false; // Variable para indicar si la inserción fue exitosa.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
         try {
-            this.conectar(); // Metodo para conectar a la base de datos
-            String sql = "INSERT INTO tb_perfil(nombre_usuario, apellido_usuario, num_documento, centro_formacion, id_usuario_fk) VALUES (?,?,?,?,?)"; // Insert into del nuevo perfil asociado al usuario
-            ps = getCon().prepareStatement(sql); // Preparar la consulta sql
-            // Setear los parametros para registrar el perfil
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para insertar un nuevo perfil en la base de datos.
+            String sql = "INSERT INTO tb_perfil(nombre_usuario, apellido_usuario, num_documento, centro_formacion, id_usuario_fk) VALUES (?,?,?,?,?)";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            // Establecer los valores para la consulta.
             ps.setString(1, profile.getNombre_usuario());
             ps.setString(2, profile.getApellido_usuario());
             ps.setString(3, profile.getNum_documento());
             ps.setString(4, profile.getCentro_formacion());
             ps.setInt(5, id_user);
-            // Si se realizo la inserccion devuelve tru
+            // Ejecutar la consulta y verificar si se insertó un registro.
             if (ps.executeUpdate() == 1) {
-                insert = true;
+                insert = true; // La inserción fue exitosa.
             }
         } catch (SQLException e) {
             System.out.println("Error creando el perfil: " + e.getMessage());
         } finally {
-            // Metodo para desconectar
-            this.desconectar();
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return insert;
+        return insert; // Retornar true o false dependiendo del éxito de la inserción.
     }
-    
-    // Metodo para obtener los datos del perfil
-    public Perfil dataPerfil(Usuario user){
-        Perfil profile = null; // Perfil nullo para luego instanciarlo al momento de obtener los datos de perfil
-        PreparedStatement ps = null; // Variable para preparar la consulta
-        ResultSet rs = null; // Variable para obtener los datos de dicho perfil
+
+    /**
+     * Obtiene los datos del perfil basado en el correo electrónico del usuario.
+     *
+     * @param user El objeto Usuario que contiene el correo electrónico para
+     * buscar el perfil.
+     * @return El objeto Perfil con los datos encontrados, o null si no se
+     * encuentra.
+     */
+    public Perfil dataPerfil(Usuario user) {
+        Perfil profile = null; // Inicialmente, no se encuentra el perfil.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
+        ResultSet rs = null; // Variable para manejar los resultados de la consulta.
         try {
-            // Metodo para conectar a la base de datos
-            this.conectar();
-            String sql = "SELECT id_perfil, nombre_usuario, apellido_usuario, num_documento, centro_formacion FROM tb_perfil JOIN  tb_usuarios on tb_usuarios.id_usuario = id_usuario_fk WHERE tb_usuarios.correo_inst = ?"; // Preparar consulta sql para obtner los datos
-            ps = getCon().prepareStatement(sql); // Preparar consulta sql para ejecutarla
-            ps.setString(1, user.getCorreoInst()); // Setear el parametro a la consulta
-            rs = ps.executeQuery(); // Ejecutar la consulta SQL
-            
-            // Si se realizo la consulta
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para obtener los datos del perfil basado en el correo electrónico del usuario.
+            String sql = "SELECT id_perfil, nombre_usuario, apellido_usuario, num_documento, centro_formacion FROM tb_perfil JOIN tb_usuarios on tb_usuarios.id_usuario = id_usuario_fk WHERE tb_usuarios.correo_inst = ?";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            ps.setString(1, user.getCorreoInst()); // Establecer el valor del correo electrónico en la consulta.
+            rs = ps.executeQuery(); // Ejecutar la consulta SQL.
+            // Verificar si se encontraron datos del perfil.
             if (rs.next()) {
-                profile = new Perfil(); // Instancia el nuevo perfil
-                int id_perfil = rs.getInt("id_perfil"); // Convierte el id en entero
-                // Obtener los datos en varibales para despues setearlas en el objeto
+                profile = new Perfil(); // Crear una nueva instancia de Perfil.
+                int id_perfil = rs.getInt("id_perfil"); // Obtener el ID del perfil.
+                // Obtener los datos del perfil y establecerlos en el objeto Perfil.
                 String nombre = rs.getString("nombre_usuario");
                 String apellido = rs.getString("apellido_usuario");
                 String numero = rs.getString("num_documento");
                 String centro = rs.getString("centro_formacion");
-                
-                // Setear los datos al objeto
+
                 profile.setId_perfil(id_perfil);
                 profile.setNombre_usuario(nombre);
                 profile.setApellido_usuario(apellido);
@@ -70,72 +90,80 @@ public class PerfilDAO extends Conexion{
             }
         } catch (Exception e) {
             System.out.println("Error al obtener los datos en perfilDao: " + e.getMessage());
+        } finally {
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        finally {
-            // Metodo para desconectar la base de datos
-            this.desconectar();
-        }
-        return profile;
+        return profile; // Retornar el objeto Perfil con los datos obtenidos.
     }
-    
-    // Metodo para actualizar los datos del perfil que recibe un objeto perfil
-    public boolean actualizarPerfil(Perfil p){
-        boolean estado = false; // Retornara un estado true o false dependiendo
-        PreparedStatement ps = null; // Variable para preparar la consulta
+
+    /**
+     * Actualiza los datos de un perfil en la base de datos.
+     *
+     * @param p El objeto Perfil con los datos actualizados.
+     * @return true si el perfil fue actualizado exitosamente, false en caso
+     * contrario.
+     */
+    public boolean actualizarPerfil(Perfil p) {
+        boolean estado = false; // Variable para indicar si la actualización fue exitosa.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
         try {
-            this.conectar(); // Metodo para conectar a la base de datos
-            String sql = "UPDATE tb_perfil SET nombre_usuario = ?, apellido_usuario = ?, num_documento = ?, centro_formacion = ? WHERE id_perfil = ?"; // Consulta SQL para actualizar los datos del perfil
-            ps = getCon().prepareStatement(sql); // Conectar y preparar consulta para ejecutarla
-            
-            // Setear los parametros para la actualizacion 
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para actualizar los datos del perfil.
+            String sql = "UPDATE tb_perfil SET nombre_usuario = ?, apellido_usuario = ?, num_documento = ?, centro_formacion = ? WHERE id_perfil = ?";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            // Establecer los valores para la consulta.
             ps.setString(1, p.getNombre_usuario());
             ps.setString(2, p.getApellido_usuario());
             ps.setString(3, p.getNum_documento());
             ps.setString(4, p.getCentro_formacion());
             ps.setInt(5, p.getId_perfil());
-            int modificado = ps.executeUpdate(); // ExecutaUpdate, devuelve un entero es decir casi igual true o false
-            // Si el usuario fue modificado
+            int modificado = ps.executeUpdate(); // Ejecutar la consulta y obtener el número de filas afectadas.
+            // Verificar si se actualizó al menos un registro.
             if (modificado > 0) {
                 System.out.println("EL USUARIO CON ID: " + p.getId_perfil() + " HA SIDO MODIFICADO");
-                estado = true; // Cambia el estado a true
-                return estado; // Retorna el estado
+                estado = true; // La actualización fue exitosa.
+                return estado; // Retornar true si la actualización fue exitosa.
             }
         } catch (Exception e) {
             System.out.println("Error actualizando el perfil: " + e.getMessage());
         } finally {
-            // Metodo para desconectar con la base de datos
-            this.desconectar();
+            this.desconectar(); // Desconectar de la base de datos.
         }
-        return estado;
+        return estado; // Retornar false si la actualización no fue exitosa.
     }
-    
-    // Metodo para buscar el aprendiz dependiendo del numero de documento
-    public JsonObject buscarAprendiz(String numDocumento){
-     JsonObject informacionAprendiz = new JsonObject(); // Variable de JSONObjetc para obtener los datos del usuario como un objeto
-     PreparedStatement ps = null; // Variable para preparar las consultas SQL
-     ResultSet rs = null; // Varibale para obtener los datos que devuelve la base de datos
+
+    /**
+     * Busca un aprendiz en la base de datos basado en su número de documento.
+     *
+     * @param numDocumento El número de documento del aprendiz a buscar.
+     * @return Un JsonObject con la información del aprendiz, o un JsonObject
+     * vacío si no se encuentra.
+     */
+    public JsonObject buscarAprendiz(String numDocumento) {
+        JsonObject informacionAprendiz = new JsonObject(); // Crear un nuevo objeto JSON para la información del aprendiz.
+        PreparedStatement ps = null; // Variable para preparar la consulta SQL.
+        ResultSet rs = null; // Variable para manejar los resultados de la consulta.
         try {
-            this.conectar(); // Metodo para conectar a la base de datos
-            String sql = "SELECT tb_perfil.nombre_usuario, tb_perfil.apellido_usuario, tb_perfil.num_documento, tb_perfil.centro_formacion, tb_usuarios.id_usuario FROM tb_perfil JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario WHERE tb_perfil.num_documento = ? AND tb_usuarios.id_rol_fk = 1;"; // Consulta para obtener los usuarios que tienen el rol de aprendiz para poder otorgarles la asignacion
-            ps = getCon().prepareStatement(sql); // Preparar la consulta sql
-            ps.setString(1, numDocumento); // Setear el numero de documento entrante
-            rs = ps.executeQuery(); // Ejecutar consulta en la base de datos
-            // Si existe alguien con este numero de documento
+            this.conectar(); // Conectar a la base de datos.
+            // Consulta SQL para obtener los datos del perfil y usuario basado en el número de documento.
+            String sql = "SELECT tb_perfil.nombre_usuario, tb_perfil.apellido_usuario, tb_perfil.num_documento, tb_perfil.centro_formacion, tb_usuarios.id_usuario FROM tb_perfil JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario WHERE tb_perfil.num_documento = ? AND tb_usuarios.id_rol_fk = 1;";
+            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
+            ps.setString(1, numDocumento); // Establecer el número de documento en la consulta.
+            rs = ps.executeQuery(); // Ejecutar la consulta SQL.
+            // Verificar si se encontraron datos del aprendiz.
             if (rs.next()) {
-                // Se agregan propiedades al JSONObject
+                // Agregar las propiedades al JsonObject con la información del aprendiz.
                 informacionAprendiz.addProperty("details", "Nombre: " + rs.getString("nombre_usuario")
-                + "<br>" + "Numero de documento: " + rs.getString("num_documento"));
+                        + "<br>" + "Numero de documento: " + rs.getString("num_documento"));
                 informacionAprendiz.addProperty("userId", rs.getInt("id_usuario"));
-            }
-            else {
+            } else {
                 System.out.println("NO SE ENCONTRO NINGUN USUARIO CON EL NUMERO DE DOCUMENTO: " + numDocumento);
             }
         } catch (Exception e) {
             System.out.println("Error buscando el aprendiz");
         } finally {
-            // Metodo para desconectar la base de datos
-            this.desconectar();
+            this.desconectar(); // Desconectar de la base de datos.
         }
-     return informacionAprendiz;
+        return informacionAprendiz; // Retornar el JsonObject con la información del aprendiz.
     }
 }

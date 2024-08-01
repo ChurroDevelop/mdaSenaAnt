@@ -12,43 +12,57 @@ import modelo.PerfilDAO;
 import modelo.objetos.Perfil;
 import modelo.objetos.Usuario;
 
+/**
+ * Servlet para manejar el registro de perfiles de usuario. Permite actualizar o
+ * crear un perfil asociado al usuario autenticado.
+ */
 @WebServlet(name = "svPerfil", urlPatterns = {"/svPerfil"})
 public class svPerfil extends HttpServlet {
-    Usuario user = new Usuario(); // Instancia de un nuevo usuario
-    Perfil profile = new Perfil(); // Instancia de un nuevo perfil
-    PerfilDAO profileDao = new PerfilDAO(); // Instancia de un nuevo perfilDao que manejara los procesos CRUD
-    
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
 
+    private final PerfilDAO perfilDao = new PerfilDAO();  // DAO para operaciones CRUD relacionadas con perfiles
+
+    /**
+     * Maneja las solicitudes POST para registrar o actualizar el perfil de un
+     * usuario.
+     *
+     * @param request Solicitud HTTP que contiene la información del perfil del
+     * usuario.
+     * @param response Respuesta HTTP que redirige al usuario después del
+     * registro.
+     * @throws ServletException Si ocurre un error durante el procesamiento de
+     * la solicitud.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession sesionUser = request.getSession(); // Session para el usuario
-        request.setCharacterEncoding("UTF-8"); // Cotejamiento para los acentos en la base de datos
-        
-        String nombre = request.getParameter("txtNombre"); // Toma el nombre del formualario
-        String apellidos = request.getParameter("txtApellidos"); // Toma el apellido del formulario
-        String documento = request.getParameter("txtDocumento"); // Toma el documento del formularip
-        String centro = request.getParameter("txtCentro"); // Toma el centro de formacioon del formulario
-        
-        Usuario user = (Usuario) sesionUser.getAttribute("autenticacion"); // Se castea la sesion que se obtiene del registro
-        
-        profile.setNombre_usuario(nombre); // Se setea el atributo nombre de la clase perfil
-        profile.setApellido_usuario(apellidos); // Se setea el atributo apellido de la clase perfil
-        profile.setNum_documento(documento); // Se setea el atributo documento de la clase perfil
-        profile.setCentro_formacion(centro); // Se setea el atributo centro de formacion de la clase perfil
-        
-        try { // Manejo de errores
-            profileDao.registroPerfil(profile, user.getId_usuario()); // Se registra el perfil y se le pasa el ID del usuario que se seteo
-            System.out.println("Se registro el perfil"); // Muestra mensaje por consola que se pudo registar el nuevo perfil asociado al usuario
-            response.sendRedirect("login.jsp"); // Redirije a la vista que se va a manejar
+        HttpSession sesionUser = request.getSession();  // Obtiene la sesión del usuario autenticado
+        request.setCharacterEncoding("UTF-8");  // Configura la codificación de caracteres para manejar acentos y caracteres especiales
+
+        // Recupera los parámetros del formulario de perfil
+        String nombre = request.getParameter("txtNombre");
+        String apellidos = request.getParameter("txtApellidos");
+        String documento = request.getParameter("txtDocumento");
+        String centro = request.getParameter("txtCentro");
+
+        // Recupera el objeto Usuario de la sesión
+        Usuario user = (Usuario) sesionUser.getAttribute("autenticacion");
+
+        // Crea y configura el objeto Perfil con la información del formulario
+        Perfil perfil = new Perfil();
+        perfil.setNombre_usuario(nombre);
+        perfil.setApellido_usuario(apellidos);
+        perfil.setNum_documento(documento);
+        perfil.setCentro_formacion(centro);
+
+        try {
+            // Registra o actualiza el perfil en la base de datos
+            perfilDao.registroPerfil(perfil, user.getId_usuario());
+            System.out.println("Se registró el perfil exitosamente");  // Mensaje en consola para confirmación
+            response.sendRedirect("login.jsp");  // Redirige al usuario a la página de login
         } catch (Exception e) {
-            System.out.println("Error en el Perfil DAO: " +e.getMessage());
+            // Manejo de errores en caso de excepción
+            System.out.println("Error en el Perfil DAO: " + e.getMessage());
         }
-        
-        
     }
 }

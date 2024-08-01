@@ -12,58 +12,71 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import modelo.objetos.Usuario;
 
+/**
+ * Clase para enviar códigos de verificación por correo electrónico.
+ */
 public class EnviarCodigo {
-    
-    // Metodo para obtener el numero random para el codigo de verificaicon
-    public String getRandom(){
+
+    /**
+     * Genera un código de verificación aleatorio de 6 dígitos.
+     *
+     * @return El código de verificación en formato de 6 dígitos.
+     */
+    public String getRandom() {
         Random r = new Random();
         int numero = r.nextInt(999999);
         return String.format("%06d", numero);
     }
-    
-    // Metodo para enviar el email al correo institucuonal del usuario
-    public static void enviarEmail(Usuario user) throws AddressException{
+
+    /**
+     * Envía un correo electrónico con el código de verificación al usuario.
+     *
+     * @param user El objeto Usuario que contiene el correo y el código de
+     * verificación.
+     * @throws AddressException Si la dirección de correo es inválida.
+     */
+    public static void enviarEmail(Usuario user) throws AddressException {
         try {
-            // Correo de verificacion
-            String destinatario = user.getCorreoInst(); // Correo destinatario
-            String remitente = "mdasena00@outlook.com"; // Correo remitente
-            
-            // Datos del proveedor
+            // Correo destinatario
+            String destinatario = user.getCorreoInst();
+            // Correo remitente
+            String remitente = "mdasena00@outlook.com";
+
+            // Credenciales del correo remitente
             final String usuario = "mdasena00@outlook.com";
             final String password = "ijjbcdmrvpekpvtn";
-            
-            // Host para el envio del email
+
+            // Host para el envío del email
             final String host = "smtp-mail.outlook.com";
-            
-            // Configuracion para el envio del correo
+
+            // Configuración para el envío del correo
             Properties propiedades = new Properties();
             propiedades.put("mail.smtp.auth", "true");
             propiedades.put("mail.smtp.starttls.enable", "true");
             propiedades.put("mail.smtp.host", host);
             propiedades.put("mail.smtp.port", "587");
-            
-            // Creador de la nueva session
-            Session session = Session.getInstance(propiedades,
-                    new Authenticator(){
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication(){
-                            return new PasswordAuthentication(usuario, password);
-                        }
-                    });
-            
-            // Creacion del mensaje a enviar por Email
+
+            // Creador de la nueva sesión
+            Session session = Session.getInstance(propiedades, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(usuario, password);
+                }
+            });
+
+            // Creación del mensaje a enviar por email
             Message mensaje = new MimeMessage(session);
             mensaje.setFrom(new InternetAddress(remitente));
             mensaje.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
-            
-            // Asuntos y cuerpo del correo
-            mensaje.setSubject("Codigo de verificacion de la plataforma MdaSena");
-            mensaje.setText("El codigo de verificacion es: " + user.getCodigo());
-            
-            // Enviar el menasje a email
+
+            // Asunto y cuerpo del correo
+            mensaje.setSubject("Código de verificación de la plataforma MdaSena");
+            mensaje.setText("El código de verificación es: " + user.getCodigo());
+
+            // Enviar el mensaje a email
             Transport.send(mensaje);
         } catch (Exception e) {
-            System.out.println("Error mandando email en: " + e.getMessage());
+            System.out.println("Error mandando email: " + e.getMessage());
         }
     }
 }
