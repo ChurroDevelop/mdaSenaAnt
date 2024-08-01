@@ -82,9 +82,9 @@
                 </button>
             </form>
         </a>
-        <a href="#">
-            <button id="showModal-2"
-                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+        <a href="../../administrarPost.jsp">
+            <button
+                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
                 <i class="fa-solid fa-bell"></i>
                 Notificaciones
             </button>
@@ -121,8 +121,8 @@
             Crear post
         </button>
     </a>
-    <a href="#">
-        <button id="showModal-2"
+    <a href="../../administrarPost.jsp">
+        <button
                 class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
             <i class="fa-solid fa-bell"></i>
             Notificaciones
