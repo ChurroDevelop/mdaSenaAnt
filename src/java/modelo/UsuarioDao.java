@@ -32,7 +32,7 @@ public class UsuarioDao extends Conexion {
         try {
             this.conectar(); // Conectar a la base de datos.
             // Consulta SQL para insertar un nuevo usuario en la base de datos.
-            String sqlUser = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk) VALUES (?,?,?)";
+            String sqlUser = "INSERT INTO tb_usuarios(correo_inst, password, id_rol_fk, estado_usuario) VALUES (?,?,?, true)";
             ps = getCon().prepareStatement(sqlUser); // Preparar la consulta SQL.
             // Establecer los valores para la consulta.
             ps.setString(1, user.getCorreoInst());

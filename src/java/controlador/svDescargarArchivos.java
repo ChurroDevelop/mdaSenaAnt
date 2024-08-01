@@ -1,4 +1,4 @@
-package servlets;
+package controlador;
 
 import modelo.ArchivoDAO;
 import modelo.objetos.Archivo;
@@ -49,7 +49,7 @@ public class svDescargarArchivos extends HttpServlet {
 
         // Configurar la respuesta HTTP para la descarga del archivo
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=documento." + archivo.getExtensionDocumento());
+        response.setHeader("Content-Disposition", "attachment; filename=" + archivo.getNombreDocumento());
         response.setContentLength(archivo.getDocumento().length);
 
         // Enviar el archivo al cliente

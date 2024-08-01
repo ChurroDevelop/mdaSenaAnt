@@ -4,6 +4,13 @@
     request.setAttribute("pageTitle", "MDA SENA - Crear perfil");
 %>
 
+<%
+    HttpSession sesion = request.getSession(false);
+    if (sesion == null || sesion.getAttribute("autenticacion") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 
