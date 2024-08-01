@@ -1,123 +1,78 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import modelo.Usuario;
-import modelo.UsuarioDAO;
+import modelo.EncriptarContraseña;
+import modelo.PerfilDAO;
+import modelo.UsuarioDao;
+import modelo.objetos.Perfil;
+import modelo.objetos.Usuario;
 
 /**
- *
- * @author Propietario
+ * Servlet para manejar el inicio de sesión de usuarios. Valida las credenciales
+ * proporcionadas por el usuario y establece la sesión correspondiente.
  */
-@WebServlet(name = "svLogin", urlPatterns = {"/svLogin"})
 public class svLogin extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
-    
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
+    // Instancias de los DAOs y objetos necesarios para la autenticación
+    private final UsuarioDao userDao = new UsuarioDao(); // DAO para manejar operaciones de usuario
+    private final PerfilDAO profileDao = new PerfilDAO(); // DAO para manejar operaciones de perfil
+    private final Usuario u = new Usuario(); // Objeto Usuario para almacenar credenciales
+    private Perfil profile = new Perfil(); // Objeto Perfil para almacenar la información del perfil del usuario
 
+    /**
+     * Maneja las solicitudes POST para autenticar al usuario y establecer la
+     * sesión.
+     *
+     * @param request Solicitud HTTP que contiene las credenciales del usuario.
+     * @param response Respuesta HTTP que indica el resultado de la
+     * autenticación.
+     * @throws ServletException Si ocurre un error durante el procesamiento de
+     * la solicitud.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String accion = request.getParameter("accion");
-        try {
-            if (accion != null) {
-                switch (accion) {
-                    case "verificar":
-                            verificar(request, response);
-                        break;
-                    case "cerrar":
-                        cerrarSession(request,response);
-                    default:
-                        response.sendRedirect("views/login.jsp");
-                }
-            }
-            else{
-                response.sendRedirect("views/login.jsp");
-            }
-        } catch (Exception e) {
-            System.out.println("Error 2: " + e.getMessage());
-            try {
-                this.getServletConfig().getServletContext().getRequestDispatcher("/views/login.jsp").forward(request, response);
-            } catch (Exception ex) {
-                System.out.println("Error 3: " + e.getMessage());
-            }
-        }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
-    private void verificar(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession sesion;
-        UsuarioDAO dao;
-        Usuario usuario;
-        usuario = this.obtenerUsuario(request);
-        dao = new UsuarioDAO();
-        usuario = dao.identificar(usuario);
-        if (usuario != null && usuario.getId_rol_fk().getNombre_rol().equals("Aprendiz")) {
-             sesion = request.getSession();
-             sesion.setAttribute("Aprendiz", usuario);
-             request.setAttribute("Hola", "Bienvenido al sistema");
-             System.out.println("Redireccionando a la vista del aprendiz");
-             response.sendRedirect("views/viewsAprendiz/inicio.jsp");
-             this.getServletConfig().getServletContext().getRequestDispatcher("/views/viewsAprendiz/inicio.jsp").forward(request, response);
-        }
-        else{
-            if (usuario != null && usuario.getId_rol_fk().getNombre_rol().equals("Instructor")) {
-                sesion = request.getSession();
-                sesion.setAttribute("Instructor", usuario);
-                this.getServletConfig().getServletContext().getRequestDispatcher("/views/viewsInstructor/inicio.jsp").forward(request, response);
-            }
-            else{
-                if (usuario != null && usuario.getId_rol_fk().getNombre_rol().equals("Monitor")) {
-                    sesion = request.getSession();
-                    sesion.setAttribute("Monitor", usuario);
-                    response.sendRedirect("views/viewsMonitor/inicio.jsp");
-                    this.getServletConfig().getServletContext().getRequestDispatcher("/views/viewsMonitor/inicio.jsp").forward(request, response);
-                }
-                else{
-                    System.out.println(usuario.getId_rol_fk().getNombre_rol() + "Hola");
-                    System.out.println("Error en las credenciales");
-                    request.setAttribute("mensaje", "Credenciales incorrectas");
-                    response.sendRedirect("views/login.jsp");
-                }
-            }
-        }
-    }
-
-    private void cerrarSession(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        // Obtiene la sesión actual para almacenar los datos del usuario y del perfil
         HttpSession sesion = request.getSession();
-        sesion.setAttribute("Aprendiz", null);
-        sesion.invalidate();
-        response.sendRedirect("views/login.jsp");
-    }
+        HttpSession sesionPerfil = request.getSession();
 
-    private Usuario obtenerUsuario(HttpServletRequest request) {
-        Usuario u = new Usuario();
-        u.setCorreoInstitucional(request.getParameter("txtCorreo"));
-        u.setContrasena(request.getParameter("txtClave"));
-        return u;
-    }
+        // Configura la codificación de caracteres para manejar acentos y caracteres especiales
+        request.setCharacterEncoding("UTF-8");
 
+        // Recupera el correo y la contraseña proporcionados por el usuario en el formulario
+        String correo = request.getParameter("txtCorreo");
+        String password = request.getParameter("txtClave");
+
+        // Encripta la contraseña para compararla con la almacenada en la base de datos
+        String encript = EncriptarContraseña.encriptar(password);
+
+        // Configura el objeto Usuario con el correo y la contraseña encriptada
+        u.setCorreoInst(correo);
+        u.setPassword(encript);
+
+        System.out.println("Usuario inicial: " + u.getCorreoInst());
+
+        // Obtiene la información del usuario desde la base de datos
+        Usuario newUser = userDao.getDataUser(u);
+        profile = profileDao.dataPerfil(newUser);
+
+        // Configura el tipo de respuesta como texto plano
+        response.setContentType("text/plain");
+
+        // Verifica las credenciales del usuario
+        if (userDao.autenticacion(u)) {
+            // Si la autenticación es exitosa, almacena los datos del usuario y del perfil en la sesión
+            sesion.setAttribute("dataUser", newUser);
+            sesionPerfil.setAttribute("dataPerfil", profile);
+            response.getWriter().write("success"); // Escribe 'success' en la respuesta
+        } else {
+            response.getWriter().write("error"); // Escribe 'error' en la respuesta si las credenciales son incorrectas
+        }
+    }
 }
