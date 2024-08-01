@@ -1,4 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    HttpSession sesion = request.getSession(false);
+    if (sesion == null || sesion.getAttribute("autenticacion") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 

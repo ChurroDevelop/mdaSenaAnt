@@ -78,7 +78,8 @@ public class PostDAO extends Conexion {
             this.conectar();  // Establece la conexión a la base de datos
 
             // SQL para seleccionar todos los posts activos junto con el nombre del usuario que los creó
-            String sql = "SELECT p.*, pf.nombre_usuario \n"
+            String sql = "SELECT p.*, \n"
+                    + "CONCAT(pf.nombre_usuario, ' ', pf.apellido_usuario) AS nombre_completo\n"
                     + "FROM tb_post p\n"
                     + "INNER JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario\n"
                     + "INNER JOIN tb_perfil pf ON u.id_usuario = pf.id_usuario_fk\n"
@@ -97,7 +98,7 @@ public class PostDAO extends Conexion {
                 post.setTitulo(rs.getString("titulo_post"));  // Establecer el título del post
                 post.setEstado(rs.getBoolean("estado"));  // Establecer el estado del post
                 post.setObservacion(rs.getString("observacion"));  // Establecer la observación del post
-                post.setNombreUsuario(rs.getString("nombre_usuario"));  // Establecer el nombre del usuario que creó el post
+                post.setNombreUsuario(rs.getString("nombre_completo"));  // Establecer el nombre del usuario que creó el post
                 posts.add(post);  // Agregar el post a la lista
             }
         } catch (SQLException e) {

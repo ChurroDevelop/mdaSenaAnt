@@ -80,11 +80,12 @@ public class svCrearPost extends HttpServlet {
         for (Part filePart : fileParts) {
             if (filePart.getName().equals("archivo") && filePart.getSize() > 0) {
                 String fileName = filePart.getSubmittedFileName();  // Obtener el nombre del archivo
+                System.out.println(fileName);
                 String extension = fileName.substring(fileName.lastIndexOf('.') + 1);  // Obtener la extensión del archivo
                 byte[] fileContent = inputStreamToByteArray(filePart.getInputStream());  // Convertir el contenido del archivo a bytes
 
                 // Crear un nuevo objeto Archivo y asignar valores
-                Archivo archivo = new Archivo(0, extension, fileContent, idPost);
+                Archivo archivo = new Archivo(0, extension, fileName, fileContent, idPost);
                 try {
                     // Crear el archivo en la base de datos
                     archivoDAO.crearArchivo(archivo);

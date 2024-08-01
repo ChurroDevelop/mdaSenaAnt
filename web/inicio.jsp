@@ -234,7 +234,7 @@
                     for (Archivo archivo : archivos) {
             %>
             <a class="text-base hover:underline" href="<%= request.getContextPath()%>/descargarArchivo?id=<%= archivo.getIdDocumento()%>">
-                <i class="fa-solid fa-arrow-down"></i> Descargar <%= archivo.getExtensionDocumento()%>
+                <i class="fa-solid fa-arrow-down"></i> <%= archivo.getNombreDocumento()%>
             </a><br/>
             <%
                     }

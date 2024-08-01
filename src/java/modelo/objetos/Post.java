@@ -5,12 +5,27 @@ import java.util.List;
 
 public class Post {
 
+    // Atributos del post
     private int id;
     private String titulo;
     private boolean estado;
     private String observacion;
     private int idUsuarioFk;
     private String nombreUsuario;
+
+    // Constructor vacio
+    public Post() {
+    }
+
+    // Constructor con parametros
+    public Post(int id, String titulo, boolean estado, String observacion, int idUsuarioFk, String nombreUsuario) {
+        this.id = id;
+        this.titulo = titulo;
+        this.estado = estado;
+        this.observacion = observacion;
+        this.idUsuarioFk = idUsuarioFk;
+        this.nombreUsuario = nombreUsuario;
+    }
 
     // Getters y setters
     public int getId() {

@@ -45,7 +45,7 @@ public class svEliminarMonitor extends HttpServlet {
 
         // Intenta eliminar el monitor del instructor
         if (mDao.eliminarMonitor(idUser)) {
-            // Si la eliminación fue exitosa, actualiza la lista de monitores del instructor
+//             Si la eliminación fue exitosa, actualiza la lista de monitores del instructor
             List<Perfil> monitores = mDao.obtenerMonitores(idInstructor);
             // Guarda la lista actualizada en la sesión
             sesion.setAttribute("listMonitores", monitores);

@@ -30,7 +30,7 @@ public class ArchivoDAO extends Conexion {
             this.conectar();  // Establece la conexión a la base de datos
 
             // SQL para insertar un nuevo archivo en la tabla 'tb_documento'
-            String sql = "INSERT INTO tb_documento (extension_documento, documento, id_post_fk) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO tb_archivo (extension_archivo, archivo, nombre_archivo, id_post_fk) VALUES (?, ?, ?, ?)";
 
             // Preparar la sentencia SQL para su ejecución
             ps = getCon().prepareStatement(sql);
@@ -38,7 +38,8 @@ public class ArchivoDAO extends Conexion {
             // Asignar valores a los parámetros de la sentencia SQL
             ps.setString(1, archivo.getExtensionDocumento());  // Extensión del archivo
             ps.setBytes(2, archivo.getDocumento());  // Contenido del archivo en formato de bytes
-            ps.setInt(3, archivo.getIdPostFk());  // ID del post al que está asociado el archivo
+            ps.setString(3, archivo.getNombreDocumento());
+            ps.setInt(4, archivo.getIdPostFk());  // ID del post al que está asociado el archivo
 
             // Ejecutar la sentencia SQL de inserción
             ps.executeUpdate();
@@ -58,18 +59,19 @@ public class ArchivoDAO extends Conexion {
 
         try {
             this.conectar();
-            String sql = "SELECT * FROM tb_documento WHERE id_documento = ?";
+            String sql = "SELECT * FROM tb_archivo WHERE id_archivo= ?";
             ps = getCon().prepareStatement(sql);
             ps.setInt(1, idDocumento);
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                int id = rs.getInt("id_documento");
-                String extension = rs.getString("extension_documento");
+                int id = rs.getInt("id_archivo");
+                String extension = rs.getString("extension_archivo");
+                String nameDoc = rs.getString("nombre_archivo");
                 byte[] documento = rs.getBytes("documento");
                 int idPostFk = rs.getInt("id_post_fk");
 
-                archivo = new Archivo(id, extension, documento, idPostFk);
+                archivo = new Archivo(id, extension, nameDoc, documento, idPostFk);
             }
         } catch (SQLException e) {
             throw new SQLException("Error al obtener el archivo: " + e.getMessage());
@@ -87,18 +89,19 @@ public class ArchivoDAO extends Conexion {
 
         try {
             this.conectar();
-            String sql = "SELECT * FROM tb_documento WHERE id_post_fk = ?";
+            String sql = "SELECT * FROM tb_archivo WHERE id_post_fk = ?";
             ps = getCon().prepareStatement(sql);
             ps.setInt(1, postId);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id_documento");
-                String extension = rs.getString("extension_documento");
-                byte[] documento = rs.getBytes("documento");
+                int id = rs.getInt("id_archivo");
+                String extension = rs.getString("extension_archivo");
+                String nameDoc = rs.getString("nombre_archivo");
+                byte[] documento = rs.getBytes("archivo");
                 int idPostFk = rs.getInt("id_post_fk");
 
-                archivos.add(new Archivo(id, extension, documento, idPostFk));
+                archivos.add(new Archivo(id, extension, nameDoc, documento, idPostFk));
             }
         } catch (SQLException e) {
             throw new SQLException("Error al listar archivos: " + e.getMessage());

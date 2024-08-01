@@ -47,6 +47,10 @@ public class svPerfil extends HttpServlet {
 
         // Recupera el objeto Usuario de la sesión
         Usuario user = (Usuario) sesionUser.getAttribute("autenticacion");
+        if (sesionUser == null || user == null) {
+            response.sendRedirect("registro.jsp");
+            System.out.println("Es nula la sesion");
+        }
 
         // Crea y configura el objeto Perfil con la información del formulario
         Perfil perfil = new Perfil();
