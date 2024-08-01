@@ -1,5 +1,8 @@
 package modelo.objetos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Post {
 
     private int id;

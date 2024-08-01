@@ -4,6 +4,9 @@ import config.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import modelo.objetos.Archivo;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Clase que gestiona las operaciones relacionadas con la tabla 'tb_documento'
@@ -47,4 +50,63 @@ public class ArchivoDAO extends Conexion {
             this.desconectar();
         }
     }
+
+    public Archivo obtenerArchivoPorId(int idDocumento) throws SQLException {
+        Archivo archivo = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            this.conectar();
+            String sql = "SELECT * FROM tb_documento WHERE id_documento = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setInt(1, idDocumento);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("id_documento");
+                String extension = rs.getString("extension_documento");
+                byte[] documento = rs.getBytes("documento");
+                int idPostFk = rs.getInt("id_post_fk");
+
+                archivo = new Archivo(id, extension, documento, idPostFk);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener el archivo: " + e.getMessage());
+        } finally {
+            this.desconectar();
+        }
+
+        return archivo;
+    }
+
+    public List<Archivo> listarArchivosPorPostId(int postId) throws SQLException {
+        List<Archivo> archivos = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            this.conectar();
+            String sql = "SELECT * FROM tb_documento WHERE id_post_fk = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setInt(1, postId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id_documento");
+                String extension = rs.getString("extension_documento");
+                byte[] documento = rs.getBytes("documento");
+                int idPostFk = rs.getInt("id_post_fk");
+
+                archivos.add(new Archivo(id, extension, documento, idPostFk));
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al listar archivos: " + e.getMessage());
+        } finally {
+            this.desconectar();
+        }
+
+        return archivos;
+    }
+
 }

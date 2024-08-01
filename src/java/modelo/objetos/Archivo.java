@@ -48,6 +48,4 @@ public class Archivo {
         this.idPostFk = idPostFk;
     }
 
-    // Otros métodos útiles (opcional)
-    // ...
 }
