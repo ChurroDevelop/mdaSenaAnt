@@ -63,7 +63,7 @@
                         if (archivos != null && !archivos.isEmpty()) {
                             for (Archivo archivo : archivos) {
                     %>
-                    <a class="text-base hover:underline" href="<%= request.getContextPath()%>/descargarArchivo?id=<%= archivo.getIdDocumento()%>">
+                    <a class="text-base hover:underline" href="/descargarArchivo?id=<%= archivo.getIdDocumento()%>">
                         <i class="fa-solid fa-arrow-down"></i> <%= archivo.getNombreDocumento()%>
                     </a><br/>
                     <%

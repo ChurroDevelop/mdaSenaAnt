@@ -141,4 +141,16 @@ public class PostDAO extends Conexion {
         }
         return posts;
     }
+    
+    public boolean modificarEstado() {
+        boolean estado = false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            this.conectar();
+            String sql = "";
+        } catch (Exception e) {
+        }
+        return estado;
+    }
 }
