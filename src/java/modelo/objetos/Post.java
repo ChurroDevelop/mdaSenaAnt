@@ -1,5 +1,6 @@
 package modelo.objetos;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,22 +13,23 @@ public class Post {
     private String observacion;
     private int idUsuarioFk;
     private String nombreUsuario;
+    private int contador;
+    private Timestamp fechaPost;
 
-    // Constructor vacio
     public Post() {
     }
 
-    // Constructor con parametros
-    public Post(int id, String titulo, boolean estado, String observacion, int idUsuarioFk, String nombreUsuario) {
+    public Post(int id, String titulo, boolean estado, String observacion, int idUsuarioFk, String nombreUsuario, int contador, Timestamp fechaPost) {
         this.id = id;
         this.titulo = titulo;
         this.estado = estado;
         this.observacion = observacion;
         this.idUsuarioFk = idUsuarioFk;
         this.nombreUsuario = nombreUsuario;
+        this.contador = contador;
+        this.fechaPost = fechaPost;
     }
 
-    // Getters y setters
     public int getId() {
         return id;
     }
@@ -44,7 +46,7 @@ public class Post {
         this.titulo = titulo;
     }
 
-    public boolean getEstado() {
+    public boolean isEstado() {
         return estado;
     }
 
@@ -64,8 +66,8 @@ public class Post {
         return idUsuarioFk;
     }
 
-    public void setIdUsuarioFk(int idUsuario) {
-        this.idUsuarioFk = idUsuario;
+    public void setIdUsuarioFk(int idUsuarioFk) {
+        this.idUsuarioFk = idUsuarioFk;
     }
 
     public String getNombreUsuario() {
@@ -76,4 +78,22 @@ public class Post {
         this.nombreUsuario = nombreUsuario;
     }
 
+    public int getContador() {
+        return contador;
+    }
+
+    public void setContador(int contador) {
+        this.contador = contador;
+    }
+
+    public Timestamp getFechaPost() {
+        return fechaPost;
+    }
+
+    public void setFechaPost(Timestamp fechaPost) {
+        this.fechaPost = fechaPost;
+    }
+    
+    
+    
 }

@@ -82,12 +82,15 @@
                 </button>
             </form>
         </a>
-        <a href="../administrarPost.jsp">
-            <button
-                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                <i class="fa-solid fa-bell"></i>
-                Notificaciones
-            </button>
+        <a href="">
+            <form action="/svListarPosts" method="GET">
+                <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdInstructor">
+                <button
+                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                    <i class="fa-solid fa-bell"></i>
+                    Notificaciones
+                </button>
+            </form>
         </a>
         <a href="editarPerfil.jsp">
             <button

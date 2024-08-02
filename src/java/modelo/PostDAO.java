@@ -1,6 +1,8 @@
 package modelo;
 
+import com.mysql.cj.xdevapi.Result;
 import config.Conexion;
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,16 +34,15 @@ public class PostDAO extends Conexion {
             this.conectar();  // Establece la conexión a la base de datos
 
             // SQL para insertar un nuevo post en la tabla 'tb_post'
-            String sql = "INSERT INTO tb_post (titulo_post, estado, observacion, id_usuario_fk) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO tb_post (titulo_post, estado, observacion, id_usuario_fk) VALUES (?, false, ?, ?)";
 
             // Preparar la sentencia SQL para su ejecución
             ps = getCon().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             // Asignar valores a los parámetros de la sentencia SQL
             ps.setString(1, post.getTitulo());  // Título del post
-            ps.setBoolean(2, post.getEstado());  // Estado del post (activo/inactivo)
-            ps.setString(3, post.getObservacion());  // Observaciones adicionales sobre el post
-            ps.setInt(4, post.getIdUsuarioFk());  // ID del usuario que creó el post
+            ps.setString(2, post.getObservacion());  // Observaciones adicionales sobre el post
+            ps.setInt(3, post.getIdUsuarioFk());  // ID del usuario que creó el post
 
             // Ejecutar la sentencia SQL de inserción
             ps.executeUpdate();
@@ -111,4 +112,33 @@ public class PostDAO extends Conexion {
         return posts;  // Retornar la lista de posts activos
     }
 
+    
+    public List<Post> listarPostsUser(String idInstructor) {
+        List<Post> posts = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            this.conectar();
+            String sql = "SELECT p.id_post ,p.fecha_post as fecha ,CONCAT(pe.nombre_usuario, \" \", pe.apellido_usuario) as nombreCompleto, p.titulo_post, COUNT(a.id_archivo) AS cantidadArchivos FROM tb_post p JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk JOIN tb_archivo a ON a.id_post_fk = p.id_post WHERE u.id_instructor_asig = ? GROUP BY p.titulo_post";
+            ps = getCon().prepareStatement(sql);
+            ps.setString(1, idInstructor);
+            rs = ps.executeQuery();
+            while (rs.next()) {           
+                System.out.println("AGREGANDO UN NUEVO POST AL ARREGLO");
+                Timestamp a = rs.getTimestamp("fecha");
+                Post postIns = new Post();
+                postIns.setId(rs.getInt("id_post"));
+                postIns.setFechaPost(a);
+                postIns.setTitulo(rs.getString("titulo_post"));
+                postIns.setNombreUsuario(rs.getString("nombreCompleto"));
+                postIns.setContador(rs.getInt("cantidadArchivos"));
+                posts.add(postIns);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR LISTANDO LOS POSTS: " + e.getMessage());
+        } finally {
+            this.desconectar();
+        }
+        return posts;
+    }
 }
