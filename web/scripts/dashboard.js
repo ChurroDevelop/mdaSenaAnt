@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
     tabLinks[0].click();
 });
 
+// Esto es para ver la cantidad de archivos que tiene ese post
+// Ayudeme a agregarle lo del modal a esta vain pofavo
 const _btnContador = document.querySelectorAll("#cantidadArchivos");
 _btnContador.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -137,64 +139,66 @@ _btnContador.forEach((btn) => {
 //    });
 //})
 //
-//// Modal para ver la observación
-//const _observacion = document.getElementById("observacion");
-//_observacion.addEventListener("click", () => {
-//    const _section = document.createElement("section");
-//    _section.classList.add(
-//            "flex",
-//            "bg-[#1D1D1D60]",
-//            "fixed",
-//            "min-h-screen",
-//            "w-full",
-//            "justify-center",
-//            "items-center",
-//            "z-10"
-//            );
-//    document.body.appendChild(_section);
-//
-//    const _modal = document.createElement("div");
-//    _modal.classList.add(
-//            "bg-white",
-//            "w-96",
-//            "rounded-lg",
-//            "p-5",
-//            "text-center",
-//            "flex",
-//            "gap-5",
-//            "flex-col",
-//            "items-center",
-//            "relative"
-//            );
-//    _modal.textContent = "Observación"; // Por medio de JSP muestra la cantidad de archivos y muestra los arvhivos
-//    _section.appendChild(_modal);
-//
-//    // Botón de cierre
-//    const _closeBtn = document.createElement("button");
-//    _closeBtn.classList.add(
-//            "absolute",
-//            "top-2",
-//            "right-2",
-//            "bg-red-500",
-//            "text-white",
-//            "rounded-full",
-//            "w-6",
-//            "h-6",
-//            "flex",
-//            "items-center",
-//            "justify-center"
-//            );
-//    _closeBtn.textContent = "X";
-//    _closeBtn.addEventListener("click", () => {
-//        document.body.removeChild(_section);
-//    });
-//    _modal.appendChild(_closeBtn);
-//
-//    const _obser = document.createElement("p");
-//    _obser.classList.add("text-center");
-//    _obser.textContent = "La mala pirobo, aprenda a redactar skdjskjdskdj, hola churro Xde";
-//    _modal.appendChild(_obser);
-//});
+// Modal para ver la observación
+const _observacion = document.querySelectorAll("#observacion");
+_observacion.forEach((element) => {
+    element.addEventListener("click", async () => {
+        const _section = document.createElement("section");
+        _section.classList.add(
+                "flex",
+                "bg-[#1D1D1D60]",
+                "fixed",
+                "min-h-screen",
+                "w-full",
+                "justify-center",
+                "items-center",
+                "z-10"
+                );
+        document.body.appendChild(_section);
+
+        const _modal = document.createElement("div");
+        _modal.classList.add(
+                "bg-white",
+                "w-96",
+                "rounded-lg",
+                "p-5",
+                "text-center",
+                "flex",
+                "gap-5",
+                "flex-col",
+                "items-center",
+                "relative"
+                );
+        _modal.textContent = "Observación"; // Por medio de JSP muestra la cantidad de archivos y muestra los arvhivos
+        _section.appendChild(_modal);
+
+        // Botón de cierre
+        const _closeBtn = document.createElement("button");
+        _closeBtn.classList.add(
+                "absolute",
+                "top-2",
+                "right-2",
+                "bg-red-500",
+                "text-white",
+                "rounded-full",
+                "w-6",
+                "h-6",
+                "flex",
+                "items-center",
+                "justify-center"
+                );
+        _closeBtn.textContent = "X";
+        _closeBtn.addEventListener("click", () => {
+            document.body.removeChild(_section);
+        });
+        _modal.appendChild(_closeBtn);
+
+        const _obser = document.createElement("p");
+        _obser.classList.add("text-center");
+        _obser.textContent = element.textContent;
+        _modal.appendChild(_obser);
+    });
+})
 
 
 // Modal para confirmar aceptar el post
@@ -250,18 +254,20 @@ _aceptar.forEach((e) => {
         _buttonUpdate.addEventListener("click", async () => {
             // Aquí pega la el método para aceptar publicar el post
             let _idPost = e.getAttribute('data-id');
-            console.log(_idPost);
+            let _idInstructor = document.getElementById("idInstructor").value;
+            console.log(_idInstructor);
 
             let response = await fetch('/svEstadoPost', {
-            method: 'POST',
+                method: 'POST',
                 header: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
-                    'txtIdPost': _idPost
+                    'txtIdPost': _idPost,
+                    'txtIdInstructor': _idInstructor
                 })
             });
-
+            location.reload();
             document.body.removeChild(_section);
         });
 
@@ -286,91 +292,113 @@ _aceptar.forEach((e) => {
 })
 //
 //
-//// Modal para rechazar el post
-//const _rechazar = document.getElementById("rechazarPost");
-//_rechazar.addEventListener("click", () => {
-//    const _section = document.createElement("section");
-//    _section.classList.add(
-//            "flex",
-//            "bg-[#1D1D1D60]",
-//            "fixed",
-//            "min-h-screen",
-//            "w-full",
-//            "justify-center",
-//            "items-center",
-//            "z-10"
-//            );
-//    document.body.appendChild(_section);
-//
-//    const _modal = document.createElement("div");
-//    _modal.classList.add(
-//            "bg-white",
-//            "w-96",
-//            "rounded-lg",
-//            "p-5",
-//            "text-center",
-//            "flex",
-//            "gap-2.5",
-//            "flex-col",
-//            "items-center",
-//            "relative"
-//            );
-//    _modal.textContent = "¿Motivo del rechazo al post?";
-//    _section.appendChild(_modal);
-//
-//    // Botón de cierre
-//    const _closeBtn = document.createElement("button");
-//    _closeBtn.classList.add(
-//            "absolute",
-//            "top-2",
-//            "right-2",
-//            "bg-red-500",
-//            "text-white",
-//            "rounded-full",
-//            "w-6",
-//            "h-6",
-//            "flex",
-//            "items-center",
-//            "justify-center"
-//            );
-//    _closeBtn.textContent = "X";
-//    _closeBtn.addEventListener("click", () => {
-//        document.body.removeChild(_section);
-//    });
-//    _modal.appendChild(_closeBtn);
-//
-//    // Input para observaciones
-//    const _inputObservacion = document.createElement("textarea");
-//    _inputObservacion.classList.add(
-//            "w-full",
-//            "p-2",
-//            "textarea",
-//            "textarea-bordered",
-//            "bg-white"
-//            );
-//    _inputObservacion.placeholder = "Escribe tu observación aquí...";
-//    _modal.appendChild(_inputObservacion);
-//
-//    // Botón para enviar observación
-//    const _submitBtn = document.createElement("button");
-//    _submitBtn.classList.add(
-//            "btn",
-//            "bg-mdaGreen",
-//            "border-none",
-//            "text-white",
-//            "hover:bg-mdaGreen",
-//            "w-full"
-//            );
-//    _submitBtn.textContent = "Enviar Observación";
-//    _submitBtn.addEventListener("click", () => {
-//        const observacion = _inputObservacion.value;
-//        console.log("Observación enviada:", observacion);
-//        // Brou aquí el método para la consulta
-//        // Modificar el estado y agregar la observación
-//        document.body.removeChild(_section);
-//    });
-//    _modal.appendChild(_submitBtn);
-//
-//    const _buttonContainer = document.createElement("div");
-//    _modal.appendChild(_buttonContainer);
-//});
+// Modal para rechazar el post
+const _rechazar = document.querySelectorAll("#rechazarPost");
+_rechazar.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const _section = document.createElement("section");
+        _section.classList.add(
+                "flex",
+                "bg-[#1D1D1D60]",
+                "fixed",
+                "min-h-screen",
+                "w-full",
+                "justify-center",
+                "items-center",
+                "z-10"
+                );
+        document.body.appendChild(_section);
+
+        const _modal = document.createElement("div");
+        _modal.classList.add(
+                "bg-white",
+                "w-96",
+                "rounded-lg",
+                "p-5",
+                "text-center",
+                "flex",
+                "gap-2.5",
+                "flex-col",
+                "items-center",
+                "relative"
+                );
+        _modal.textContent = "¿Motivo del rechazo al post?";
+        _section.appendChild(_modal);
+
+        // Botón de cierre
+        const _closeBtn = document.createElement("button");
+        _closeBtn.classList.add(
+                "absolute",
+                "top-2",
+                "right-2",
+                "bg-red-500",
+                "text-white",
+                "rounded-full",
+                "w-6",
+                "h-6",
+                "flex",
+                "items-center",
+                "justify-center"
+                );
+        _closeBtn.textContent = "X";
+        _closeBtn.addEventListener("click", () => {
+            document.body.removeChild(_section);
+        });
+        _modal.appendChild(_closeBtn);
+
+        // Input para observaciones
+        const _inputObservacion = document.createElement("textarea");
+        _inputObservacion.classList.add(
+                "w-full",
+                "p-2",
+                "textarea",
+                "textarea-bordered",
+                "bg-white"
+                );
+        _inputObservacion.placeholder = "Escribe tu observación aquí...";
+        _modal.appendChild(_inputObservacion);
+
+        // Botón para enviar observación
+        const _submitBtn = document.createElement("button");
+        _submitBtn.classList.add(
+                "btn",
+                "bg-mdaGreen",
+                "border-none",
+                "text-white",
+                "hover:bg-mdaGreen",
+                "w-full"
+                );
+        _submitBtn.textContent = "Enviar Observación";
+        _submitBtn.addEventListener("click", async () => {
+            let observacion = _inputObservacion.value;
+            console.log("Observación enviada:", observacion);
+            // Brou aquí el método para la consulta
+
+            let _idPost = btn.getAttribute("data-id");
+            let _idInstructor = document.getElementById("idInstructor").value;
+            console.log(_idInstructor);
+            console.log(_idPost);
+
+            let request = await fetch("/svRechazarPost", {
+                method: "POST",
+                header: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    "txtIdPost": _idPost,
+                    "txtIdInstructor": _idInstructor,
+                    "txtObservacion": observacion
+                })
+            })
+
+            location.reload();
+
+            // Modificar el estado y agregar la observación
+            document.body.removeChild(_section);
+        });
+        _modal.appendChild(_submitBtn);
+
+        const _buttonContainer = document.createElement("div");
+        _modal.appendChild(_buttonContainer);
+    });
+})

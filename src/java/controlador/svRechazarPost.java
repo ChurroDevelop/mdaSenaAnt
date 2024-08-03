@@ -8,36 +8,38 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.*;
 import javax.servlet.http.HttpSession;
 import modelo.PostDAO;
 
+@WebServlet(name = "svRechazarPost", urlPatterns = {"/svRechazarPost"})
+public class svRechazarPost extends HttpServlet {
+    // Instancia para los metodos a la base de datos
+    PostDAO pDao = new PostDAO();
 
-@WebServlet("/svEstadoPost")
-public class svEstadoPost extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Instanciar la nueva sesion
+        // Instanciar una nueva sesion
         HttpSession sesion = request.getSession();
         
-        // Instancia de un postDao para manejo a la base de datos
-        PostDAO pDao = new PostDAO();
-        
-        // Tomar el id del post
+        // Tomar los parametros para realizar las consultas a la base de datos
         int idPost = Integer.parseInt(request.getParameter("txtIdPost"));
         String idInstructor = request.getParameter("txtIdInstructor");
-        
-        // Manejo del estado, para saber si se modifico o no el post
-        boolean estado = pDao.modificarEstado(idPost);
+        String observacion = request.getParameter("txtObservacion");
+
+        // Manejo de estado para saber si se agrego o no la obsrvacion
+        boolean estado = pDao.agregarObservacion(idPost, observacion);
         
         if (estado) {
             sesion.setAttribute("listaPosts", pDao.listarPostsUser(idInstructor));
-            System.out.println("Se modifico el post y ya es visible en la plataforma");
+            System.out.println("SI SE PUDO MODIFICAR EL POST");
         }
-        
-        
     }
 
 }

@@ -66,11 +66,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <input type="hidden" value="<%= user.getId_usuario() %>" id="idInstructor">
+                            <!--ESTO ES PARA VER LOS POSTS QUE ESTAN PENDIENTES-->
                             <%                                
                                 for (Post post : posts) {
+                                    if (!post.getEstado() && !post.getValidacion()) {
                             %>
                             <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
-                                <!--                                <td type="hidden" data-id="" id="idPost"></td>-->
                                 <td><%= post.getFechaPost()%></td>
                                 <td><%= post.getNombreUsuario()%></td>
                                 <td><%= post.getTitulo()%></td>
@@ -80,7 +82,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button id="rechazarPost">
+                                    <button id="rechazarPost" data-id="<%= post.getId() %>">
                                         <i class="fa-solid fa-square-xmark text-mdaRed text-lg"></i>
                                     </button>
                                     <button id="aceptarPost" data-id='<%= post.getId()%>'>
@@ -108,11 +110,10 @@
                                             }
                                             %>
                                         </div>
-                        
                             </tr>
-                            
                             <%
                                 }
+                            }
                             %>
                         </tbody>
                     </table>
@@ -129,16 +130,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!--ESTA ES PARA VER LOS POST QUE ESTAN ACEPTADOS-->
+                            <%
+                                for (Post post : posts) {
+                                    if (post.getEstado() && post.getValidacion()) {
+                            %>
                             <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
-                                <td>08-01-2024</td>
-                                <td>Daniel Fernando Gómez Zayas</td>
-                                <td>¿Qúé es el internet de las cosas?</td>
+                                <td><%= post.getFechaPost() %></td>
+                                <td><%= post.getNombreUsuario() %></td>
+                                <td><%= post.getTitulo() %></td>
                                 <td>
-                                    <button id="cantidadArchivos">
-                                        1
+                                    <button id="cantidadArchivos" data-id="<%= post.getId() %>">
+                                        <%= post.getContador()%>
                                     </button>
                                 </td>
                             </tr>
+                            <% 
+                                }
+                            } 
+                            %>
                         </tbody>
                     </table>
                 </div>
@@ -156,29 +166,38 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!--ESTE ES PARA VER LA PESTAÑA DE LOS POSTS QUE ESTAN RECHAZADOS-->
+                            <%
+                                for (Post post : posts) {
+                                        if (!post.getEstado() && post.getValidacion()) {
+                            %>
                             <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
-                                <td>08-01-2024</td>
-                                <td>Daniel Fernando Gómez Zayas</td>
-                                <td>¿Qúé es el internet de las cosas?</td>
+                                <td><%= post.getFechaPost() %></td>
+                                <td><%= post.getNombreUsuario() %></td>
+                                <td><%= post.getTitulo() %></td>
                                 <td>
                                     <button id="cantidadArchivos">
-                                        1
+                                        <%= post.getContador() %>
                                     </button>
                                 </td>
                                 <td class="truncate max-w-36" title="La mala pirobo, aprenda a redactar skdjskjdskdj, hola churro Xde">
                                     <button id="observacion">
-                                        La mala pirobo, aprenda a redactar skdjskjdskdj, hola churro Xde
+                                        <%= post.getObservacion() %>
                                     </button>
                                 </td>
                                 <td>
-                                    <button id="rechazarPost">
+                                    <button id="rechazarPost" data-id="<%= post.getId() %>">
                                         <i class="fa-solid fa-square-xmark text-mdaRed text-lg"></i>
                                     </button>
-                                    <button id="aceptarPost">
+                                    <button id="aceptarPost" data-id="<%= post.getId() %>">
                                         <i class="fa-solid fa-square-check text-mdaGreen text-lg ml-2"></i>
                                     </button>
                                 </td>
                             </tr>
+                            <%
+                                }
+                            }
+                            %>
                         </tbody>
                     </table>
                 </div>

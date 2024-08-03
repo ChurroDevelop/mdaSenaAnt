@@ -7,35 +7,29 @@ import java.util.List;
 public class Post {
 
     // Atributos del post
-    private int id;
     private String titulo;
-    private boolean estado;
     private String observacion;
-    private int idUsuarioFk;
     private String nombreUsuario;
+    private boolean estado;
+    private boolean validacion;
+    private int id;
+    private int idUsuarioFk;
     private int contador;
     private Timestamp fechaPost;
 
     public Post() {
     }
 
-    public Post(int id, String titulo, boolean estado, String observacion, int idUsuarioFk, String nombreUsuario, int contador, Timestamp fechaPost) {
-        this.id = id;
+    public Post(String titulo, String observacion, String nombreUsuario, boolean estado, boolean validacion, int id, int idUsuarioFk, int contador, Timestamp fechaPost) {
         this.titulo = titulo;
-        this.estado = estado;
         this.observacion = observacion;
-        this.idUsuarioFk = idUsuarioFk;
         this.nombreUsuario = nombreUsuario;
+        this.estado = estado;
+        this.validacion = validacion;
+        this.id = id;
+        this.idUsuarioFk = idUsuarioFk;
         this.contador = contador;
         this.fechaPost = fechaPost;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitulo() {
@@ -46,14 +40,6 @@ public class Post {
         this.titulo = titulo;
     }
 
-    public boolean isEstado() {
-        return estado;
-    }
-
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
-
     public String getObservacion() {
         return observacion;
     }
@@ -62,20 +48,44 @@ public class Post {
         this.observacion = observacion;
     }
 
-    public int getIdUsuarioFk() {
-        return idUsuarioFk;
-    }
-
-    public void setIdUsuarioFk(int idUsuarioFk) {
-        this.idUsuarioFk = idUsuarioFk;
-    }
-
     public String getNombreUsuario() {
         return nombreUsuario;
     }
 
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public boolean isValidacion() {
+        return validacion;
+    }
+
+    public void setValidacion(boolean validacion) {
+        this.validacion = validacion;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdUsuarioFk() {
+        return idUsuarioFk;
+    }
+
+    public void setIdUsuarioFk(int idUsuarioFk) {
+        this.idUsuarioFk = idUsuarioFk;
     }
 
     public int getContador() {
@@ -93,7 +103,13 @@ public class Post {
     public void setFechaPost(Timestamp fechaPost) {
         this.fechaPost = fechaPost;
     }
+
+    public Boolean getEstado(){
+        return estado;
+    }
     
-    
-    
+    public Boolean getValidacion(){
+        return validacion;
+    }
+
 }

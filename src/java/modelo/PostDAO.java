@@ -119,7 +119,7 @@ public class PostDAO extends Conexion {
         ResultSet rs = null;
         try {
             this.conectar();
-            String sql = "SELECT p.id_post ,p.fecha_post as fecha ,CONCAT(pe.nombre_usuario, \" \", pe.apellido_usuario) as nombreCompleto, p.titulo_post, COUNT(a.id_archivo) AS cantidadArchivos FROM tb_post p JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk JOIN tb_archivo a ON a.id_post_fk = p.id_post WHERE u.id_instructor_asig = ? GROUP BY p.titulo_post";
+            String sql = "SELECT p.id_post ,p.fecha_post as fecha ,CONCAT(pe.nombre_usuario, \" \", pe.apellido_usuario) as nombreCompleto, p.titulo_post, COUNT(a.id_archivo) AS cantidadArchivos, p.estado, p.validacion, p.observacion FROM tb_post p JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk JOIN tb_archivo a ON a.id_post_fk = p.id_post WHERE u.id_instructor_asig = ? GROUP BY p.titulo_post";
             ps = getCon().prepareStatement(sql);
             ps.setString(1, idInstructor);
             rs = ps.executeQuery();
@@ -128,6 +128,9 @@ public class PostDAO extends Conexion {
                 Timestamp a = rs.getTimestamp("fecha");
                 Post postIns = new Post();
                 postIns.setId(rs.getInt("id_post"));
+                postIns.setEstado(rs.getBoolean("estado"));
+                postIns.setValidacion(rs.getBoolean("validacion"));
+                postIns.setObservacion(rs.getString("observacion"));
                 postIns.setFechaPost(a);
                 postIns.setTitulo(rs.getString("titulo_post"));
                 postIns.setNombreUsuario(rs.getString("nombreCompleto"));
@@ -142,15 +145,58 @@ public class PostDAO extends Conexion {
         return posts;
     }
     
-    public boolean modificarEstado() {
+    public boolean modificarEstado(int idPost) {
         boolean estado = false;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             this.conectar();
-            String sql = "";
+            String sql = "UPDATE tb_post set validacion = true, estado = true WHERE id_post = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setInt(1, idPost);
+            int x = ps.executeUpdate();
+            if (x > 0) {
+                System.out.println("SE MODIFICO EL ESTADO DEL POST");
+                estado = true;
+            }
         } catch (Exception e) {
+            System.out.println("ERROR ACTUALIZANDO EL ESTADO DEL PSOT: " + e.getMessage());
+        } finally {
+            this.desconectar();
         }
         return estado;
+    }
+    
+    public boolean agregarObservacion(int idPost, String observacion){
+        boolean estado = false;
+        PreparedStatement ps = null;
+        try {
+            this.conectar();
+            String sql = "UPDATE tb_post SET estado = false, validacion = true, observacion = ? WHERE id_post = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setString(1, observacion);
+            ps.setInt(2, idPost);
+            int x = ps.executeUpdate();
+            if (x > 0) {
+                System.out.println("SE MODIFICO Y SE AGREGO UNA OBSERVACION"); 
+                estado = true;
+           }
+        } catch (Exception e) {
+            System.out.println("ERROR ACTUALIZANDO EL POST CON OBSERVACION: " + e.getMessage());
+        } finally {
+            this.desconectar();
+        }
+        return estado;
+    }
+    
+    public String obtenerObservacion() {
+        String observacion = null;
+        PreparedStatement ps = null;
+        try {
+            this.conectar();
+            String sql = "SELECT observacion FROM tb_";
+        } catch (Exception e) {
+        }
+        return observacion;
     }
 }
