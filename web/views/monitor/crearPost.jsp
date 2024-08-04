@@ -44,7 +44,7 @@
                     </label>
                     <label class="input input-bordered flex items-center gap-2 bg-white mb-4">
                         <i class="fa-solid fa-file-upload"></i> 
-                        <input type="file" class="grow text-mdaBlack" id="archivo" name="archivo" accept=".pdf,.doc,.docx" multiple> 
+                        <input type="file" class="grow text-mdaBlack" id="archivo" name="archivo" accept=".pdf,.doc,.docx,.py" multiple> 
                     </label>
                     <button type="submit" class="btn w-full bg-mdaGreen border-none text-white hover:bg-mdaGreen">
                         Cargar post

@@ -353,7 +353,8 @@ _rechazar.forEach((btn) => {
                 "p-2",
                 "textarea",
                 "textarea-bordered",
-                "bg-white"
+                "bg-white",
+                "text-black"
                 );
         _inputObservacion.placeholder = "Escribe tu observación aquí...";
         _modal.appendChild(_inputObservacion);

@@ -28,7 +28,7 @@ import java.util.Collection;
         initParams = {
             @WebInitParam(name = "disallowedFileTypes", value = "exe,bat")})
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 2, // Umbral para almacenar archivos temporalmente en la memoria (2 MB)
+        fileSizeThreshold = 1024 * 1024 * 5, // Umbral para almacenar archivos temporalmente en la memoria (2 MB)
         maxFileSize = 1024 * 1024 * 50, // Tamaño máximo de archivo permitido (50 MB)
         maxRequestSize = 1024 * 1024 * 100 // Tamaño máximo de solicitud permitido (100 MB)
 )
