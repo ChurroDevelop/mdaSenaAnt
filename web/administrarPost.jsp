@@ -40,8 +40,7 @@
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
         <!-- Incluir la navegación -->
         <%@ include file="partials/nav.jsp" %>
-        <%            
-            if (user.getId_rol_fk().getNombre_rol().equals("Instructor")) {
+        <%            if (user.getId_rol_fk().getNombre_rol().equals("Instructor")) {
         %>
         <div class="container mx-auto p-4 w-9/12">
             <!-- Contenedor de pestañas -->
@@ -93,7 +92,7 @@
                                     <i class="fa-solid fa-square-check text-mdaGreen text-lg ml-2"></i>
                                 </button>
                             </td>
-                        <div id="documentosContainer">
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
                             <%
                                 List<Archivo> archivos = null;
                                 try {
@@ -104,10 +103,16 @@
                                 if (archivos != null && !archivos.isEmpty()) {
                                     for (Archivo arch : archivos) {
                             %>
-                            <div class="hidden" data-id='<%= post.getId()%>' id="divPost">
-                                <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
-                                    <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
-                                </a>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center">
+                                <p>Cantidad de archivos del post: <%= post.getContador()%></p>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
+                                </button>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
+                                </div>
                             </div>
                             <%
                                     }
@@ -212,9 +217,9 @@
         %>
         <div class="container mx-auto p-4 w-9/12">
             <!-- Contenedor de pestañas -->
-            <h1 class="text-black text-xl mb-4 font-bold">Dashboard de <%= perfil.getNombre_usuario() + " " +perfil.getApellido_usuario() %></h1>
+            <h1 class="text-black text-xl mb-4 font-bold">Dashboard de <%= perfil.getNombre_usuario() + " " + perfil.getApellido_usuario()%></h1>
             <div class="tabs text-black">
-                    <ul class="flex border-b">
+                <ul class="flex border-b">
                     <li class="mr-1">
                         <a href="#tab1" class="tab-link rounded-t-lg bg-white py-2 px-4 inline-block text-mdaBlack cursor-pointer">Posts creados</a>
                     </li>
@@ -334,7 +339,7 @@
                 </div>
             </div>
         </div>
-        <% } %>
+        <% }%>
     </body>
 
     <script src="scripts/dashboard.js">

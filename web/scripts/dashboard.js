@@ -41,7 +41,11 @@ _btnContador.forEach((btn) => {
     });
 });
 
-
+const _cerrarCantidadPost = document.getElementById("cerrarCantidadPost");
+_cerrarCantidadPost.addEventListener("click", () => {
+    const _archivos = document.getElementById("divPost");
+    _archivos.classList.add("hidden");
+});
 
 //
 //// Modal para ver la cantidad de los archivos
