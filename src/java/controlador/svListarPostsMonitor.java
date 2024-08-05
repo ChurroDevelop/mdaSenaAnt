@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
@@ -13,16 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import modelo.MonitorDAO;
 import modelo.PostDAO;
 import modelo.objetos.Post;
 
-/**
- *
- * @author Propietario
- */
-@WebServlet(name = "svListarPosts", urlPatterns = {"/svListarPosts"})
-public class svListarPosts extends HttpServlet {
-
+@WebServlet(name = "svListarPostsMonitor", urlPatterns = {"/svListarPostsMonitor"})
+public class svListarPostsMonitor extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -36,21 +28,15 @@ public class svListarPosts extends HttpServlet {
         HttpSession sesion = request.getSession();
         
         // Atrapar el id del instructor para listar esos posts
-        String id = request.getParameter("txtIdInstructor");
+        int id = Integer.parseInt(request.getParameter("txtIdMonitor")) ;
         
-        // Instancia de un postDao
-        PostDAO pDao = new PostDAO();
+        // Instancia de un MonitorDao
+        MonitorDAO mDao = new MonitorDAO();
         
         // Lista de los post de ese instructor
-        List<Post> posts = pDao.listarPostsUser(id);
+        List<Post> posts = mDao.listaPostMonitor(id);
         
-        sesion.setAttribute("listaPosts", posts);
+        sesion.setAttribute("listaPostsMonitor", posts);
         response.sendRedirect("administrarPost.jsp");
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

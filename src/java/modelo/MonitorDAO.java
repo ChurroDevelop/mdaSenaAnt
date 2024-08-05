@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import modelo.objetos.Perfil;
 import modelo.objetos.Usuario;
+import modelo.objetos.Post;
 
 /**
  * Clase DAO para operaciones relacionadas con los monitores.
@@ -49,17 +50,7 @@ public class MonitorDAO extends Conexion {
         } catch (Exception e) {
             System.out.println("ERROR OBTENIENDO LOS DATOS DE LOS MONITORES: " + e.getMessage());
         } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                this.desconectar(); // Método para desconectar la base de datos
-            } catch (Exception e) {
-                System.out.println("ERROR CERRANDO RECURSOS: " + e.getMessage());
-            }
+            this.desconectar();
         }
         return monitores;
     }
@@ -99,5 +90,59 @@ public class MonitorDAO extends Conexion {
             }
         }
         return modificacion;
+    }
+    
+    // Metodo para listar los post por id de monitor
+    public List<Post> listaPostMonitor(int idMonitor){
+        
+        // Retornara una lista de posts, los cuales son los que ha subido el monitor
+        List<Post> postsMonitor = new ArrayList<>();
+        
+        // Variable para el manejo de las consultas
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        // Manejo de errores
+        try {
+            // Metodo para conectar con la base de datos
+            this.conectar();
+            
+            // Consutla sql para obtener los datos necesarios
+            String sql = "SELECT p.id_post, p.titulo_post, p.estado, p.validacion, p.observacion, p.fecha_post, COUNT(a.id_archivo) as cantidadArchivos, CONCAT(pe.nombre_usuario, \" \", pe.apellido_usuario) as nombreCompleto FROM tb_post p JOIN tb_archivo a ON p.id_post = a.id_post_fk JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk WHERE p.id_usuario_fk = ? GROUP BY id_post";
+            
+            // Preparar la conexion con la consulta sql
+            ps = getCon().prepareStatement(sql);
+            
+            // Se setea el id del monitor en la primea columna para que se cumpla la consulta
+            ps.setInt(1, idMonitor);
+            
+            // Ejecutar la consulta
+            rs = ps.executeQuery();
+            
+            // Si se encuentran posts de ese monitor
+            while(rs.next()){
+                
+                // Se instancia un nuevo objeto post, y lo agregara en un arreglo
+                Post post = new Post();
+                post.setId(rs.getInt("id_post"));
+                post.setIdUsuarioFk(idMonitor);
+                post.setTitulo(rs.getString("titulo_post"));
+                post.setNombreUsuario(rs.getString("nombreCompleto"));
+                post.setObservacion(rs.getString("observacion"));
+                post.setValidacion(rs.getBoolean("validacion"));
+                post.setEstado(rs.getBoolean("estado"));
+                post.setContador(rs.getInt("cantidadArchivos"));
+                post.setFechaPost(rs.getTimestamp("fecha_post"));
+                
+                // Agregar el posts al arreglo
+                postsMonitor.add(post);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR OBTENIENDO LOS POSTS DEL MONITOR: " + e.getMessage());
+        } finally {
+            // Metodo para desconectar la base de datos
+            this.desconectar();
+        }
+        return  postsMonitor;
     }
 }

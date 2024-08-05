@@ -83,7 +83,7 @@
             </form>
         </a>
         <a href="">
-            <form action="/svListarPosts" method="GET">
+            <form action="/svListarPosts" method="POST">
                 <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdInstructor">
                 <button
                     class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">

@@ -19,6 +19,7 @@
     PostDAO pDao = new PostDAO();
     ArchivoDAO aDao = new ArchivoDAO();
     List<Post> posts = (List<Post>) sesion.getAttribute("listaPosts");
+    List<Post> postMonitor = (List<Post>) sesion.getAttribute("listaPostsMonitor");
 %>
 <%
     request.setAttribute("pageTitle", "MDA SENA - Administrar post");
@@ -43,6 +44,7 @@
         <%            if (user.getId_rol_fk().getNombre_rol().equals("Instructor")) {
         %>
         <div class="container mx-auto p-4 w-9/12">
+            <h1 class="text-black text-xl mb-4 font-bold">Dashboard del instructor <%= perfil.getNombre_usuario() + " " + perfil.getApellido_usuario()%></h1>
             <!-- Contenedor de pestañas -->
             <div class="tabs text-black">
                 <ul class="flex border-b">
@@ -101,10 +103,12 @@
                                 }
 
                                 if (archivos != null && !archivos.isEmpty()) {
-                                    for (Archivo arch : archivos) {
                             %>
                             <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center">
                                 <p>Cantidad de archivos del post: <%= post.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
                                 <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
                                     X
                                 </button>
@@ -113,9 +117,11 @@
                                         <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
                                     </a>
                                 </div>
+                                <%
+                                    }
+                                %>
                             </div>
                             <%
-                                    }
                                 }
                             %>
                         </div>
@@ -189,7 +195,7 @@
                                         <%= post.getContador()%>
                                     </button>
                                 </td>
-                                <td class="truncate max-w-36" title="La mala pirobo, aprenda a redactar skdjskjdskdj, hola churro Xde">
+                                <td class="truncate max-w-36" title="<%= post.getObservacion()%>">
                                     <button id="observacion">
                                         <%= post.getObservacion()%>
                                     </button>
@@ -236,39 +242,61 @@
                         <thead>
                             <tr class="text-black text-md text-center">
                                 <th>Fecha</th>
-                                <th>Nombre monitor</th>
                                 <th>Título</th>
                                 <th>Cantidad archivos</th>
-                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                         <input type="hidden" value="<%= user.getId_usuario()%>" id="idMonitor">
+                        <%
+                            for (Post psMonitor : postMonitor) {
+                                if (!psMonitor.getEstado() && !psMonitor.getValidacion()) {
+                        %>
                         <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
-                            <td>Fecha del post</td>
-                            <td>Nombre del usuario</td>
-                            <td>Titulo del post</td>
+                            <td><%= psMonitor.getFechaPost()%></td>
+                            <td><%= psMonitor.getTitulo()%></td>
                             <td>
-                                <button id="cantidadArchivos" data-id="">
-                                    1
+                                <button id="cantidadArchivos" data-id="<%= psMonitor.getId()%>">
+                                    <%= psMonitor.getContador()%>
                                 </button>
                             </td>
-                            <td>
-                                <button id="rechazarPost" data-id="">
-                                    <i class="fa-solid fa-square-xmark text-mdaRed text-lg"></i>
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= psMonitor.getId()%>' id="divPost">
+                            <%
+                                List<Archivo> archivos = null;
+                                try {
+                                    archivos = aDao.listarArchivosPorPostId(psMonitor.getId());
+                                } catch (Exception e) {
+                                }
+
+                                if (archivos != null && !archivos.isEmpty()) {
+                            %>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center">
+                                <p>Cantidad de archivos del post: <%= psMonitor.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
                                 </button>
-                                <button id="aceptarPost" data-id=''>
-                                    <i class="fa-solid fa-square-check text-mdaGreen text-lg ml-2"></i>
-                                </button>
-                            </td>
-                        <div id="documentosContainer">
-                            <div class="hidden" data-id='' id="divPost">
-                                <a href=''>
-                                    <i class="fa-solid fa-arrow-down"></i> 
-                                </a>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
+                                </div>
+                                <%
+                                    }
+                                %>
                             </div>
+                            <%
+                                }
+                            %>
                         </div>
+
                         </tr>
+                        <%
+                                }
+                            }
+                        %>
                         </tbody>
                     </table>
                 </div>
@@ -278,22 +306,59 @@
                         <thead>
                             <tr class="text-black text-md text-center">
                                 <th>Fecha</th>
-                                <th>Nombre monitor</th>
                                 <th>Título</th>
                                 <th>Cantidad archivos</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <%
+                                for (Post psMonitor : postMonitor) {
+                                    if (psMonitor.getEstado() && psMonitor.getValidacion()) {
+                            %>
                             <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
-                                <td>Fecha del post</td>
-                                <td>Nombre del usuario</td>
-                                <td>Titulo del post</td>
+                                <td><%= psMonitor.getFechaPost()%></td>
+                                <td><%= psMonitor.getTitulo()%></td>
                                 <td>
-                                    <button id="cantidadArchivos" data-id="">
-                                        1
+                                    <button id="cantidadArchivos" data-id="<%= psMonitor.getId()%>">
+                                        <%= psMonitor.getContador()%>
                                     </button>
                                 </td>
                             </tr>
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= psMonitor.getId()%>' id="divPost">
+                            <%
+                                List<Archivo> archivos = null;
+                                try {
+                                    archivos = aDao.listarArchivosPorPostId(psMonitor.getId());
+                                } catch (Exception e) {
+                                }
+
+                                if (archivos != null && !archivos.isEmpty()) {
+                            %>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center">
+                                <p>Cantidad de archivos del post: <%= psMonitor.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
+                                </button>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
+                                </div>
+                                <%
+                                    }
+                                %>
+                            </div>
+                            <%
+                                }
+                            %>
+                        </div>
+                        <%
+                                }
+                            }
+                        %>
                         </tbody>
                     </table>
                 </div>
@@ -303,39 +368,56 @@
                         <thead>
                             <tr class="text-black text-md text-center">
                                 <th>Fecha</th>
-                                <th>Nombre monitor</th>
                                 <th>Título</th>
                                 <th>Cantidad archivos</th>
                                 <th>Observación</th>
-                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <%
+                                for (Post psMonitor : postMonitor) {
+                                    if (!psMonitor.getEstado() && psMonitor.getValidacion()) {
+                            %>
                             <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
-                                <td>Fecha del post</td>
-                                <td>Nombre del usuario</td>
-                                <td>Titulo del post</td>
+                                <td><%= psMonitor.getFechaPost()%></td>
+                                <td><%= psMonitor.getTitulo()%></td>
                                 <td>
                                     <button id="cantidadArchivos">
-                                        1
+                                        <%= psMonitor.getContador()%>
                                     </button>
                                 </td>
-                                <td class="truncate max-w-36" title="La mala pirobo, aprenda a redactar skdjskjdskdj, hola churro Xde">
+                                <td class="truncate max-w-36" title="<%= psMonitor.getObservacion()%>">
                                     <button id="observacion">
-                                        Algo tranqui
+                                        <%= psMonitor.getObservacion()%>
                                     </button>
                                 </td>
                                 <td>
-                                    <button id="rechazarPost" data-id="">
-                                        <i class="fa-solid fa-square-xmark text-mdaRed text-lg"></i>
-                                    </button>
-                                    <button id="aceptarPost" data-id="">
-                                        <i class="fa-solid fa-square-check text-mdaGreen text-lg ml-2"></i>
+                                    <button id="btnModificar" class="btn btn-xs bg-mdaGreen border-none text-white hover:bg-mdaGreen">
+                                        Modificar
                                     </button>
                                 </td>
                             </tr>
+                            <%
+                                    }
+                                }
+                            %>
                         </tbody>
                     </table>
+                    <div id="modalPost" class="w-screen fixed z-10 inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+                        <div class="bg-white p-8 rounded shadow-lg max-w-lg w-full relative">
+                            <button onClick="closeModal()" class="absolute top-2 right-2 text-gray-500">&times;</button>
+                            <form action="/svModificarPost" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="txtIdUser" value="<%= user.getId_usuario()%>">
+                                <label class="input input-bordered flex items-center gap-2 bg-white-">
+                                    <i class="fa-solid fa-file-upload"></i> 
+                                    <input type="file" class="grow text-mdaBlack" id="archivo" name="archivo" accept=".pdf,.doc,.docx,.py" multiple> 
+                                </label>
+                                <button type="submit" class="w-full btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
+                                    Modificar post
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

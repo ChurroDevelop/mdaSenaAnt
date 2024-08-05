@@ -22,11 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Esto es para ver la cantidad de archivos que tiene ese post
-// Ayudeme a agregarle lo del modal a esta vain pofavo
 const _btnContador = document.querySelectorAll("#cantidadArchivos");
 _btnContador.forEach((btn) => {
     btn.addEventListener('click', () => {
-        const _divs = document.querySelectorAll('#divPost')
+        const _divs = document.querySelectorAll('#divPost');
         _divs.forEach((e) => {
             let idDiv = e.getAttribute('data-id');
             let idBtn = btn.getAttribute('data-id');
@@ -41,108 +40,18 @@ _btnContador.forEach((btn) => {
     });
 });
 
-const _cerrarCantidadPost = document.getElementById("cerrarCantidadPost");
-_cerrarCantidadPost.addEventListener("click", () => {
-    const _archivos = document.getElementById("divPost");
-    _archivos.classList.add("hidden");
-});
+// Boton para cerrar el modal de la cantidad de documentos
+const _cerrarCantidadPost = document.querySelectorAll("#cerrarCantidadPost");
+console.log(_cerrarCantidadPost)
+_cerrarCantidadPost.forEach((e) => {
+    e.addEventListener("click", () => {
+        const _archivos = document.querySelectorAll("#divPost");
+        _archivos.forEach((i) => {
+            i.classList.add("hidden");
+        })
+    });
+})
 
-//
-//// Modal para ver la cantidad de los archivos
-//const _cantidadArchivo = document.querySelectorAll("#cantidadArchivos");
-//_cantidadArchivo.forEach((e) => {
-//    e.addEventListener("click", async () => {
-//        const _section = document.createElement("section");
-//        _section.classList.add(
-//                "flex",
-//                "bg-[#1D1D1D60]",
-//                "fixed",
-//                "min-h-screen",
-//                "w-full",
-//                "justify-center",
-//                "items-center",
-//                "z-10"
-//                );
-//        document.body.appendChild(_section);
-//
-//        const _modal = document.createElement("div");
-//        _modal.classList.add(
-//                "bg-white",
-//                "w-96",
-//                "rounded-lg",
-//                "p-5",
-//                "text-center",
-//                "flex",
-//                "gap-5",
-//                "flex-col",
-//                "items-center",
-//                "relative"
-//                );
-//        _modal.textContent = "Cantidad de archivos: 1"; // Por medio de JSP muestra la cantidad de archivos y muestra los arvhivos
-//        _section.appendChild(_modal);
-//
-//        // Botón de cierre
-//        const _closeBtn = document.createElement("button");
-//        _closeBtn.classList.add(
-//                "absolute",
-//                "top-2",
-//                "right-2",
-//                "bg-red-500",
-//                "text-white",
-//                "rounded-full",
-//                "w-6",
-//                "h-6",
-//                "flex",
-//                "items-center",
-//                "justify-center"
-//                );
-//        _closeBtn.textContent = "X";
-//        _closeBtn.addEventListener("click", () => {
-//            document.body.removeChild(_section);
-//        });
-//        _modal.appendChild(_closeBtn);
-//
-//        // Eu ChurroGOAT
-//        // Haga un GPTazo para hacer el bucle según la cantidad de archivos
-//        // Perdón si no lo hice, ya andaba con sueño
-//
-//        // Ejemplo de archivo
-//        const _id = e.getAttribute('data-id');
-//        console.log(_id);
-//
-//        event.preventDefault();
-//
-//        let response = await fetch('/svListarArchivos', {
-//            method: 'POST',
-//            header: {
-//                'Content-Type': 'application/x-www-form-urlencoded'
-//            },
-//            body: new URLSearchParams({
-//                'txtIdPost': _id
-//            })
-//        });
-//
-//        let data = await response.json();
-//        console.log(data);
-//
-//        const _div = document.createElement("div");
-////        _modal.appendChild(_div);
-//
-//        data.forEach((archivo) => {
-////            const _archivo = document.createElement("a");
-////            _archivo.setAttribute("href", "");
-////            _archivo.classList.add("text-center", "text-black", "inline-block");
-////            _div.appendChild(_archivo);
-//        })
-//
-////        const _archivo = document.createElement("a");
-////        _archivo.classList.add("text-center");
-////        _archivo.textContent = "ChurroGOAT.pdf";
-////        _modal.appendChild(_archivo);
-//
-//    });
-//})
-//
 // Modal para ver la observación
 const _observacion = document.querySelectorAll("#observacion");
 _observacion.forEach((element) => {
@@ -294,8 +203,7 @@ _aceptar.forEach((e) => {
 
     });
 })
-//
-//
+
 // Modal para rechazar el post
 const _rechazar = document.querySelectorAll("#rechazarPost");
 _rechazar.forEach((btn) => {
@@ -407,3 +315,14 @@ _rechazar.forEach((btn) => {
         _modal.appendChild(_buttonContainer);
     });
 })
+
+const _btnModificar = document.querySelectorAll("#btnModificar");
+_btnModificar.forEach((element) => {
+    element.addEventListener("click", () => {
+        document.getElementById('modalPost').classList.remove('hidden');
+    });
+})
+
+function closeModal() {
+    document.getElementById('modalPost').classList.add('hidden');
+}
