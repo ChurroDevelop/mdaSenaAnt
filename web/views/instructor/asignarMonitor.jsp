@@ -5,7 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
     HttpSession sesion = request.getSession(false);
-    if ((sesion == null || sesion.getAttribute("dataUser") == null)) {
+    if ((sesion == null || sesion.getAttribute("dataUser") == null) || sesion.getAttribute("listMonitores") == null) {
         System.out.println("Error en la vista de editar perfil");
         response.sendRedirect("login.jsp");
         return;
@@ -54,7 +54,7 @@
                     <button class="btn bg-mdaGreen border-none text-white hover:bg-mdaGreen w-full mt-4" type="submit">Agregar</button>
                 </form>
                 <div id="infoAprendiz" class="flex justify-around items-center">
-                    <p id="detallesAprendiz" class="text-mdaBlack"></p>
+                    <p id="detallesAprendiz" class="text-mdaBlack font-bold"></p>
                     <input type="hidden" id="idInstructor" value="<%= user.getId_usuario()%>" name="idInstructorTxt">
                 </div>
             </article>
@@ -98,6 +98,7 @@
                             <p class="inline-block"> <%= p.getNombre_usuario() + " " + p.getApellido_usuario()%> </p>
                         </div>
                         <form action="/svEliminarMonitor" method="POST">
+                            <input type="hidden" value="<%= user.getId_usuario() %>" name="txtIdInstructor">
                             <input type="hidden" value="<%= p.getId_perfil()%>" name="txtIdMonitor">
                             <button class="btn bg-mdaRed border-none text-white hover:bg-mdaRed">
                                 Quitar monitor

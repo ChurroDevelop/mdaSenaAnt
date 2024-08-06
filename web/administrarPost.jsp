@@ -104,7 +104,7 @@
 
                                 if (archivos != null && !archivos.isEmpty()) {
                             %>
-                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center">
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
                                 <p>Cantidad de archivos del post: <%= post.getContador()%></p>
                                 <%
                                     for (Archivo arch : archivos) {
@@ -270,7 +270,7 @@
 
                                 if (archivos != null && !archivos.isEmpty()) {
                             %>
-                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center">
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
                                 <p>Cantidad de archivos del post: <%= psMonitor.getContador()%></p>
                                 <%
                                     for (Archivo arch : archivos) {
@@ -334,7 +334,7 @@
 
                                 if (archivos != null && !archivos.isEmpty()) {
                             %>
-                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center">
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
                                 <p>Cantidad de archivos del post: <%= psMonitor.getContador()%></p>
                                 <%
                                     for (Archivo arch : archivos) {
@@ -371,6 +371,7 @@
                                 <th>Título</th>
                                 <th>Cantidad archivos</th>
                                 <th>Observación</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -382,7 +383,7 @@
                                 <td><%= psMonitor.getFechaPost()%></td>
                                 <td><%= psMonitor.getTitulo()%></td>
                                 <td>
-                                    <button id="cantidadArchivos">
+                                    <button id="cantidadArchivos" data-id="<%= psMonitor.getId()%>">
                                         <%= psMonitor.getContador()%>
                                     </button>
                                 </td>
@@ -391,36 +392,53 @@
                                         <%= psMonitor.getObservacion()%>
                                     </button>
                                 </td>
-                                <td>
-                                    <button id="btnModificar" class="btn btn-xs bg-mdaGreen border-none text-white hover:bg-mdaGreen">
-                                        Modificar
-                                    </button>
-                                </td>
                             </tr>
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= psMonitor.getId()%>' id="divPost">
                             <%
+                                List<Archivo> archivos = null;
+                                try {
+                                    archivos = aDao.listarArchivosPorPostId(psMonitor.getId());
+                                } catch (Exception e) {
+                                }
+
+                                if (archivos != null && !archivos.isEmpty()) {
+                            %>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
+                                <p>Cantidad de archivos del post: <%= psMonitor.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
+                                </button>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
+                                </div>
+                                <%
                                     }
+                                %>
+                            </div>
+                            <%
                                 }
                             %>
+                        </div>
+                        <%
+                                }
+                            }
+                        %>
+
                         </tbody>
                     </table>
-                    <div id="modalPost" class="w-screen fixed z-10 inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-                        <div class="bg-white p-8 rounded shadow-lg max-w-lg w-full relative">
-                            <button onClick="closeModal()" class="absolute top-2 right-2 text-gray-500">&times;</button>
-                            <form action="/svModificarPost" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="txtIdUser" value="<%= user.getId_usuario()%>">
-                                <label class="input input-bordered flex items-center gap-2 bg-white-">
-                                    <i class="fa-solid fa-file-upload"></i> 
-                                    <input type="file" class="grow text-mdaBlack" id="archivo" name="archivo" accept=".pdf,.doc,.docx,.py" multiple> 
-                                </label>
-                                <button type="submit" class="w-full btn bg-mdaGreen border-none text-white mt-4 hover:bg-mdaGreen">
-                                    Modificar post
-                                </button>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+                        
+        <!-- Indicador de rol -->
+        <button class="bg-white btn btn-sm border-none text-mdaBlack fixed top-0 right-0 m-2.5 hover:bg-white">
+            <i class="fa-solid fa-user"></i> <%= user.getId_rol_fk().getNombre_rol()%>
+        </button>
         <% }%>
     </body>
 

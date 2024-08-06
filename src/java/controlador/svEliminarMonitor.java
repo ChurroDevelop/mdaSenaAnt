@@ -41,14 +41,16 @@ public class svEliminarMonitor extends HttpServlet {
 
         // Recupera el ID del monitor a eliminar y el ID del instructor desde la solicitud
         String idUser = request.getParameter("txtIdMonitor");
-        String idInstructor = request.getParameter("idInstructorTxt");
+        String idInstructor = request.getParameter("txtIdInstructor");
+        System.out.println("ID DEL INSTRUCTOR: " + idInstructor);
 
         // Intenta eliminar el monitor del instructor
         if (mDao.eliminarMonitor(idUser)) {
 //             Si la eliminación fue exitosa, actualiza la lista de monitores del instructor
             List<Perfil> monitores = mDao.obtenerMonitores(idInstructor);
+            System.out.println(monitores);
             // Guarda la lista actualizada en la sesión
-            sesion.setAttribute("listMonitores", monitores);
+            sesion.setAttribute("listMonitores", monitores);    
             // Redirige a la vista de asignación de monitores
             response.sendRedirect("views/instructor/asignarMonitor.jsp");
         } else {

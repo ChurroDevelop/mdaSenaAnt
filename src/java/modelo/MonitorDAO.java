@@ -66,7 +66,9 @@ public class MonitorDAO extends Conexion {
         PreparedStatement ps = null; // Variable para la consulta SQL
         try {
             this.conectar(); // Método para conectar a la base de datos
-            String sql = "UPDATE tb_usuarios SET id_rol_fk = 1, id_instructor_asig = null WHERE id_usuario = ?"; // Consulta SQL para actualizar el rol del usuario
+            String sql = "UPDATE tb_usuarios\n" +
+                        "SET id_rol_fk = 1, id_instructor_asig = null\n" +
+                        "WHERE id_usuario = (SELECT id_usuario_fk FROM tb_perfil WHERE id_perfil = ?);"; // Consulta SQL para actualizar el rol del usuario
             ps = getCon().prepareStatement(sql); // Preparar la consulta para ejecutar en el gestor de base de datos
             ps.setString(1, idUser); // Pasarle el parámetro que es el ID del usuario
             int modificado = ps.executeUpdate(); // Ejecutar la consulta, devuelve un entero
@@ -75,7 +77,7 @@ public class MonitorDAO extends Conexion {
             if (modificado > 0) {
                 modificacion = true; // Cambia el estado a true, es decir que modificó el usuario
             } else {
-                System.out.println("NO SE PUDO REALIZAR LA MODIFICACION DE ROL");
+                System.out.println("NO SE PUDO REALIZAR LA MODIFICACION DE ROL: " + idUser);
             }
         } catch (Exception e) {
             System.out.println("ERROR QUITANDO EL ROL MONITOR: " + e.getMessage());

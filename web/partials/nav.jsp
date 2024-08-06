@@ -126,13 +126,13 @@
     </a>
     <a href="">
         <form action="/svListarPostsMonitor" method="POST">
-                <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdMonitor">
-                <button
-                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                    <i class="fa-solid fa-bell"></i>
-                    Notificaciones
-                </button>
-            </form>
+            <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdMonitor">
+            <button
+                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                <i class="fa-solid fa-bell"></i>
+                Notificaciones
+            </button>
+        </form>
     </a>
     <a href="editarPerfil.jsp">
         <button
