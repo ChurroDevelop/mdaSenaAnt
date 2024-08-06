@@ -159,11 +159,42 @@
                                         <%= post.getContador()%>
                                     </button>
                                 </td>
-                            </tr>
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
                             <%
+                                List<Archivo> archivos = null;
+                                try {
+                                    archivos = aDao.listarArchivosPorPostId(post.getId());
+                                } catch (Exception e) {
+                                }
+
+                                if (archivos != null && !archivos.isEmpty()) {
+                            %>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
+                                <p>Cantidad de archivos del post: <%= post.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
+                                </button>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
+                                </div>
+                                <%
                                     }
+                                %>
+                            </div>
+                            <%
                                 }
                             %>
+                        </div>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
                         </tbody>
                     </table>
                 </div>
@@ -191,7 +222,7 @@
                                 <td><%= post.getNombreUsuario()%></td>
                                 <td><%= post.getTitulo()%></td>
                                 <td>
-                                    <button id="cantidadArchivos">
+                                    <button id="cantidadArchivos" data-id="<%= post.getId() %>">
                                         <%= post.getContador()%>
                                     </button>
                                 </td>
@@ -201,18 +232,46 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button id="rechazarPost" data-id="<%= post.getId()%>">
-                                        <i class="fa-solid fa-square-xmark text-mdaRed text-lg"></i>
-                                    </button>
-                                    <button id="aceptarPost" data-id="<%= post.getId()%>">
-                                        <i class="fa-solid fa-square-check text-mdaGreen text-lg ml-2"></i>
+                                    <button id="eliminarPost" data-id="<%= post.getId()%>" class="btn btn-sm bg-transparent border border-mdaRed text-mdaRed hover:bg-mdaRed hover:text-mdaWhite hover:border-mdaRed">
+                                        Eliminar
                                     </button>
                                 </td>
-                            </tr>
-                            <%
-                                    }
+                                <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
+                                    <%
+                                        List<Archivo> archivos = null;
+                                        try {
+                                            archivos = aDao.listarArchivosPorPostId(post.getId());
+                                        } catch (Exception e) {
+                                        }
+
+                                        if (archivos != null && !archivos.isEmpty()) {
+                                    %>
+                                    <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
+                                        <p>Cantidad de archivos del post: <%= post.getContador()%></p>
+                                        <%
+                                            for (Archivo arch : archivos) {
+                                        %>
+                                        <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                            X
+                                        </button>
+                                        <div>
+                                            <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                                <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                            </a>
+                                        </div>
+                                        <%
+                                            }
+                                        %>
+                                    </div>
+                                    <%
+                                        }
+                                    %>
+                                </div>
+                        </tr>
+                        <%
                                 }
-                            %>
+                            }
+                        %>
                         </tbody>
                     </table>
                 </div>
@@ -434,7 +493,7 @@
                 </div>
             </div>
         </div>
-                        
+
         <!-- Indicador de rol -->
         <button class="bg-white btn btn-sm border-none text-mdaBlack fixed top-0 right-0 m-2.5 hover:bg-white">
             <i class="fa-solid fa-user"></i> <%= user.getId_rol_fk().getNombre_rol()%>
@@ -442,7 +501,7 @@
         <% }%>
     </body>
 
-    <script src="scripts/dashboard.js">
-    </script>
+    <script src="scripts/dashboard.js"></script>
+    <script src="scripts/buscador.js"></script>
 
 </html>

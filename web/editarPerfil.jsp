@@ -58,7 +58,7 @@
                 <form action="">
                     <label class="input input-bordered flex items-center gap-2 bg-white">
                         <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-                        <input type="text" class="grow text-mdaBlack" placeholder="Search" />
+                        <input type="text" class="grow text-mdaBlack" placeholder="Search" id="buscador"/>
                     </label>
                 </form>
                 <!-- HR -->
@@ -256,6 +256,7 @@
         <!-- Enlace para manejo del DOM -->
         <script type="module" src="scripts/validacionFormularios/editarPerfil.js"></script>
         <script src="scripts/cerrar.js"></script>
+        <script src="scripts/buscador.js"></script>
     </body>
 
 </html>

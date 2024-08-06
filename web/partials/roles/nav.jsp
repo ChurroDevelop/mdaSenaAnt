@@ -25,7 +25,7 @@
         <form action="">
             <label class="input input-bordered flex items-center gap-2 bg-white">
                 <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-                <input type="text" class="grow text-mdaBlack" placeholder="Search" />
+                <input type="text" class="grow text-mdaBlack" placeholder="Search" id="buscador"/>
             </label>
         </form>
         <!-- HR -->
@@ -125,11 +125,14 @@
         </button>
     </a>
     <a href="../../administrarPost.jsp">
-        <button
+        <form action="/svListarPostsMonitor" method="POST">
+            <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdMonitor">
+            <button
                 class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-solid fa-bell"></i>
-            Notificaciones
-        </button>
+                <i class="fa-solid fa-bell"></i>
+                Notificaciones
+            </button>
+        </form>
     </a>
     <a href="../../editarPerfil.jsp">
         <button

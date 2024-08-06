@@ -59,6 +59,7 @@
 
         <!-- Enlace para manejo del DOM -->
         <script src="../../scripts/monitor.js"></script>
+        <script src="../../scripts/buscador.js"></script>
     </body>
 
 </html>

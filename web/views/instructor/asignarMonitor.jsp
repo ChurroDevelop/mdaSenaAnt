@@ -116,6 +116,7 @@
         <!-- Enlace para manejo del DOM -->
         <script src="../../scripts/instructor.js"></script>
         <script src="../../scripts/script.js"></script>
+        <script src="../../scripts/buscador.js"></script>
     </body>
 
 </html>

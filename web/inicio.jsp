@@ -35,24 +35,25 @@
     <%@ include file="partials/head.jsp" %>
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
         <!-- Incluir la navegación -->
+        
         <%@ include file="partials/nav.jsp" %>
 
         <!-- Contenedor para los posts -->
         <section class="m-auto flex w-full max-w-screen-2xl min-h-screen justify-center p-5 gap-5 flex-wrap content-start">
             <% if (posts != null && !posts.isEmpty()) { %>
             <% for (Post post : posts) {%>
-            <article class="bg-white w-full max-w-2xl h-auto shadow-md rounded-lg p-5 flex flex-col justify-between">
+            <article id="posts" class="bg-white w-full max-w-2xl h-auto shadow-md rounded-lg p-5 flex flex-col justify-between">
                 <!-- Nombre del creador del post -->
                 <div class="text-mdaBlack text-sm">
                     <p><b><%= post.getNombreUsuario()%></b></p>
                 </div>
                 <div class="text-mdaGreen p-2">
                     <!-- Titulo del post -->
-                    <h2 class="text-4xl mb-2 truncate" title="<%= post.getTitulo()%>">
+                    <h2 class="text-4xl mb-2 truncate" title="<%= post.getTitulo()%>" id="title">
                         <b><%= post.getTitulo()%></b>
                     </h2>
                     <!-- Archivos anexados al post -->
-                    <div class="max-h-44 overflow-scroll">
+                    <div class="max-h-12 overflow-scroll">
                         <%
                             List<Archivo> archivos = null;
                             try {
@@ -88,5 +89,6 @@
 
         <!-- Enlace para manejo del DOM -->
         <script src="scripts/inicio.js"></script>
+        <script src="scripts/buscar.js"></script>
     </body>
 </html>

@@ -3,15 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/J:/bloig/web/inicio.jsp</file>
-            <file>file:/J:/bloig/web/views/instructor/asignarMonitor.jsp</file>
-            <file>file:/J:/bloig/web/editarPerfil.jsp</file>
-            <file>file:/J:/bloig/web/scripts/dashboard.js</file>
-            <file>file:/J:/bloig/web/scripts/instructor.js</file>
-            <file>file:/J:/bloig/web/partials/nav.jsp</file>
-            <file>file:/J:/bloig/src/java/controlador/svEliminarMonitor.java</file>
-            <file>file:/J:/bloig/src/java/modelo/MonitorDAO.java</file>
-            <file>file:/J:/bloig/web/administrarPost.jsp</file>
+            <file>file:/J:/blog/web/inicio.jsp</file>
+            <file>file:/J:/blog/web/scripts/buscar.js</file>
         </group>
     </open-files>
 </project-private>

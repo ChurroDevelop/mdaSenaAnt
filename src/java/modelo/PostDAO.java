@@ -189,14 +189,68 @@ public class PostDAO extends Conexion {
         return estado;
     }
     
-    public String obtenerObservacion() {
-        String observacion = null;
+    
+    public boolean deshabilitarPost(String idPost){
+        boolean estado = false;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             this.conectar();
-            String sql = "SELECT observacion FROM tb_";
+            String sql = "UPDATE tb_post SET estado = false, validacion = true WHERE id_post = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setString(1, idPost);
+            int x = ps.executeUpdate();
+            if (x > 0) {
+                estado = true;
+                System.out.println("SE MODIFICO EL ESTADO DEL POST: " + idPost);
+            }
         } catch (Exception e) {
+            System.out.println("ERROR AL MODIFICAR EL ESTADO DEL POST: " + e.getMessage());
+        } finally {
+            this.desconectar();
         }
-        return observacion;
+        return estado;
+    }
+
+    // Metodo para eliminar el post de la base de datos
+    public boolean eliminarPost(String idPost) {
+        
+        // Manejo del estado para saber si se elimino o no el post
+        boolean estado = false;
+        
+        // Variables para el manejo de las consu,tas
+        PreparedStatement ps = null;
+        PreparedStatement psDos = null;
+        try {
+            // Metodo para conectar con la base de datos
+            this.conectar();
+            
+            // Consultas SQL
+            String sql = "DELETE FROM tb_post WHERE id_post = ?";
+            String sqlDos = "DELETE FROM tb_archivo WHERE id_post_fk = ?";
+            
+            // Tomar y preparar las consultas sql
+            ps = getCon().prepareStatement(sql);
+            psDos = getCon().prepareStatement(sqlDos);
+            
+            // Eliminar los archivos relacionados al post
+            psDos.setString(1, idPost);
+            psDos.executeUpdate();
+            
+            // Eliminar el post
+            ps.setString(1, idPost);
+            int x = ps.executeUpdate();
+            if (x > 0) {
+                estado = true;
+                System.out.println("SE ELIMINO EL POST CON EL ID: " + idPost);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR ELIMINANDO EL POST: " + e.getMessage());
+        } finally {
+            // Metodo para desconectar la base de datos
+            this.desconectar();
+        }
+        // Retornara un valor booleano
+        return estado;
     }
 }
