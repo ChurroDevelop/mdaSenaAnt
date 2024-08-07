@@ -21,18 +21,6 @@ public class svEliminarMonitor extends HttpServlet {
     // Instancia del DAO para manejar la base de datos de monitores
     private final MonitorDAO mDao = new MonitorDAO();
 
-    /**
-     * Maneja las solicitudes POST para eliminar un monitor. Actualiza la lista
-     * de monitores del instructor después de la eliminación.
-     *
-     * @param request Solicitud HTTP que contiene los IDs del monitor y del
-     * instructor.
-     * @param response Respuesta HTTP que redirige a la vista actualizada de
-     * asignación de monitores.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,11 +34,12 @@ public class svEliminarMonitor extends HttpServlet {
 
         // Intenta eliminar el monitor del instructor
         if (mDao.eliminarMonitor(idUser)) {
-//             Si la eliminación fue exitosa, actualiza la lista de monitores del instructor
+            // Si la eliminación fue exitosa, actualiza la lista de monitores del instructor
             List<Perfil> monitores = mDao.obtenerMonitores(idInstructor);
-            System.out.println(monitores);
+            
             // Guarda la lista actualizada en la sesión
-            sesion.setAttribute("listMonitores", monitores);    
+            sesion.setAttribute("listMonitores", monitores); 
+            
             // Redirige a la vista de asignación de monitores
             response.sendRedirect("views/instructor/asignarMonitor.jsp");
         } else {

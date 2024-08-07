@@ -34,30 +34,24 @@ import java.util.Collection;
 )
 public class svCrearPost extends HttpServlet {
 
-    private final PostDAO postDAO = new PostDAO();  // DAO para manejar operaciones con posts
-    private final ArchivoDAO archivoDAO = new ArchivoDAO();  // DAO para manejar operaciones con archivos
+    // DAO para manejar operaciones con posts
+    private final PostDAO postDAO = new PostDAO();  
+    
+    // DAO para manejar operaciones con archivos
+    private final ArchivoDAO archivoDAO = new ArchivoDAO();  
 
-    /**
-     * Maneja las solicitudes POST para crear un nuevo post y cargar archivos
-     * asociados.
-     *
-     * @param request Solicitud HTTP que contiene los datos del post y los
-     * archivos.
-     * @param response Respuesta HTTP para redirigir al usuario después de
-     * procesar la solicitud.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");  // Establece la codificación de caracteres para la solicitud
+        // Establece la codificación de caracteres para la solicitud
+        request.setCharacterEncoding("UTF-8");  
 
-        // Obtener los parámetros del post desde la solicitud
+        // Obtener los parámetros del post desde la solicitud del formulario
         String titulo = request.getParameter("titulo");
+        
+        // Castear el id del usuario a entero
         int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
 
-        // Crear un nuevo objeto Post y asignar valores
+        // Crear un nuevo objeto Post y asignar valores por metodos setters
         Post post = new Post();
         post.setTitulo(titulo);
         post.setIdUsuarioFk(idUsuario);
@@ -71,28 +65,52 @@ public class svCrearPost extends HttpServlet {
         } catch (SQLException e) {
             // Manejo de errores si no se puede crear el post
             System.out.println("No se pudo crear el post: " + e.getMessage());
+            
+            // Retorna a la vista de crear post por parte del monitor
             response.sendRedirect("crearPost.jsp");
+            
+            // Rompe de una vez la ejecucion del servlet
             return;
         }
 
         // Manejo de los archivos subidos
+        
+        // Recupera todas las partes <de una solicitud multipart
         Collection<Part> fileParts = request.getParts();
+        
+        // Iterador sobre cada archivo subido
         for (Part filePart : fileParts) {
+            
+            // Filtra los archivos que tengan el nombre archivo, y que el tamaño sea mayor a 0
             if (filePart.getName().equals("archivo") && filePart.getSize() > 0) {
-                String fileName = filePart.getSubmittedFileName();  // Obtener el nombre del archivo
+                
+                // Obtener el nombre del archivo
+                String fileName = filePart.getSubmittedFileName();
+                
+                // Mensaje de depuracion para saber si se tomo o no el archivo
                 System.out.println(fileName);
-                String extension = fileName.substring(fileName.lastIndexOf('.') + 1);  // Obtener la extensión del archivo
-                byte[] fileContent = inputStreamToByteArray(filePart.getInputStream());  // Convertir el contenido del archivo a bytes
+                
+                // Obtener la extensión del archivo, toma la extension despues de que encuentre un punto en su nombre
+                String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+                
+                // Convertir el contenido del archivo a bytes
+                byte[] fileContent = convertirArrayBite(filePart.getInputStream());  
 
                 // Crear un nuevo objeto Archivo y asignar valores
                 Archivo archivo = new Archivo(0, extension, fileName, fileContent, idPost);
+                
+                // Manejo de errores
                 try {
                     // Crear el archivo en la base de datos
                     archivoDAO.crearArchivo(archivo);
                 } catch (SQLException e) {
                     // Manejo de errores si no se puede crear el archivo
                     System.out.println("No se pudo crear el archivo: " + e.getMessage());
+                    
+                    // Redirije a la vista de crear post por parte del monitor
                     response.sendRedirect("crearPost.jsp");
+                    
+                    // Rompe de una vez la ejecucion del servlet
                     return;
                 }
             }
@@ -110,14 +128,26 @@ public class svCrearPost extends HttpServlet {
      * @throws IOException Si ocurre un error durante la lectura del
      * InputStream.
      */
-    private byte[] inputStreamToByteArray(InputStream inputStream) throws IOException {
+    private byte[] convertirArrayBite(InputStream inputStream) throws IOException {
+        
+        // Crear un nuevo buffer para almacenar temporalmente los bytes leidos
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        
+        // Variable para almacenar el numero de bytes leidos en cada iteracion
         int nRead;
-        byte[] data = new byte[16384];  // Tamaño del buffer de lectura
+        
+        // Tamaño de 16 KB del buffer de lectura
+        byte[] data = new byte[16384];
+        
+        // Bucle para leer byte por byte comenzando por el indice 0
         while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
             buffer.write(data, 0, nRead);
         }
+        
+        // Al almacenar los datos en memoria, se hace un llamado para que los datos sean procesdos
         buffer.flush();
+        
+        // Retorna el arreglo de bytes, para subir el documento a la base de datos
         return buffer.toByteArray();
     }
 }

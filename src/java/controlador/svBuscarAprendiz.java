@@ -18,17 +18,6 @@ public class svBuscarAprendiz extends HttpServlet {
     // Instancia de un nuevo PerfilDAO para manejar las operaciones de base de datos relacionadas con el perfil.
     PerfilDAO pDao = new PerfilDAO();
 
-    /**
-     * Maneja las solicitudes POST para buscar un aprendiz por su número de
-     * documento.
-     *
-     * @param request Solicitud HTTP que contiene la información de la solicitud
-     * del cliente.
-     * @param response Respuesta HTTP que se enviará al cliente.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -41,9 +30,11 @@ public class svBuscarAprendiz extends HttpServlet {
 
         // Establece el tipo de contenido de la respuesta HTTP a JSON.
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8"); // Asegura que la codificación sea UTF-8 para caracteres especiales.
+        
+        // Asegura que la codificación sea UTF-8 para caracteres especiales.
+        response.setCharacterEncoding("UTF-8"); 
 
-        // Escribe el JsonObject en la respuesta HTTP.
+        // Escribe la respuesta HTTP en formato JSON
         response.getWriter().write(info.toString());
     }
 }

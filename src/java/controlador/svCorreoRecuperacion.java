@@ -25,32 +25,25 @@ public class svCorreoRecuperacion extends HttpServlet {
 
     // Instanciando un nuevo usuario para colocarle sus atributos
     Usuario user = new Usuario();
+    
     // Instancia de un UsuarioDao que manejará los procesos CRUD
     UsuarioDao userDao = new UsuarioDao();
+    
     // Instancia de EnviarCodigoContrasena para enviar el código de recuperación
     EnviarCodigoContrasena mensaje = new EnviarCodigoContrasena();
 
-    /**
-     * Maneja las solicitudes POST para enviar un código de recuperación al
-     * correo electrónico del usuario.
-     *
-     * @param request Solicitud HTTP que contiene el correo electrónico del
-     * usuario.
-     * @param response Respuesta HTTP que indica el resultado del proceso.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Obtiene la sesión actual
         HttpSession sesion = request.getSession();
+        
         // Configura la codificación de caracteres para evitar problemas con acentos y caracteres especiales
         request.setCharacterEncoding("UTF-8");
 
         // Obtiene el correo electrónico ingresado por el usuario en el formulario
         String correo = request.getParameter("txtCorreo");
+        
         // Genera un código aleatorio para la autenticación
         String codigo = mensaje.getRandom();
 
@@ -66,13 +59,14 @@ public class svCorreoRecuperacion extends HttpServlet {
         Matcher mAprendiz = pAprendiz.matcher(correo);
         Matcher mInstructor = pInstructor.matcher(correo);
 
-        // Configura el correo y el código en el objeto usuario
+        // Se toman los datos entrantes y se setean al objeto Usuario
         user.setCorreoInst(correo);
         user.setCodigo(codigo);
 
         // Verifica si el usuario existe en la base de datos
         boolean encontrado = userDao.buscarUser(user);
 
+        // Devuelve la respuesta en texto plano
         response.setContentType("text/plain");
 
         // Si el correo cumple con alguno de los patrones y el usuario existe en la base de datos

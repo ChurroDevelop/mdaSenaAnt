@@ -23,22 +23,13 @@ public class svCambiarContrasena extends HttpServlet {
     // Instancia de UsuarioDao para manejar las operaciones de base de datos relacionadas con el usuario.
     UsuarioDao userDao = new UsuarioDao();
 
-    /**
-     * Maneja las solicitudes POST para cambiar la contraseña del usuario.
-     *
-     * @param request Solicitud HTTP que contiene la información de la solicitud
-     * del cliente.
-     * @param response Respuesta HTTP que se enviará al cliente.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Obtiene la sesión del usuario.
         HttpSession sesionUser = request.getSession();
+        
         // Configura la codificación de caracteres para evitar problemas con acentos y caracteres especiales.
         request.setCharacterEncoding("UTF-8");
 
@@ -48,16 +39,25 @@ public class svCambiarContrasena extends HttpServlet {
 
         // Recupera el objeto Usuario de la sesión.
         Usuario user = (Usuario) sesionUser.getAttribute("autenticacion");
-        System.out.println("Usuario: " + user.getCorreoInst()); // Imprime en consola el correo del usuario autenticado.
+        
+         // Depuracion para el usuario autenticado
+        System.out.println("Usuario: " + user.getCorreoInst());
 
         // Verifica si la nueva contraseña y su confirmación coinciden.
         if (clave.equals(confirmarClave)) {
+            
             // Encripta la nueva contraseña.
             String encript = EncriptarContraseña.encriptar(confirmarClave);
+            
+            // Manejo de errores
             try {
-                System.out.println("Las contraseñas coinciden"); // Mensaje de confirmación en consola.
+                
+                // Mensaje de confirmación en consola.
+                System.out.println("Las contraseñas coinciden");
+                
                 // Cambia la contraseña del usuario en la base de datos.
                 userDao.cambiarContrasena(userDao.obtenerId(user.getCorreoInst()), encript);
+                
                 // Redirige al usuario a la página de inicio de sesión.
                 response.sendRedirect("login.jsp");
             } catch (SQLException ex) {

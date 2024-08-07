@@ -30,29 +30,21 @@ public class svCodigo extends HttpServlet {
     UsuarioDao userDao = new UsuarioDao();
     EnviarCodigo mensaje = new EnviarCodigo();
 
-    /**
-     * Maneja las solicitudes POST para registrar un usuario y enviar un código
-     * de verificación a su correo.
-     *
-     * @param request Solicitud HTTP que contiene los datos del usuario.
-     * @param response Respuesta HTTP que indica el resultado del proceso.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Obtiene la sesión actual
         HttpSession sesion = request.getSession();
+        
         // Configura la codificación de caracteres para evitar problemas con acentos y caracteres especiales
         request.setCharacterEncoding("UTF-8");
 
-        // Obtiene los datos ingresados por el usuario en el formulario
+        // Obtiene los datos ingresados por el usuario en el formulario, como correo, clave y la confirmacion de la clave
         String correo = request.getParameter("txtCorreo");
         String clave = request.getParameter("txtPass");
         String confirm = request.getParameter("txtConfirm");
+        
         // Genera un código aleatorio para la autenticación
         String codigo = mensaje.getRandom();
 
@@ -70,37 +62,55 @@ public class svCodigo extends HttpServlet {
 
         // Configura el tipo de contenido de la respuesta
         response.setContentType("text/plain");
+        
         // Obtiene el escritor para enviar la respuesta al cliente
         PrintWriter out = response.getWriter();
 
         // Verifica si la contraseña y su confirmación coinciden
         if (clave.equals(confirm)) {
+            
             // Encripta la contraseña
             String encript = EncriptarContraseña.encriptar(clave);
 
-            // Configura el correo, la contraseña encriptada y el código en el objeto usuario
+            // Se setean los datos a los atributos de la nueva instancia del objeto
             user.setCorreoInst(correo);
             user.setPassword(encript);
             user.setCodigo(codigo);
+            
+            // Depuracion del codigo de verificacion por si algo falla
             System.out.println(codigo);
 
             // Verifica si el usuario ya existe en la base de datos
             boolean encontrado = userDao.buscarUser(user);
 
+            // Manejo de errores
             try {
                 if (!encontrado) {
+                    
                     // Verifica si el correo cumple con el patrón de aprendiz
                     if (mAprendiz.matches()) {
+                        
+                        // Envia el mensaje via outlook
                         mensaje.enviarEmail(user);
+                        
+                        // Se setea una nueva sesion para tomarala en las vistas
                         sesion.setAttribute("autenticacion", user);
-                        System.out.println("Es un Aprendiz");
+                        
+                        // Devuelve al cliente
                         out.print("success");
+                        
                         // Verifica si el correo cumple con el patrón de instructor
                     } else if (mInstructor.matches()) {
+                        
+                        // Envia el mensaje via outlook
                         mensaje.enviarEmail(user);
+                        
+                        // Se setea una nueva sesion para tomarla en las vistas
                         sesion.setAttribute("autenticacion", user);
-                        System.out.println("Es un Instructor");
+                        
+                        // Devuelve al cliente
                         out.print("success");
+                        
                         // Si el correo no cumple con ningún patrón
                     } else {
                         out.print("invalid_email");

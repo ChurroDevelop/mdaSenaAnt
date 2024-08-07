@@ -24,16 +24,6 @@ public class svAsignacion extends HttpServlet {
     // Instancia de MonitorDAO para manejar las operaciones de base de datos relacionadas con los monitores.
     private final MonitorDAO mDao = new MonitorDAO();
 
-    /**
-     * Maneja las solicitudes POST para asignar el rol de monitor a un aprendiz.
-     *
-     * @param request Solicitud HTTP que contiene la información de la solicitud
-     * del cliente.
-     * @param response Respuesta HTTP que se enviará al cliente.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,11 +40,17 @@ public class svAsignacion extends HttpServlet {
 
         // Redirigir a la vista de asignar monitor, donde se verá el nuevo monitor, según el resultado de la actualización.
         if (actualizacion) {
-            List<Perfil> monitores = mDao.obtenerMonitores(idInstructor); // Obtener la lista de monitores asignados.
-            sesion.setAttribute("listMonitores", monitores); // Guardar la lista de monitores en la sesión.
+            
+            // Obtener la lista de monitores asignados.
+            List<Perfil> monitores = mDao.obtenerMonitores(idInstructor); 
+            
+            // Guardar la lista de monitores en la sesión.
+            sesion.setAttribute("listMonitores", monitores); 
         } else {
             System.out.println("No se pudo hacer la modificación");
         }
-        response.sendRedirect("views/instructor/asignarMonitor.jsp"); // Redirigir a la vista de asignar monitor.
+        
+        // Redirigir a la vista de asignar monitor.
+        response.sendRedirect("views/instructor/asignarMonitor.jsp"); 
     }
 }

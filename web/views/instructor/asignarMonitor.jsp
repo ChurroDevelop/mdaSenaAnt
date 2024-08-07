@@ -79,7 +79,7 @@
                               d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
                               clip-rule="evenodd" />
                         </svg>
-                        <input type="text" class="grow text-mdaBlack" placeholder="Search"/>
+                        <input type="text" class="grow text-mdaBlack" placeholder="Buscar monitor" id="buscarMonitor"/>
                     </label>
                 </form>
                 <!-- HR -->
@@ -92,10 +92,10 @@
                     <%
                         for (Perfil p : monitores) {
                     %>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center" id="monitorItem">
                         <div class="text-mdaBlack">
                             <i class="fa-solid fa-user-minus mx-2.5"></i>
-                            <p class="inline-block"> <%= p.getNombre_usuario() + " " + p.getApellido_usuario()%> </p>
+                            <p class="inline-block" id="nombreMonitor"> <%= p.getNombre_usuario() + " " + p.getApellido_usuario()%> </p>
                         </div>
                         <form action="/svEliminarMonitor" method="POST">
                             <input type="hidden" value="<%= user.getId_usuario() %>" name="txtIdInstructor">
@@ -117,6 +117,7 @@
         <script src="../../scripts/instructor.js"></script>
         <script src="../../scripts/script.js"></script>
         <script src="../../scripts/buscador.js"></script>
+        <script src="../../scripts/buscar.js"></script>
     </body>
 
 </html>

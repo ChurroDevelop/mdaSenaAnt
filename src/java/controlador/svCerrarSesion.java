@@ -14,22 +14,14 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "svCerrarSesion", urlPatterns = {"/svCerrarSesion"})
 public class svCerrarSesion extends HttpServlet {
 
-    /**
-     * Maneja las solicitudes POST para cerrar la sesión del usuario.
-     *
-     * @param request Solicitud HTTP que contiene la información de la solicitud
-     * del cliente.
-     * @param response Respuesta HTTP que se enviará al cliente.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Obtiene la sesión actual, si existe
         HttpSession sesion = request.getSession(false);
-        System.out.println(sesion); // Imprime la sesión actual en la consola para depuración
+        
+        // Imprime la sesión actual en la consola para depuración
+        System.out.println(sesion); 
 
         // Si hay una sesión activa, la invalida para cerrar la sesión del usuario
         if (sesion != null) {
@@ -38,5 +30,9 @@ public class svCerrarSesion extends HttpServlet {
 
         // Redirige al usuario a la página de inicio de sesión después de cerrar la sesión
         response.sendRedirect("login.jsp");
+        
+        /*
+            No se esta utilizando este Servlet, ya que se hace por medio de JS
+        */
     }
 }
