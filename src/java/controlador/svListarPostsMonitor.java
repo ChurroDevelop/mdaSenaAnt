@@ -36,7 +36,10 @@ public class svListarPostsMonitor extends HttpServlet {
         // Lista de los post de ese instructor
         List<Post> posts = mDao.listaPostMonitor(id);
         
+        // Sobre escribir la sesion que tiene como valor los post de dicho monitr
         sesion.setAttribute("listaPostsMonitor", posts);
+        
+        // Redirije a la vista de administrar post por parte del monitor
         response.sendRedirect("administrarPost.jsp");
     }
 }

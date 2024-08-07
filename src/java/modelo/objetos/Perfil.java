@@ -1,6 +1,7 @@
 package modelo.objetos;
 
 public class Perfil {
+    // Atributos del objeto perfil
     private int id_perfil;
     private String nombre_usuario;
     private String apellido_usuario;
@@ -8,9 +9,11 @@ public class Perfil {
     private String centro_formacion;
     private Usuario id_usuario_fk;
 
+    // Constructor vacio
     public Perfil() {
     }
 
+    // Constructor con parametros
     public Perfil(int id_perfil, String nombre_usuario, String apellido_usuario, String num_documento, String centro_formacion, Usuario id_usuario_fk) {
         this.id_perfil = id_perfil;
         this.nombre_usuario = nombre_usuario;
@@ -20,6 +23,7 @@ public class Perfil {
         this.id_usuario_fk = id_usuario_fk;
     }
 
+    // Getters and Setters
     public int getId_perfil() {
         return id_perfil;
     }

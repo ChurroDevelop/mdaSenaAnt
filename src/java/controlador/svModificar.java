@@ -21,17 +21,6 @@ public class svModificar extends HttpServlet {
     // Instancia de PerfilDAO para manejar operaciones de actualización de perfil en la base de datos
     private final PerfilDAO pDao = new PerfilDAO();
 
-    /**
-     * Maneja las solicitudes POST para actualizar el perfil de un usuario.
-     *
-     * @param request Solicitud HTTP que contiene los datos del perfil del
-     * usuario a actualizar.
-     * @param response Respuesta HTTP que redirige al usuario después de la
-     * actualización.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

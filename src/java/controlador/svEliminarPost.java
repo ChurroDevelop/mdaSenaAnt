@@ -12,7 +12,7 @@ import modelo.PostDAO;
 
 @WebServlet(name = "svEliminarPost", urlPatterns = {"/svEliminarPost"})
 public class svEliminarPost extends HttpServlet {
-
+    // Instancia de un nuevo PostDao para manejo a la base de datos
     PostDAO pDao = new PostDAO();
 
     @Override
@@ -23,15 +23,21 @@ public class svEliminarPost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Instanciar una nueva sesion
         HttpSession sesion = request.getSession();
 
+        // Capturar el id del post y el id del instructor
         String idPost = request.getParameter("txtIdPost");
         String idInstructor = request.getParameter("txtIdInstructor");
 
+        // Manejo de estados para saber si el post se elimino o no
         boolean estado = pDao.eliminarPost(idPost);
 
         if (estado) {
+            // Sobre escribe una nueva sesion donde estan los post de los monitores
             sesion.setAttribute("listaPosts", pDao.listarPostsUser(idInstructor));
+            
+            // Redirije a la vista del panel de control
             response.sendRedirect("adminisitrarPost.jsp");
         }
     }

@@ -14,13 +14,7 @@ import modelo.objetos.Post;
  */
 public class MonitorDAO extends Conexion {
 
-    /**
-     * Obtiene una lista de perfiles de monitores asignados a un instructor
-     * específico.
-     *
-     * @param idInstructor El ID del instructor.
-     * @return Una lista de objetos Perfil que representan a los monitores.
-     */
+    // Metodo para obtner la lista de los monitores que asigno dicho instructor
     public List<Perfil> obtenerMonitores(String idInstructor) {
         List<Perfil> monitores = new ArrayList<>(); // Instancia de un nuevo ArrayList
         PreparedStatement ps = null; // Variable para el manejo de la consulta SQL
@@ -55,42 +49,48 @@ public class MonitorDAO extends Conexion {
         return monitores;
     }
 
-    /**
-     * Elimina el rol de monitor de un usuario específico.
-     *
-     * @param idUser El ID del usuario a modificar.
-     * @return true si la modificación fue exitosa, false en caso contrario.
-     */
+    // Metodo para eliminar el rol monitor de dicho usuario
     public boolean eliminarMonitor(String idUser) {
-        boolean modificacion = false; // Manejo de estado para saber si se modificó o no el rol del aprendiz
-        PreparedStatement ps = null; // Variable para la consulta SQL
+        // Manejo de estado para saber si se modificó o no el rol del aprendiz
+        boolean modificacion = false; 
+        // Variable para la consulta SQL
+        PreparedStatement ps = null; 
+        
         try {
-            this.conectar(); // Método para conectar a la base de datos
+            // Método para conectar a la base de datos
+            this.conectar();
+            
+            // Consulta SQL para actualizar el rol del usuario
             String sql = "UPDATE tb_usuarios\n" +
                         "SET id_rol_fk = 1, id_instructor_asig = null\n" +
-                        "WHERE id_usuario = (SELECT id_usuario_fk FROM tb_perfil WHERE id_perfil = ?);"; // Consulta SQL para actualizar el rol del usuario
-            ps = getCon().prepareStatement(sql); // Preparar la consulta para ejecutar en el gestor de base de datos
-            ps.setString(1, idUser); // Pasarle el parámetro que es el ID del usuario
-            int modificado = ps.executeUpdate(); // Ejecutar la consulta, devuelve un entero
+                        "WHERE id_usuario = (SELECT id_usuario_fk FROM tb_perfil WHERE id_perfil = ?);"; 
+            
+            // Preparar la consulta para ejecutar en el gestor de base de datos
+            ps = getCon().prepareStatement(sql); 
+            
+            // Pasarle el parámetro que es el ID del usuario
+            ps.setString(1, idUser); 
+            
+            // Ejecutar la consulta, devuelve un entero
+            int modificado = ps.executeUpdate(); 
 
             // Si lo que ha sido modificado es mayor a 0 entonces ejecuta lo siguiente
             if (modificado > 0) {
-                modificacion = true; // Cambia el estado a true, es decir que modificó el usuario
+                // Cambia el estado a true, es decir que modificó el usuario
+                modificacion = true; 
             } else {
+                
+                // Depuracion de la modificacion del rol por si salio algun error
                 System.out.println("NO SE PUDO REALIZAR LA MODIFICACION DE ROL: " + idUser);
             }
         } catch (Exception e) {
+            // Depuracion por si ocurre un error
             System.out.println("ERROR QUITANDO EL ROL MONITOR: " + e.getMessage());
         } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                this.desconectar(); // Método para desconectar la base de datos
-            } catch (Exception e) {
-                System.out.println("ERROR CERRANDO RECURSOS: " + e.getMessage());
-            }
+            // Metodo para deconectar de la base de datos
+            this.desconectar();
         }
+        // Retorna el boolean
         return modificacion;
     }
     
@@ -145,6 +145,7 @@ public class MonitorDAO extends Conexion {
             // Metodo para desconectar la base de datos
             this.desconectar();
         }
+        // Retorna la lista de los post de dicho monitor
         return  postsMonitor;
     }
 }

@@ -10,7 +10,6 @@ public class Archivo {
     private int idPostFk;
 
     // Constructor vacio
-
     public Archivo() {
     }
     

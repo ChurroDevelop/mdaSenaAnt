@@ -17,9 +17,11 @@ public class Post {
     private int contador;
     private Timestamp fechaPost;
 
+    // Constructor vacio
     public Post() {
     }
 
+    // Constructor con parametros
     public Post(String titulo, String observacion, String nombreUsuario, boolean estado, boolean validacion, int id, int idUsuarioFk, int contador, Timestamp fechaPost) {
         this.titulo = titulo;
         this.observacion = observacion;
@@ -32,6 +34,7 @@ public class Post {
         this.fechaPost = fechaPost;
     }
 
+    // Getters and Setters
     public String getTitulo() {
         return titulo;
     }

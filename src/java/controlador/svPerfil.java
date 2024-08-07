@@ -21,18 +21,6 @@ public class svPerfil extends HttpServlet {
 
     private final PerfilDAO perfilDao = new PerfilDAO();  // DAO para operaciones CRUD relacionadas con perfiles
 
-    /**
-     * Maneja las solicitudes POST para registrar o actualizar el perfil de un
-     * usuario.
-     *
-     * @param request Solicitud HTTP que contiene la información del perfil del
-     * usuario.
-     * @param response Respuesta HTTP que redirige al usuario después del
-     * registro.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

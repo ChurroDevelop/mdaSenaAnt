@@ -17,14 +17,7 @@ import modelo.objetos.Post;
  */
 public class PostDAO extends Conexion {
 
-    /**
-     * Crea un nuevo post en la base de datos.
-     *
-     * @param post Objeto Post que contiene la información del post a crear.
-     * @return El ID del post recién creado. Si ocurre un error, retorna 0.
-     * @throws SQLException Si ocurre un error al interactuar con la base de
-     * datos.
-     */
+    // Metodo para crear el post
     public int crearPost(Post post) throws SQLException {
         int idPost = 0;  // Variable para almacenar el ID del post creado
         PreparedStatement ps = null;  // Preparación de la sentencia SQL
@@ -62,14 +55,7 @@ public class PostDAO extends Conexion {
         return idPost;  // Retornar el ID del post creado (0 si ocurrió un error)
     }
 
-    /**
-     * Lista todos los posts activos en la base de datos.
-     *
-     * @return Una lista de objetos Post que contienen la información de los
-     * posts activos.
-     * @throws SQLException Si ocurre un error al interactuar con la base de
-     * datos.
-     */
+    // metodo para listar todos los post de la base de datos
     public List<Post> listarPosts() throws SQLException {
         List<Post> posts = new ArrayList<>();  // Lista para almacenar los posts activos
         PreparedStatement ps = null;  // Preparación de la sentencia SQL
@@ -112,7 +98,7 @@ public class PostDAO extends Conexion {
         return posts;  // Retornar la lista de posts activos
     }
 
-    
+    // Metodo para listar los posts de los monitores que asigno el instructor
     public List<Post> listarPostsUser(String idInstructor) {
         List<Post> posts = new ArrayList<>();
         PreparedStatement ps = null;
@@ -145,51 +131,86 @@ public class PostDAO extends Conexion {
         return posts;
     }
     
+    // Metodo para modificar la visualizacion del post
     public boolean modificarEstado(int idPost) {
+        // Manejo de estado para saber si se modifico o no
         boolean estado = false;
+        
+        // Variable para el manejo de las consultas SQL
         PreparedStatement ps = null;
-        ResultSet rs = null;
+        
         try {
+            // Metodo para conectar la base de datos
             this.conectar();
+            
+            // Update SQL para modificar el estaod del post y la validacion del post
             String sql = "UPDATE tb_post set validacion = true, estado = true WHERE id_post = ?";
+            
+            // Preparar la consulta SQL
             ps = getCon().prepareStatement(sql);
+            
+            // Se setea el valor a su respectiva columna
             ps.setInt(1, idPost);
+            
+            // Entero para manejar su se ejecuto el update SQL o no
             int x = ps.executeUpdate();
             if (x > 0) {
                 System.out.println("SE MODIFICO EL ESTADO DEL POST");
                 estado = true;
             }
         } catch (Exception e) {
+            // Depuracion del error por consola
             System.out.println("ERROR ACTUALIZANDO EL ESTADO DEL PSOT: " + e.getMessage());
         } finally {
+            // Metodo para desconectar la base de datos
             this.desconectar();
         }
+        // Retorna el valor booleano
         return estado;
     }
     
+    // Metodo para agregar la observacion al post
     public boolean agregarObservacion(int idPost, String observacion){
+        // Manejo de estado para saber si fue o no actualizado
         boolean estado = false;
+        
+        // Variable para el manejo de la consulta SQL
         PreparedStatement ps = null;
+        
         try {
+            // Metodo para conectar la base de datos
             this.conectar();
+            
+            // Update SQL de dicho post, agregandole la observacion
             String sql = "UPDATE tb_post SET estado = false, validacion = true, observacion = ? WHERE id_post = ?";
+            
+            // Preparar la consulta SQL
             ps = getCon().prepareStatement(sql);
+            
+            // Setearle a sus columnas los datos correspondientes
             ps.setString(1, observacion);
             ps.setInt(2, idPost);
+            
+            // Entero para saber si fue o no actualizado la observacion del post
             int x = ps.executeUpdate();
             if (x > 0) {
                 System.out.println("SE MODIFICO Y SE AGREGO UNA OBSERVACION"); 
                 estado = true;
            }
         } catch (Exception e) {
+            // Depuracion del error
             System.out.println("ERROR ACTUALIZANDO EL POST CON OBSERVACION: " + e.getMessage());
         } finally {
+            // Metodo para desconectar la base de datos
             this.desconectar();
         }
+        // Retorna el estado
         return estado;
     }
     
-    
+    /*
+        Metodo para deshabilitar el post, "No se esta utilizando este metodo"
+    */
     public boolean deshabilitarPost(String idPost){
         boolean estado = false;
         PreparedStatement ps = null;

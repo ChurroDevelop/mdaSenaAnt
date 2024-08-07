@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
@@ -16,10 +12,6 @@ import javax.servlet.http.HttpSession;
 import modelo.PostDAO;
 import modelo.objetos.Post;
 
-/**
- *
- * @author Propietario
- */
 @WebServlet(name = "svListarPosts", urlPatterns = {"/svListarPosts"})
 public class svListarPosts extends HttpServlet {
 
@@ -38,19 +30,16 @@ public class svListarPosts extends HttpServlet {
         // Atrapar el id del instructor para listar esos posts
         String id = request.getParameter("txtIdInstructor");
         
-        // Instancia de un postDao
+        // Instancia de un postDao para manejo a la base de datos
         PostDAO pDao = new PostDAO();
         
         // Lista de los post de ese instructor
         List<Post> posts = pDao.listarPostsUser(id);
         
+        // Asignar una nueva sesion con el arreglo de los post encontrados de dicho instructor
         sesion.setAttribute("listaPosts", posts);
+        
+        // Redirijir a la vista de administrar los post por parte del instructor
         response.sendRedirect("administrarPost.jsp");
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

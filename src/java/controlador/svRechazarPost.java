@@ -40,6 +40,10 @@ public class svRechazarPost extends HttpServlet {
             sesion.setAttribute("listaPosts", pDao.listarPostsUser(idInstructor));
             System.out.println("SI SE PUDO MODIFICAR EL POST");
         }
+        
+        /**
+         * Este servlet no se esta utilizando
+         */
     }
 
 }

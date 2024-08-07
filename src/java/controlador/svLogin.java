@@ -24,17 +24,6 @@ public class svLogin extends HttpServlet {
     private final Usuario u = new Usuario(); // Objeto Usuario para almacenar credenciales
     private Perfil profile = new Perfil(); // Objeto Perfil para almacenar la información del perfil del usuario
 
-    /**
-     * Maneja las solicitudes POST para autenticar al usuario y establecer la
-     * sesión.
-     *
-     * @param request Solicitud HTTP que contiene las credenciales del usuario.
-     * @param response Respuesta HTTP que indica el resultado de la
-     * autenticación.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,8 +44,6 @@ public class svLogin extends HttpServlet {
         // Configura el objeto Usuario con el correo y la contraseña encriptada
         u.setCorreoInst(correo);
         u.setPassword(encript);
-
-        System.out.println("Usuario inicial: " + u.getCorreoInst());
 
         // Obtiene la información del usuario desde la base de datos
         Usuario newUser = userDao.getDataUser(u);

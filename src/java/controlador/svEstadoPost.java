@@ -25,7 +25,7 @@ public class svEstadoPost extends HttpServlet {
         // Instancia de un postDao para manejo a la base de datos
         PostDAO pDao = new PostDAO();
         
-        // Tomar el id del post
+        // Tomar el id del post y el id del instrucutor
         int idPost = Integer.parseInt(request.getParameter("txtIdPost"));
         String idInstructor = request.getParameter("txtIdInstructor");
         
@@ -33,8 +33,15 @@ public class svEstadoPost extends HttpServlet {
         boolean estado = pDao.modificarEstado(idPost);
         
         if (estado) {
+            // Se sobre escribe la sesion con los post de los monitores
             sesion.setAttribute("listaPosts", pDao.listarPostsUser(idInstructor));
+            
+            // Depuracion del codigo
             System.out.println("Se modifico el post y ya es visible en la plataforma");
+            
+            /*
+                Este servlet no se esta utilizando
+            */
         }
         
         

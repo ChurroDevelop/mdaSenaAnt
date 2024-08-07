@@ -22,17 +22,6 @@ public class svListarMonitores extends HttpServlet {
     // Instancia del DAO para manejar la base de datos de monitores
     private final MonitorDAO mDao = new MonitorDAO();
 
-    /**
-     * Maneja las solicitudes GET para listar monitores asignados por un
-     * instructor.
-     *
-     * @param request Solicitud HTTP que contiene el ID del instructor.
-     * @param response Respuesta HTTP que redirige a la vista de asignación de
-     * monitores.
-     * @throws ServletException Si ocurre un error durante el procesamiento de
-     * la solicitud.
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
