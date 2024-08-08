@@ -6,10 +6,10 @@
     HttpSession sesion = request.getSession(false);
     HttpSession sesionPerfil = request.getSession(false);
     if (sesion == null || sesion.getAttribute("dataUser") == null) {
-            response.sendRedirect("../../login.jsp");
-            return;
+        response.sendRedirect("../../login.jsp");
+        return;
     }
-    Perfil perfil = (Perfil)  sesionPerfil.getAttribute("dataPerfil");
+    Perfil perfil = (Perfil) sesionPerfil.getAttribute("dataPerfil");
     Usuario user = (Usuario) sesion.getAttribute("dataUser");
 %>
 
@@ -24,7 +24,14 @@
 
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
         <!-- Incluir la navegación -->
-        <%@ include file="../../partials/roles/nav.jsp" %>
+        <!-- Incluir la navegación -->
+        <div class="hidden md:block">
+            <%@ include file="../../partials/roles/nav.jsp" %>            
+        </div>
+
+        <div class="block md:hidden">
+            <%@ include file="../../partials/roles/navMobile.jsp" %>            
+        </div>
 
         <div id="modal-2__background" class="hidden bg-mdaBlack_400 w-full min-h-screen absolute"></div>
         <!-- Contenedor para los artículos -->
@@ -37,7 +44,7 @@
                 </div>
                 <!-- Post -->
                 <form action="/svCrearPost" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="idUsuario" value="<%= perfil.getId_perfil() %>"> 
+                    <input type="hidden" name="idUsuario" value="<%= perfil.getId_perfil()%>"> 
                     <label class="input input-bordered flex items-center gap-2 bg-white mb-4">
                         <i class="fa-solid fa-heading"></i>
                         <input type="text" class="grow text-mdaBlack" placeholder="Titulo del post" id="titulo" name="titulo"> 
@@ -60,6 +67,22 @@
         <!-- Enlace para manejo del DOM -->
         <script src="../../scripts/monitor.js"></script>
         <script src="../../scripts/buscador.js"></script>
+        <script src="../../scripts/buscarMobile.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const abrirNavegacionBtn = document.getElementById("abrirNavegacion");
+                const modalNavegacion = document.getElementById("modalNavegacion");
+
+                abrirNavegacionBtn.addEventListener("click", function () {
+                    // Toggle visibility of the navigation
+                    if (modalNavegacion.classList.contains("hidden")) {
+                        modalNavegacion.classList.remove("hidden");
+                    } else {
+                        modalNavegacion.classList.add("hidden");
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>

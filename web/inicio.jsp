@@ -35,8 +35,15 @@
     <%@ include file="partials/head.jsp" %>
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
         <!-- Incluir la navegación -->
-        
-        <%@ include file="partials/nav.jsp" %>
+
+        <div class="hidden md:block">
+            <%@ include file="partials/nav.jsp" %>            
+        </div>
+
+        <div class="block md:hidden">
+            <%@ include file="partials/navMobile.jsp" %>            
+        </div>
+
 
         <!-- Contenedor para los posts -->
         <section class="m-auto flex w-full max-w-screen-2xl min-h-screen justify-center p-5 gap-5 flex-wrap content-start">
@@ -90,5 +97,22 @@
         <!-- Enlace para manejo del DOM -->
         <script src="scripts/inicio.js"></script>
         <script src="scripts/buscar.js"></script>
+        <script src="scripts/buscarMobile.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const abrirNavegacionBtn = document.getElementById("abrirNavegacion");
+                const modalNavegacion = document.getElementById("modalNavegacion");
+
+                abrirNavegacionBtn.addEventListener("click", function () {
+                    // Toggle visibility of the navigation
+                    if (modalNavegacion.classList.contains("hidden")) {
+                        modalNavegacion.classList.remove("hidden");
+                    } else {
+                        modalNavegacion.classList.add("hidden");
+                    }
+                });
+            });
+        </script>
+
     </body>
 </html>

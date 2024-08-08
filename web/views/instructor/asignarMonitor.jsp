@@ -28,7 +28,13 @@
         <!-- Ingrese aquí la estrucuta de la página -->
 
         <!-- Incluir la navegación -->
-        <%@ include file="../../partials/roles/nav.jsp" %>
+        <div class="hidden md:block">
+            <%@ include file="../../partials/roles/nav.jsp" %>            
+        </div>
+
+        <div class="block md:hidden">
+            <%@ include file="../../partials/roles/navMobile.jsp" %>            
+        </div>
 
         <div id="modal-2__background" class="hidden bg-mdaBlack_400 w-full min-h-screen absolute"></div>
 
@@ -98,7 +104,7 @@
                             <p class="inline-block" id="nombreMonitor"> <%= p.getNombre_usuario() + " " + p.getApellido_usuario()%> </p>
                         </div>
                         <form action="/svEliminarMonitor" method="POST">
-                            <input type="hidden" value="<%= user.getId_usuario() %>" name="txtIdInstructor">
+                            <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdInstructor">
                             <input type="hidden" value="<%= p.getId_perfil()%>" name="txtIdMonitor">
                             <button class="btn bg-mdaRed border-none text-white hover:bg-mdaRed">
                                 Quitar monitor
@@ -118,6 +124,22 @@
         <script src="../../scripts/script.js"></script>
         <script src="../../scripts/buscador.js"></script>
         <script src="../../scripts/buscar.js"></script>
+        <script src="../../scripts/buscarMobile.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const abrirNavegacionBtn = document.getElementById("abrirNavegacion");
+                const modalNavegacion = document.getElementById("modalNavegacion");
+
+                abrirNavegacionBtn.addEventListener("click", function () {
+                    // Toggle visibility of the navigation
+                    if (modalNavegacion.classList.contains("hidden")) {
+                        modalNavegacion.classList.remove("hidden");
+                    } else {
+                        modalNavegacion.classList.add("hidden");
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>

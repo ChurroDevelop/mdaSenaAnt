@@ -11,9 +11,9 @@
             <div class="divider divider-horizontal"></div>
             <!-- Nombre -->
             <div class="grid flex-grow place-items-center w-full">
-                <h1 class="text-4xl text-mdaBlack leading-none">
-                    <span class="text-3xl text-mdaGreen">MDA</span> <br />
-                    Sena
+                <h1 class="text-5xl text-mdaBlack leading-none">
+                    <span class="text-4xl text-mdaGreen">MDA</span> <br />
+                    SENA
                 </h1>
             </div>
         </div>
@@ -88,7 +88,7 @@
                 <button
                     class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
                     <i class="fa-solid fa-bell"></i>
-                    Notificaciones
+                    Tablero de control
                 </button>
             </form>
         </a>
@@ -130,7 +130,7 @@
             <button
                 class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
                 <i class="fa-solid fa-bell"></i>
-                Notificaciones
+                Tablero de control
             </button>
         </form>
     </a>
@@ -148,25 +148,4 @@
     }
 %>
 
-<!-- Barra notificaciones -->
-<nav id="modal-2" class="hidden bg-white p-7 shadow-md absolute top-0 left-full h-screen w-full">
-    <div class="grid gap-y-5">
-        <button id="closeModal-2" class="btn btn-sm btn-circle btn-ghost text-mdaGreen">
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <!-- HR -->
-        <div class="flex flex-col w-full">
-            <div class="divider m-0 h-0"></div>
-        </div>
-        <div>
-            <p class="text-mdaBlack text-sm">
-                Daniel Acetaminofén, ha cargado una evidencia
-            </p>
-            <button class="btn btn-sm bg-mdaGreen border-none text-white mt-2 hover:bg-mdaGreen w-full">
-                Ver evidencia
-            </button>
-        </div>
-    </div>
 </nav>
-</nav>
-<div id="modal-2__background" class="hidden bg-mdaBlack_400 w-full min-h-screen absolute"></div>

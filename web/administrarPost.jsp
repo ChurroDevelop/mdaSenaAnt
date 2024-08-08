@@ -40,10 +40,20 @@
 
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
         <!-- Incluir la navegación -->
-        <%@ include file="partials/nav.jsp" %>
+
+
+        <div class="hidden md:block">
+            <%@ include file="partials/nav.jsp" %>            
+        </div>
+
+        <div class="block md:hidden">
+            <%@ include file="partials/navMobile.jsp" %>            
+        </div>
+
+
         <%            if (user.getId_rol_fk().getNombre_rol().equals("Instructor")) {
         %>
-        <div class="container mx-auto p-4 w-9/12">
+        <div class="container p-4 w-9/12 min-h-screen m-auto">
             <h1 class="text-black text-xl mb-4 font-bold">Dashboard del instructor <%= perfil.getNombre_usuario() + " " + perfil.getApellido_usuario()%></h1>
             <!-- Contenedor de pestañas -->
             <div class="tabs text-black">
@@ -222,7 +232,7 @@
                                 <td><%= post.getNombreUsuario()%></td>
                                 <td><%= post.getTitulo()%></td>
                                 <td>
-                                    <button id="cantidadArchivos" data-id="<%= post.getId() %>">
+                                    <button id="cantidadArchivos" data-id="<%= post.getId()%>">
                                         <%= post.getContador()%>
                                     </button>
                                 </td>
@@ -236,37 +246,37 @@
                                         Eliminar
                                     </button>
                                 </td>
-                                <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
-                                    <%
-                                        List<Archivo> archivos = null;
-                                        try {
-                                            archivos = aDao.listarArchivosPorPostId(post.getId());
-                                        } catch (Exception e) {
-                                        }
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
+                            <%
+                                List<Archivo> archivos = null;
+                                try {
+                                    archivos = aDao.listarArchivosPorPostId(post.getId());
+                                } catch (Exception e) {
+                                }
 
-                                        if (archivos != null && !archivos.isEmpty()) {
-                                    %>
-                                    <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
-                                        <p>Cantidad de archivos del post: <%= post.getContador()%></p>
-                                        <%
-                                            for (Archivo arch : archivos) {
-                                        %>
-                                        <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                                            X
-                                        </button>
-                                        <div>
-                                            <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
-                                                <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
-                                            </a>
-                                        </div>
-                                        <%
-                                            }
-                                        %>
-                                    </div>
-                                    <%
-                                        }
-                                    %>
+                                if (archivos != null && !archivos.isEmpty()) {
+                            %>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
+                                <p>Cantidad de archivos del post: <%= post.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
+                                </button>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
                                 </div>
+                                <%
+                                    }
+                                %>
+                            </div>
+                            <%
+                                }
+                            %>
+                        </div>
                         </tr>
                         <%
                                 }
@@ -280,7 +290,7 @@
         <% }
             if (user.getId_rol_fk().getNombre_rol().equals("Monitor")) {
         %>
-        <div class="container mx-auto p-4 w-9/12">
+        <div class="container p-4 w-9/12 min-h-screen m-auto">
             <!-- Contenedor de pestañas -->
             <h1 class="text-black text-xl mb-4 font-bold">Dashboard de <%= perfil.getNombre_usuario() + " " + perfil.getApellido_usuario()%></h1>
             <div class="tabs text-black">
@@ -503,5 +513,21 @@
 
     <script src="scripts/dashboard.js"></script>
     <script src="scripts/buscador.js"></script>
+    <script src="scripts/buscarMobile.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const abrirNavegacionBtn = document.getElementById("abrirNavegacion");
+            const modalNavegacion = document.getElementById("modalNavegacion");
+
+            abrirNavegacionBtn.addEventListener("click", function () {
+                // Toggle visibility of the navigation
+                if (modalNavegacion.classList.contains("hidden")) {
+                    modalNavegacion.classList.remove("hidden");
+                } else {
+                    modalNavegacion.classList.add("hidden");
+                }
+            });
+        });
+    </script>
 
 </html>

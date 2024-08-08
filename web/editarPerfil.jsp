@@ -31,169 +31,16 @@
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
         <!-- Ingrese aquí la estrucuta de la página -->
 
-        <!-- Barra lateral izquierda -->
-        <nav class="bg-white p-7 shadow-md sticky top-0 h-screen z-10">
-            <div class="grid gap-y-5">
-                <!-- Logo Sena y nombre del proyecto -->
-                <div class="flex flex-row w-full h-32">
-                    <!-- Logo -->
-                    <div class="grid flex-grow place-items-center w-full">
-                        <img src="../../images/LogoNegro.svg" alt="" />
-                    </div>
-                    <!-- HR -->
-                    <div class="divider divider-horizontal"></div>
-                    <!-- Nombre -->
-                    <div class="grid flex-grow place-items-center w-full">
-                        <h1 class="text-4xl text-mdaBlack leading-none">
-                            <span class="text-3xl text-mdaGreen">MDA</span> <br />
-                            Sena
-                        </h1>
-                    </div>
-                </div>
-                <!-- HR -->
-                <div class="flex flex-col w-full">
-                    <div class="divider m-0 h-0"></div>
-                </div>
-                <!-- Input de búsqueda -->
-                <form action="">
-                    <label class="input input-bordered flex items-center gap-2 bg-white">
-                        <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-                        <input type="text" class="grow text-mdaBlack" placeholder="Search" id="buscador"/>
-                    </label>
-                </form>
-                <!-- HR -->
-                <div class="flex flex-col w-full">
-                    <div class="divider m-0 h-0"></div>
-                </div>
-                <%
-                    if ("Aprendiz".equals(user.getId_rol_fk().getNombre_rol())) {
-                %>
-                <!-- Botones navegación Aprendiz -->
-                <div>
-                    <a href="inicio.jsp">
-                        <button
-                            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                            <i class="fa-solid fa-house"></i>
-                            Inicio
-                        </button>
-                    </a>
-                    <a href="editarPerfil.jsp">
-                        <button
-                            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                            <i class="fa-regular fa-address-card"></i>
-                            Perfil
-                        </button>
-                    </a>
-                </div>
-                <%
-                } else if ("Instructor".equals(user.getId_rol_fk().getNombre_rol())) {
-                %>
-                <!-- Botones navegación Instructor -->
-                <div>
-                    <a href="inicio.jsp">
-                        <button
-                            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                            <i class="fa-solid fa-house"></i>
-                            Inicio
-                        </button>
-                    </a>
-                    <a href="">
-                        <form action="/svListarMonitores" method="GET">
-                            <input type="hidden" value="<%= user.getId_usuario()%> " name="txtIdInstructor">
-                            <button
-                                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                                <i class="fa-solid fa-plus-minus"></i>
-                                Asignar monitor
-                            </button>
-                        </form>
-                    </a>
-                    <a href="">
-                        <form action="/svListarPosts" method="POST">
-                            <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdInstructor">
-                            <button
-                                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                                <i class="fa-solid fa-bell"></i>
-                                Notificaciones
-                            </button>
-                        </form>
-                    </a>
-                    <a href="editarPerfil.jsp">
-                        <button
-                            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                            <i class="fa-regular fa-address-card"></i>
-                            Perfil
-                        </button>
-                    </a>
-                </div>
-                <%
-                } else if ("Monitor".equals(user.getId_rol_fk().getNombre_rol())) {
-                %>
-                <!-- Botones navegación Monitor -->
-                <div>
-                    <a href="inicio.jsp">
-                        <button
-                            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                            <i class="fa-solid fa-house"></i>
-                            Inicio
-                        </button>
-                    </a>
-                    <a href="views/monitor/crearPost.jsp">
-                        <button
-                            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                            <i class="fa-solid fa-plus-minus"></i>
-                            Crear post
-                        </button>
-                    </a>
-                    <a href="">
-                        <form action="/svListarPostsMonitor" method="POST">
-                            <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdMonitor">
-                            <button
-                                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                                <i class="fa-solid fa-bell"></i>
-                                Notificaciones
-                            </button>
-                        </form>
-                    </a>
-                    <a href="editarPerfil.jsp">
-                        <button
-                            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                            <i class="fa-regular fa-address-card"></i>
-                            Perfil
-                        </button>
-                    </a>
-                </div>
-                <%
-                    }
-                %>
-            </div>
+        <div class="hidden md:block">
+            <%@ include file="partials/nav.jsp" %>            
+        </div>
 
-
-            <!-- Barra notificaciones -->
-            <nav id="modal-2" class="hidden bg-white p-7 shadow-md absolute top-0 left-full h-screen w-full">
-                <div class="grid gap-y-5">
-                    <button id="closeModal-2" class="btn btn-sm btn-circle btn-ghost text-mdaGreen">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <!-- HR -->
-                    <div class="flex flex-col w-full">
-                        <div class="divider m-0 h-0"></div>
-                    </div>
-                    <div>
-                        <p class="text-mdaBlack text-sm">
-                            Daniel Acetaminofén, ha cargado una evidencia
-                        </p>
-                        <button class="btn btn-sm bg-mdaGreen border-none text-white mt-2 hover:bg-mdaGreen w-full">
-                            Ver evidencia
-                        </button>
-                    </div>
-                </div>
-            </nav>
-        </nav>
-
-        <div id="modal-2__background" class="hidden bg-mdaBlack_400 w-full min-h-screen absolute"></div>
+        <div class="block md:hidden">
+            <%@ include file="partials/navMobile.jsp" %>            
+        </div>
 
         <!-- Contenedor para los artículos -->
-        <section class="m-auto flex w-full justify-center">
+        <section class="m-auto flex justify-center items-center min-h-screen">
             <!-- Artículo -->
             <section class="container grid bg-white p-7 rounded-lg shadow-md w-full md:w-96">
                 <!-- Texto informativo -->
@@ -257,6 +104,22 @@
         <script type="module" src="scripts/validacionFormularios/editarPerfil.js"></script>
         <script src="scripts/cerrar.js"></script>
         <script src="scripts/buscador.js"></script>
+        <script src="scripts/buscarMobile.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const abrirNavegacionBtn = document.getElementById("abrirNavegacion");
+                const modalNavegacion = document.getElementById("modalNavegacion");
+
+                abrirNavegacionBtn.addEventListener("click", function () {
+                    // Toggle visibility of the navigation
+                    if (modalNavegacion.classList.contains("hidden")) {
+                        modalNavegacion.classList.remove("hidden");
+                    } else {
+                        modalNavegacion.classList.add("hidden");
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>
