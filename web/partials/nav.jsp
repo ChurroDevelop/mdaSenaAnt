@@ -145,6 +145,50 @@
 </div>
 
 <%
+} else if ("Administrador".equals(user.getId_rol_fk().getNombre_rol())) {
+%>
+
+<!-- Botones navegación -->
+<div>
+    <!-- Inicio -->
+    <a href="inicio.jsp">
+        <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-solid fa-house"></i>
+            Inicio
+        </button>
+    </a>
+    <!-- Asignar monitor -->
+    <a href="">
+        <form action="/svListarUsuarios" method="GET">
+            <input type="hidden" value="<%= user.getId_usuario()%> " name="txtIdAdministrador">
+            <button
+                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                <i class="fa-solid fa-plus-minus"></i>
+                Listar usuarios
+            </button>
+        </form>
+    </a>
+    <a href="">
+        <form action="/svListarPublicaciones" method="POST">
+            <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdAdministrador">
+            <button
+                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                <i class="fa-solid fa-bell"></i>
+                Listar publicaciones
+            </button>
+        </form>
+    </a>
+    <a href="editarPerfil.jsp">
+        <button
+            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+            <i class="fa-regular fa-address-card"></i>
+            Perfil
+        </button>
+    </a>
+</div>
+
+<%
     }
 %>
 

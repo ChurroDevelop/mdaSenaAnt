@@ -16,6 +16,7 @@ public class Post {
     private int idUsuarioFk;
     private int contador;
     private Timestamp fechaPost;
+    private String nombreInstructor;
 
     // Constructor vacio
     public Post() {
@@ -107,12 +108,20 @@ public class Post {
         this.fechaPost = fechaPost;
     }
 
-    public Boolean getEstado(){
+    public Boolean getEstado() {
         return estado;
     }
-    
-    public Boolean getValidacion(){
+
+    public Boolean getValidacion() {
         return validacion;
+    }
+    
+    public String getNombreInstructor() {
+        return nombreInstructor;
+    }
+
+    public void setNombreInstructor(String nombreInstructor) {
+        this.nombreInstructor = nombreInstructor;
     }
 
 }
