@@ -160,7 +160,7 @@
     </a>
     <!-- Asignar monitor -->
     <a href="">
-        <form action="/svListarUsuarios" method="GET">
+        <form action="/svListarUsuarios" method="POST">
             <input type="hidden" value="<%= user.getId_usuario()%> " name="txtIdAdministrador">
             <button
                 class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">

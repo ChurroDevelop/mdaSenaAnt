@@ -19,11 +19,13 @@ public class Post {
     private String nombreInstructor;
 
     // Constructor vacio
+
     public Post() {
     }
+    
 
     // Constructor con parametros
-    public Post(String titulo, String observacion, String nombreUsuario, boolean estado, boolean validacion, int id, int idUsuarioFk, int contador, Timestamp fechaPost) {
+    public Post(String titulo, String observacion, String nombreUsuario, boolean estado, boolean validacion, int id, int idUsuarioFk, int contador, Timestamp fechaPost, String nombreInstructor) {    
         this.titulo = titulo;
         this.observacion = observacion;
         this.nombreUsuario = nombreUsuario;
@@ -33,6 +35,7 @@ public class Post {
         this.idUsuarioFk = idUsuarioFk;
         this.contador = contador;
         this.fechaPost = fechaPost;
+        this.nombreInstructor = nombreInstructor;
     }
 
     // Getters and Setters

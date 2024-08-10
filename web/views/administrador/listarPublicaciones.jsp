@@ -71,7 +71,7 @@
                                 <th>Nombre monitor</th>
                                 <th>Título</th>
                                 <th>Cantidad archivos</th>
-                                <th>Acciones</th>
+                                <th>Nombre encargado</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,12 +91,7 @@
                                 </button>
                             </td>
                             <td>
-                                <button id="rechazarPost" data-id="<%= post.getId()%>">
-                                    <i class="fa-solid fa-square-xmark text-mdaRed text-lg"></i>
-                                </button>
-                                <button id="aceptarPost" data-id='<%= post.getId()%>'>
-                                    <i class="fa-solid fa-square-check text-mdaGreen text-lg ml-2"></i>
-                                </button>
+                                
                             </td>
                         <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
                             <%

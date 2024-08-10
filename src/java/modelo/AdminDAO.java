@@ -25,10 +25,30 @@ public class AdminDAO extends Conexion {
             this.conectar();
 
             // Consutla sql para obtener los datos necesarios
-            String sql = "SELECT p.id_post, p.titulo_post, p.estado, p.validacion, p.observacion, p.fecha_post, COUNT(a.id_archivo) as cantidadArchivos, CONCAT(pe.nombre_usuario, \" \", pe.apellido_usuario) as nombreCompleto FROM tb_post p JOIN tb_archivo a ON p.id_post = a.id_post_fk\n"
-                    + "JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario\n"
-                    + "JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk\n"
-                    + "GROUP BY id_post;";
+            String sql = "SELECT \n"
+                    + "	p.id_post,\n"
+                    + "    p.observacion,\n"
+                    + "    p.fecha_post,\n"
+                    + "    CONCAT(per.nombre_usuario, ' ', per.apellido_usuario) AS nombre_monitor,\n"
+                    + "    p.titulo_post,\n"
+                    + "    COUNT(a.id_archivo) AS cantidad_archivos,\n"
+                    + "    CONCAT(pi.nombre_usuario, ' ', pi.apellido_usuario) AS nombre_instructor_asignado,\n"
+                    + "    p.estado,\n"
+                    + "    p.validacion\n"
+                    + "FROM \n"
+                    + "    tb_post p\n"
+                    + "LEFT JOIN \n"
+                    + "    tb_usuarios u ON p.id_usuario_fk = u.id_usuario\n"
+                    + "LEFT JOIN \n"
+                    + "    tb_perfil per ON u.id_usuario = per.id_usuario_fk\n"
+                    + "LEFT JOIN \n"
+                    + "    tb_archivo a ON p.id_post = a.id_post_fk\n"
+                    + "LEFT JOIN \n"
+                    + "    tb_usuarios ui ON u.id_instructor_asig = ui.id_usuario\n"
+                    + "LEFT JOIN \n"
+                    + "    tb_perfil pi ON ui.id_usuario = pi.id_usuario_fk\n"
+                    + "GROUP BY \n"
+                    + "    p.id_post, p.fecha_post, p.titulo_post, nombre_monitor, nombre_instructor_asignado, p.estado, p.validacion;";
 
             // Preparar la conexion con la consulta sql
             ps = getCon().prepareStatement(sql);
@@ -49,6 +69,7 @@ public class AdminDAO extends Conexion {
                 post.setEstado(rs.getBoolean("estado"));
                 post.setContador(rs.getInt("cantidadArchivos"));
                 post.setFechaPost(rs.getTimestamp("fecha_post"));
+                post.setNombreInstructor(rs.getString("nombre_instructr_asignado"));
 
                 // Agregar el posts al arreglo
                 allPosts.add(post);
