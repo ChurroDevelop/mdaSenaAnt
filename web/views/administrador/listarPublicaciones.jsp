@@ -91,7 +91,153 @@
                                 </button>
                             </td>
                             <td>
-                                
+                                <%= post.getNombreInstructor()%>
+                            </td>
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
+                            <%
+                                List<Archivo> archivos = null;
+                                try {
+                                    archivos = aDao.listarArchivosPorPostId(post.getId());
+                                } catch (Exception e) {
+                                }
+
+                                if (archivos != null && !archivos.isEmpty()) {
+                            %>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
+                                <p>Cantidad de archivos del post: <%= post.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
+                                </button>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
+                                </div>
+                                <%
+                                    }
+                                %>
+                            </div>
+                            <%
+                                }
+                            %>
+                        </div>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab2" class="overflow-x-auto tab-content">
+                    <table class="table overflow-hidden bg-white rounded-ss-none shadow-lg">
+                        <!-- head -->
+                        <thead>
+                            <tr class="text-black text-md text-center">
+                                <th>Fecha</th>
+                                <th>Nombre monitor</th>
+                                <th>Título</th>
+                                <th>Cantidad archivos</th>
+                                <th>Nombre encargado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <input type="hidden" value="<%= user.getId_usuario()%>" id="idInstructor">
+                        <!--ESTO ES PARA VER LOS POSTS QUE ESTAN PENDIENTES-->
+                        <%
+                            for (Post post : posts) {
+                                if (post.getEstado() && post.getValidacion()) {
+                        %>
+                        <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
+                            <td><%= post.getFechaPost()%></td>
+                            <td><%= post.getNombreUsuario()%></td>
+                            <td><%= post.getTitulo()%></td>
+                            <td>
+                                <button id="cantidadArchivos" data-id="<%= post.getId()%>">
+                                    <%= post.getContador()%>
+                                </button>
+                            </td>
+                            <td>
+                                <%= post.getNombreInstructor()%>
+                            </td>
+                        <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
+                            <%
+                                List<Archivo> archivos = null;
+                                try {
+                                    archivos = aDao.listarArchivosPorPostId(post.getId());
+                                } catch (Exception e) {
+                                }
+
+                                if (archivos != null && !archivos.isEmpty()) {
+                            %>
+                            <div class="bg-white relative w-96 rounded-lg p-5 text-center flex gap-5 flex-col items-center overflow-auto max-h-80">
+                                <p>Cantidad de archivos del post: <%= post.getContador()%></p>
+                                <%
+                                    for (Archivo arch : archivos) {
+                                %>
+                                <button id="cerrarCantidadPost" class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    X
+                                </button>
+                                <div>
+                                    <a href='/descargarArchivo?id=<%= arch.getIdDocumento()%>'>
+                                        <i class="fa-solid fa-arrow-down"></i> <%= arch.getNombreDocumento()%>
+                                    </a>
+                                </div>
+                                <%
+                                    }
+                                %>
+                            </div>
+                            <%
+                                }
+                            %>
+                        </div>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab3" class="overflow-x-auto tab-content">
+                    <table class="table overflow-hidden bg-white rounded-ss-none shadow-lg">
+                        <!-- head -->
+                        <thead>
+                            <tr class="text-black text-md text-center">
+                                <th>Fecha</th>
+                                <th>Nombre monitor</th>
+                                <th>Título</th>
+                                <th>Cantidad archivos</th>
+                                <th>Observacion</th>
+                                <th>Nombre encargado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <input type="hidden" value="<%= user.getId_usuario()%>" id="idInstructor">
+                        <!--ESTO ES PARA VER LOS POSTS QUE ESTAN PENDIENTES-->
+                        <%
+                            for (Post post : posts) {
+                                if (!post.getEstado() && post.getValidacion()) {
+                        %>
+                        <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
+                            <td><%= post.getFechaPost()%></td>
+                            <td><%= post.getNombreUsuario()%></td>
+                            <td><%= post.getTitulo()%></td>
+                            <td>
+                                <button id="cantidadArchivos" data-id="<%= post.getId()%>">
+                                    <%= post.getContador()%>
+                                </button>
+                            </td>
+                            <td class="truncate max-w-36" title="<%= post.getObservacion()%>">
+                                <button id="observacion">
+                                    <%= post.getObservacion()%>
+                                </button>
+                            </td>
+                            <td>
+                                <%= post.getNombreInstructor()%>
                             </td>
                         <div class="hidden flex bg-[#1D1D1D60] fixed top-0 left-0 min-h-screen w-full justify-center items-center z-10" data-id='<%= post.getId()%>' id="divPost">
                             <%

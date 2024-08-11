@@ -3,11 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/J:/mdaSenaAnt/web/inicio.jsp</file>
-            <file>file:/J:/mdaSenaAnt/web/partials/nav.jsp</file>
+            <file>file:/J:/mdaSenaAnt/web/partials/roles/nav.jsp</file>
             <file>file:/J:/mdaSenaAnt/web/views/administrador/listarPublicaciones.jsp</file>
-            <file>file:/J:/mdaSenaAnt/src/java/controlador/svListarPublicaciones.java</file>
+            <file>file:/J:/mdaSenaAnt/web/scripts/dashboard.js</file>
+            <file>file:/J:/mdaSenaAnt/web/views/administrador/listarUsuarios.jsp</file>
             <file>file:/J:/mdaSenaAnt/src/java/modelo/AdminDAO.java</file>
+            <file>file:/J:/mdaSenaAnt/src/java/controlador/svListarUsuarios.java</file>
+            <file>file:/J:/mdaSenaAnt/src/java/modelo/objetos/Usuario.java</file>
         </group>
     </open-files>
 </project-private>

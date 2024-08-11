@@ -47,9 +47,9 @@ _cerrarCantidadPost.forEach((e) => {
         const _archivos = document.querySelectorAll("#divPost");
         _archivos.forEach((i) => {
             i.classList.add("hidden");
-        })
+        });
     });
-})
+});
 
 // Modal para ver la observación
 const _observacion = document.querySelectorAll("#observacion");
@@ -110,7 +110,7 @@ _observacion.forEach((element) => {
         _obser.textContent = element.textContent;
         _modal.appendChild(_obser);
     });
-})
+});
 
 
 // Modal para confirmar aceptar el post
@@ -200,7 +200,7 @@ _aceptarDos.forEach((e) => {
         });
 
     });
-})
+});
 
 // Modal para confirmar aceptar el post
 const _aceptar = document.querySelectorAll("#aceptarPost");
@@ -290,7 +290,7 @@ _aceptar.forEach((e) => {
         });
 
     });
-})
+});
 
 // Modal para rechazar el post
 const _rechazar = document.querySelectorAll("#rechazarPost");
@@ -390,7 +390,7 @@ _rechazar.forEach((btn) => {
                     "txtIdInstructor": _idInstructor,
                     "txtObservacion": observacion
                 })
-            })
+            });
 
             location.reload();
 
@@ -402,14 +402,14 @@ _rechazar.forEach((btn) => {
         const _buttonContainer = document.createElement("div");
         _modal.appendChild(_buttonContainer);
     });
-})
+});
 
 const _btnModificar = document.querySelectorAll("#btnModificar");
 _btnModificar.forEach((element) => {
     element.addEventListener("click", () => {
         document.getElementById('modalPost').classList.remove('hidden');
     });
-})
+});
 
 function closeModal() {
     document.getElementById('modalPost').classList.add('hidden');

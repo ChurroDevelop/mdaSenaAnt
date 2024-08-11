@@ -55,97 +55,135 @@
                 </button>
             </a>
         </div>
-    </div>
 
     <%
     } else if ("Instructor".equals(user.getId_rol_fk().getNombre_rol())) {
     %>
 
-    <!-- Botones navegación -->
-    <div>
-        <!-- Inicio -->
-        <a href="../../inicio.jsp">
-            <button
-                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                <i class="fa-solid fa-house"></i>
-                Inicio
-            </button>
-        </a>
-        <!-- Asignar monitor -->
-        <a href="">
-            <form action="/svListarMonitores" method="GET">
-                <input type="hidden" value="<%= user.getId_usuario()%> " name="txtIdInstructor">
+        <!-- Botones navegación -->
+        <div>
+            <!-- Inicio -->
+            <a href="../../inicio.jsp">
                 <button
                     class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                    <i class="fa-solid fa-plus-minus"></i>
-                    Asignar monitor
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
                 </button>
-            </form>
-        </a>
-        <a href="">
-            <form action="/svListarPosts" method="POST">
-                <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdInstructor">
+            </a>
+            <!-- Asignar monitor -->
+            <a href="">
+                <form action="/svListarMonitores" method="GET">
+                    <input type="hidden" value="<%= user.getId_usuario()%> " name="txtIdInstructor">
+                    <button
+                        class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                        <i class="fa-solid fa-plus-minus"></i>
+                        Asignar monitor
+                    </button>
+                </form>
+            </a>
+            <a href="">
+                <form action="/svListarPosts" method="POST">
+                    <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdInstructor">
+                    <button
+                        class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                        <i class="fa-solid fa-bell"></i>
+                        Tablero de control
+                    </button>
+                </form>
+            </a>
+            <a href="../../editarPerfil.jsp">
                 <button
                     class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                    <i class="fa-solid fa-bell"></i>
-                    Tablero de control
+                    <i class="fa-regular fa-address-card"></i>
+                    Perfil
                 </button>
-            </form>
-        </a>
-        <a href="../../editarPerfil.jsp">
-            <button
-                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                <i class="fa-regular fa-address-card"></i>
-                Perfil
-            </button>
-        </a>
-    </div>
-</div>
+            </a>
+        </div>
 
 <%
 } else if ("Monitor".equals(user.getId_rol_fk().getNombre_rol())) {
 %>
 
-<!-- Botones navegación -->
-<div>
-    <!-- Inicio -->
-    <a href="../../inicio.jsp">
-        <button
-            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-solid fa-house"></i>
-            Inicio
-        </button>
-    </a>
-    <!-- Crear post -->
-    <a href="../../views/monitor/crearPost.jsp">
-        <button
-            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-solid fa-plus-minus"></i>
-            Crear post
-        </button>
-    </a>
-    <a href="../../administrarPost.jsp">
-        <form action="/svListarPostsMonitor" method="POST">
-            <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdMonitor">
-            <button
-                class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-                <i class="fa-solid fa-bell"></i>
-                Tablero de control
-            </button>
-        </form>
-    </a>
-    <a href="../../editarPerfil.jsp">
-        <button
-            class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
-            <i class="fa-regular fa-address-card"></i>
-            Perfil
-        </button>
-    </a>
-</div>
-</div>
+        <!-- Botones navegación -->
+        <div>
+            <!-- Inicio -->
+            <a href="../../inicio.jsp">
+                <button
+                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </button>
+            </a>
+            <!-- Crear post -->
+            <a href="../../views/monitor/crearPost.jsp">
+                <button
+                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                    <i class="fa-solid fa-plus-minus"></i>
+                    Crear post
+                </button>
+            </a>
+            <a href="../../administrarPost.jsp">
+                <form action="/svListarPostsMonitor" method="POST">
+                    <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdMonitor">
+                    <button
+                        class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                        <i class="fa-solid fa-bell"></i>
+                        Tablero de control
+                    </button>
+                </form>
+            </a>
+            <a href="../../editarPerfil.jsp">
+                <button
+                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                    <i class="fa-regular fa-address-card"></i>
+                    Perfil
+                </button>
+            </a>
+        </div>
 
 <%
-    }
+} else if ("Administrador".equals(user.getId_rol_fk().getNombre_rol())) {
 %>
 
+        <!-- Botones navegación -->
+        <div>
+            <!-- Inicio -->
+            <a href="../../inicio.jsp">
+                <button
+                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </button>
+            </a>
+            <!-- Asignar monitor -->
+            <a href="">
+                <form action="/svListarUsuarios" method="POST">
+                    <input type="hidden" value="<%= user.getId_usuario()%> " name="txtIdAdministrador">
+                    <button
+                        class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                        <i class="fa-solid fa-plus-minus"></i>
+                        Listar usuarios
+                    </button>
+                </form>
+            </a>
+            <a href="">
+                <form action="/svListarPublicaciones" method="POST">
+                    <input type="hidden" value="<%= user.getId_usuario()%>" name="txtIdAdministrador">
+                    <button
+                        class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                        <i class="fa-solid fa-bell"></i>
+                        Listar publicaciones
+                    </button>
+                </form>
+            </a>
+            <a href="../../editarPerfil.jsp">
+                <button
+                    class="btn bg-transparent shadow-none w-full border-none text-mdaBlack hover:bg-mdaGreen_400 flex justify-start">
+                    <i class="fa-regular fa-address-card"></i>
+                    Perfil
+                </button>
+            </a>
+        </div>
+<%}%>
+    </div>
 </nav>
