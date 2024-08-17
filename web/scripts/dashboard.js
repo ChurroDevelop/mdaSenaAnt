@@ -404,6 +404,178 @@ _rechazar.forEach((btn) => {
     });
 });
 
+const _deshabilitar = document.querySelectorAll("#deshabilitarUser");
+_deshabilitar.forEach((btnFalse) => {
+    btnFalse.addEventListener("click", async () => {
+        const _section = document.createElement("section");
+        _section.classList.add(
+                "flex",
+                "bg-[#1D1D1D60]",
+                "fixed",
+                "min-h-screen",
+                "w-full",
+                "justify-center",
+                "items-center",
+                "z-10"
+                );
+        document.body.appendChild(_section);
+
+        const _modal = document.createElement("div");
+        _modal.classList.add(
+                "bg-white",
+                "w-96",
+                "rounded-lg",
+                "p-5",
+                "text-center",
+                "flex",
+                "gap-5",
+                "flex-col",
+                "items-center"
+                );
+        _modal.textContent = "¿Seguro que quieres deshabilitar el usuarios?";
+        _section.appendChild(_modal);
+
+        const _br = document.createElement("br");
+        _modal.appendChild(_br);
+
+        const _btnContainer = document.createElement("div");
+        _modal.appendChild(_btnContainer);
+
+        const _btnUpdate = document.createElement("button");
+        _btnUpdate.classList.add(
+                "btn",
+                "w-14",
+                "bg-mdaGreen",
+                "text-white",
+                "hover:bg-mdaGreen",
+                "border-none"
+                );
+        _btnUpdate.textContent = "Si";
+        _btnContainer.appendChild(_btnUpdate);
+
+        _btnUpdate.addEventListener("click", async () => {
+            let _idUser = btnFalse.getAttribute("data-id");
+            let _idAdmin = document.getElementById("idAdmin").value;
+
+            let request = await fetch("/svDeshabilitarUser", {
+                method: "POST",
+                header: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    "txtIdUser": _idUser,
+                    "txtIdAdmin": _idAdmin
+                })
+            })
+            location.reload();
+            document.body.removeChild(_section);
+        });
+
+        const _btnCerrar = document.createElement("button");
+        _btnCerrar.classList.add(
+                "btn",
+                "w-14",
+                "bg-mdaRed",
+                "text-white",
+                "hover:bg-mdaRed",
+                "border-none",
+                "ml-2"
+                );
+        _btnCerrar.textContent = "No";
+        _btnContainer.appendChild(_btnCerrar);
+
+        _btnCerrar.addEventListener("click", () => {
+            document.body.removeChild(_section);
+        })
+    });
+});
+
+const _habilitarUsers = document.querySelectorAll("#habilitarUser");
+_habilitarUsers.forEach((btnHabilitar) => {
+    btnHabilitar.addEventListener("click", async () => {
+        const _section = document.createElement("section");
+        _section.classList.add(
+                "flex",
+                "bg-[#1D1D1D60]",
+                "fixed",
+                "min-h-screen",
+                "w-full",
+                "justify-center",
+                "items-center",
+                "z-10"
+                );
+        document.body.appendChild(_section);
+
+        const _modal = document.createElement("div");
+        _modal.classList.add(
+                "bg-white",
+                "w-96",
+                "rounded-lg",
+                "p-5",
+                "text-center",
+                "flex",
+                "gap-5",
+                "flex-col",
+                "items-center"
+                );
+        _modal.textContent = "¿Seguro que quieres habilitar el usuarios?";
+        _section.appendChild(_modal);
+
+        const _br = document.createElement("br");
+        _modal.appendChild(_br);
+
+        const _btnContainer = document.createElement("div");
+        _modal.appendChild(_btnContainer);
+
+        const _btnUpdate = document.createElement("button");
+        _btnUpdate.classList.add(
+                "btn",
+                "w-14",
+                "bg-mdaGreen",
+                "text-white",
+                "hover:bg-mdaGreen",
+                "border-none"
+                );
+        _btnUpdate.textContent = "Si";
+        _btnContainer.appendChild(_btnUpdate);
+
+        _btnUpdate.addEventListener("click", async () => {
+            let _idUser = btnHabilitar.getAttribute("data-id");
+            let _idAdmin = document.getElementById("idAdmin").value;
+
+            let request = await fetch("/svHabilitarUser", {
+                method: "POST",
+                header: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    "txtIdUser": _idUser,
+                    "txtIdAdmin": _idAdmin
+                })
+            })
+            location.reload();
+            document.body.removeChild(_section);
+        });
+
+        const _btnCerrar = document.createElement("button");
+        _btnCerrar.classList.add(
+                "btn",
+                "w-14",
+                "bg-mdaRed",
+                "text-white",
+                "hover:bg-mdaRed",
+                "border-none",
+                "ml-2"
+                );
+        _btnCerrar.textContent = "No";
+        _btnContainer.appendChild(_btnCerrar);
+
+        _btnCerrar.addEventListener("click", () => {
+            document.body.removeChild(_section);
+        })
+    })
+})
+
 const _btnModificar = document.querySelectorAll("#btnModificar");
 _btnModificar.forEach((element) => {
     element.addEventListener("click", () => {

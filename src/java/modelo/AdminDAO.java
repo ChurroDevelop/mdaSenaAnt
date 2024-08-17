@@ -116,12 +116,54 @@ public class AdminDAO extends Conexion {
                 
             }
         } catch (Exception e) {
-            System.out.println("Error agregando usuarios en la lista");
+            System.out.println("Error agregando usuarios en la lista: " + e.getMessage());
         } finally {
             this.desconectar();
         }
 
         return allUsers;
+    }
+    
+    public boolean modificarEstado(String idUser) {
+        Boolean estado = false;
+        PreparedStatement ps = null;
+        try {
+            this.conectar();
+            String sql = "UPDATE tb_usuarios SET estado_usuario = 0 WHERE id_usuario = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setString(1, idUser);
+            int x = ps.executeUpdate();
+            
+            if (x > 0) {
+                estado = true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error al deshabilitar el usuario: " + e.getMessage());
+        } finally {
+            this.desconectar();
+        }
+        return estado;
+    }
+    
+    public boolean estadoActivo(String idUser){
+        boolean estado = false;
+        PreparedStatement ps = null;
+        try {
+            this.conectar();
+            String sql = "UPDATE tb_usuarios SET estado_usuario = 1 WHERE id_usuario = ?";
+            ps = getCon().prepareStatement(sql);
+            ps.setString(1, idUser);
+            int x = ps.executeUpdate();
+            
+            if (x > 0) {
+                estado = true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error al activa el usuario: " + e.getMessage());
+        } finally {
+            this.desconectar();
+        }
+        return estado;
     }
 
 }

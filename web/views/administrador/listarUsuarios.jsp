@@ -64,6 +64,9 @@
                 <div id="tab1" class="overflow-x-auto tab-content">
                     <table class="table overflow-hidden bg-white rounded-ss-none shadow-lg">
                         <!-- head -->
+                        
+                        <input type="hidden" value="<%= user.getId_usuario() %>" id="idAdmin">
+                        
                         <thead>
                             <tr class="text-black text-md text-center">
                                 <th>Nombre usuario</th>
@@ -83,7 +86,7 @@
                                 <td><%= us.getEstadoUser() ? "Habilitado" : "Deshabilitado" %></td>
                                 <td><%= us.getNombreRol() %></td>
                                 <td>
-                                    <button id="deshabilitarUser" data-id="<%= us.getId_usuario() %>">
+                                    <button id="deshabilitarUser" data-id="<%= us.getId_usuario() %>" class="p-2 bg-mdaGreen text-white rounded-xl text-xs ease-linear hover:bg-green-700">
                                         Deshabilitar
                                     </button>
                                 </td>
@@ -115,10 +118,10 @@
                             %>
                             <tr class="text-black hover:bg-mdaGreen_400 cursor-pointer text-md text-center">
                                 <td><%= us.getNombreUser() %></td>
-                                <td><%= us.getEstadoUser() %></td>
+                                <td><%= !us.getEstadoUser() ? "Deshabilitado" : "Habilitado"%></td>
                                 <td><%= us.getNombreRol() %></td>
                                 <td>
-                                    <button id="habilitarUser" data-id="">
+                                    <button id="habilitarUser" data-id="<%= us.getId_usuario() %>" class="p-2 bg-mdaGreen text-white rounded-xl text-xs ease-linear hover:bg-green-700">
                                         Habilitar
                                     </button>
                                 </td>
