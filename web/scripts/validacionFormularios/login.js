@@ -34,6 +34,9 @@ _form.addEventListener("submit", (event) => {
                 localStorage.setItem("sesion", true);
             } else if (xhr.responseText === 'error') {
                 resultadoDiv.innerHTML = `<p class="text-red-500 mt-4">Correo o contraseña incorrectos. Inténtelo de nuevo.</p>`;
+            }
+            else if(xhr.responseText === 'disabled'){
+                resultadoDiv.innerHTML = `<p class="text-red-500 mt-4">Usuario deshabilitado</p>`;
             } else {
                 resultadoDiv.innerHTML = `<p class="text-red-500 mt-4">Ocurrió un error. Inténtelo de nuevo más tarde.</p>`;
             }

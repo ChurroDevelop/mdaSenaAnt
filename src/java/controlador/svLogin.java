@@ -55,9 +55,15 @@ public class svLogin extends HttpServlet {
         // Verifica las credenciales del usuario
         if (userDao.autenticacion(u)) {
             // Si la autenticación es exitosa, almacena los datos del usuario y del perfil en la sesión
-            sesion.setAttribute("dataUser", newUser);
-            sesionPerfil.setAttribute("dataPerfil", profile);
-            response.getWriter().write("success"); // Escribe 'success' en la respuesta
+            if (!newUser.getEstadoUser()) {
+                response.getWriter().write("disabled");
+            }
+            else {
+                sesion.setAttribute("dataUser", newUser);
+                sesionPerfil.setAttribute("dataPerfil", profile);
+                response.getWriter().write("success"); // Escribe 'success' en la respuesta
+            }
+            
         } else {
             response.getWriter().write("error"); // Escribe 'error' en la respuesta si las credenciales son incorrectas
         }

@@ -18,6 +18,10 @@
     Usuario user = (Usuario) sesion.getAttribute("dataUser");
     Perfil perfil = (Perfil) sesion.getAttribute("dataPerfil");
     List<Usuario> listUsers = (List<Usuario>) sesion.getAttribute("listaUsers");
+    if (!user.getEstadoUser()) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 <%
     request.setAttribute("pageTitle", "MDA SENA - Listar usuarios");

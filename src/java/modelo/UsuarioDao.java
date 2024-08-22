@@ -169,7 +169,7 @@ public class UsuarioDao extends Conexion {
         try {
             this.conectar(); // Conectar a la base de datos.
             // Consulta SQL para obtener todos los datos del usuario basado en el correo electrónico.
-            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk FROM tb_usuarios WHERE correo_inst = ?";
+            String sql = "SELECT id_usuario, correo_inst, password, id_rol_fk, estado_usuario FROM tb_usuarios WHERE correo_inst = ?";
             ps = getCon().prepareStatement(sql); // Preparar la consulta SQL.
             // Establecer el valor del correo electrónico en la consulta.
             ps.setString(1, user.getCorreoInst());
@@ -180,11 +180,13 @@ public class UsuarioDao extends Conexion {
                 int idUser = rs.getInt("id_usuario"); // Obtener el ID del usuario.
                 String correo = rs.getString("correo_inst");
                 String password = rs.getString("password");
+                boolean estado = rs.getBoolean("estado_usuario");
 
                 // Establecer los datos del usuario en la instancia.
                 u.setCorreoInst(correo);
                 u.setId_usuario(idUser);
                 u.setPassword(password);
+                u.setEstadoUser(estado);
                 // Obtener el rol del usuario utilizando RolDAO.
                 Rol rol = rolDao.getIdRol(user);
                 u.setId_rol_fk(rol);

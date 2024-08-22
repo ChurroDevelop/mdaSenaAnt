@@ -20,6 +20,11 @@
     PostDAO pDao = new PostDAO();
     ArchivoDAO aDao = new ArchivoDAO();
     List<Post> posts = (List<Post>) sesion.getAttribute("listaPublicaciones");
+    
+    if (!user.getEstadoUser()) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 <%
     request.setAttribute("pageTitle", "MDA SENA - Listar publicaciones");

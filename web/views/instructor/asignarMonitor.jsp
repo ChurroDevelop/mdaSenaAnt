@@ -13,6 +13,10 @@
     Perfil perfil = (Perfil) sesion.getAttribute("dataPerfil");
     Usuario user = (Usuario) sesion.getAttribute("dataUser");
     List<Perfil> monitores = (List<Perfil>) sesion.getAttribute("listMonitores");
+    if (!user.getEstadoUser()) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 
 <%

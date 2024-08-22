@@ -3,13 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/J:/mdaSenaAnt/web/partials/roles/nav.jsp</file>
-            <file>file:/J:/mdaSenaAnt/web/views/administrador/listarPublicaciones.jsp</file>
-            <file>file:/J:/mdaSenaAnt/web/scripts/dashboard.js</file>
-            <file>file:/J:/mdaSenaAnt/web/views/administrador/listarUsuarios.jsp</file>
-            <file>file:/J:/mdaSenaAnt/src/java/modelo/AdminDAO.java</file>
-            <file>file:/J:/mdaSenaAnt/src/java/controlador/svListarUsuarios.java</file>
-            <file>file:/J:/mdaSenaAnt/src/java/modelo/objetos/Usuario.java</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/validacionFormularios/login.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/inicio.jsp</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/login.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/estadosUsers.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/dashboard.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/script.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/src/java/controlador/svLogin.java</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/validacionesPerfil.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/inicio.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/src/java/modelo/UsuarioDao.java</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/monitor.js</file>
+            <file>file:/C:/Users/Aprendiz/Documents/NetBeansProjects/blog/web/scripts/instructor.js</file>
         </group>
     </open-files>
 </project-private>

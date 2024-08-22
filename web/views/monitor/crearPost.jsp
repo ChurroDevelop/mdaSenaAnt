@@ -11,6 +11,10 @@
     }
     Perfil perfil = (Perfil) sesionPerfil.getAttribute("dataPerfil");
     Usuario user = (Usuario) sesion.getAttribute("dataUser");
+    if (!user.getEstadoUser()) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 
 <%

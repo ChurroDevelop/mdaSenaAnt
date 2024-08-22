@@ -20,6 +20,11 @@
     ArchivoDAO aDao = new ArchivoDAO();
     List<Post> posts = (List<Post>) sesion.getAttribute("listaPosts");
     List<Post> postMonitor = (List<Post>) sesion.getAttribute("listaPostsMonitor");
+    
+    if (!user.getEstadoUser()) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 <%
     request.setAttribute("pageTitle", "MDA SENA - Administrar post");
