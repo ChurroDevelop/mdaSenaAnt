@@ -1,32 +1,35 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
+    // Configurar el título de la página
     request.setAttribute("pageTitle", "MDA SENA - Crear perfil");
 %>
 
 <%
+    // Obtener la sesión actual. Redirigir al usuario al login si no hay sesión activa.
     HttpSession sesion = request.getSession(false);
     if (sesion == null || sesion.getAttribute("autenticacion") == null) {
             response.sendRedirect("login.jsp");
             return;
     }
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 
-    <%@ include file="partials/head.jsp" %>
+    <%@ include file="partials/head.jsp" %> <!-- Incluir el archivo de encabezado común -->
 
     <body class="bg-mdaWhite grid content-center justify-center min-h-screen w-full p-2.5 bg-background4 bg-cover">
-        <!-- Ingrese aquí la estrucuta de la página -->
+        <!-- Ingrese aquí la estructura de la página -->
 
         <!-- Filtro imagen -->
         <div class="absolute top-0 left-0 min-h-screen w-full bg-mdaBlack_600"></div>
 
         <!-- Contenedor de login -->
         <section class="container grid bg-white p-7 rounded-lg shadow-md w-full md:w-96 z-10">
-            <!--  -->
+            <!-- Mensaje de bienvenida -->
             <h3 class="text-mdaBlack text-xl text-center mb-2.5">
-                Bienvenido, ingrese los siguiente datos y cree su perfil
+                Bienvenido, ingrese los siguientes datos y cree su perfil
             </h3>
             <!-- Logo Sena y nombre del proyecto -->
             <div class="flex flex-row w-full h-20 mb-2.5">
@@ -34,9 +37,9 @@
                 <div class="grid flex-grow place-items-center justify-end w-full">
                     <img class="w-12" src="images/LogoNegro.svg" alt="" />
                 </div>
-                <!-- HR -->
+                <!-- Línea divisoria horizontal -->
                 <div class="divider divider-horizontal"></div>
-                <!-- Nombre -->
+                <!-- Nombre del proyecto -->
                 <div class="grid flex-grow place-items-center justify-start w-full">
                     <h1 class="text-2xl text-mdaBlack leading-none">
                         <span class="text-xl text-mdaGreen">MDA</span> <br />
@@ -44,6 +47,8 @@
                     </h1>
                 </div>
             </div>
+            
+            <!-- Formulario para crear perfil -->
             <form action="svPerfil" class="validarFormulario grid" method="POST" id="formularioCrearPerfil">
                 <!-- Nombre -->
                 <div>
@@ -82,6 +87,7 @@
                 </button>
             </form>
         </section>
+        
         <!-- Enlace para manejo del DOM -->
         <script type="module" src="scripts/validacionFormularios/crearPerfil.js"></script>
     </body>

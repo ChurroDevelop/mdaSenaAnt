@@ -13,7 +13,9 @@ import modelo.UsuarioDao;
 import modelo.objetos.Perfil;
 
 /**
- * Servlet para manejar la asignación del rol de monitor a un aprendiz.
+ * Servlet que maneja la asignación del rol de monitor a un aprendiz.
+ * Responde a solicitudes POST para realizar la asignación y redirige 
+ * a la vista correspondiente tras la operación.
  */
 @WebServlet(name = "svAsignacion", urlPatterns = {"/svAsignacion"})
 public class svAsignacion extends HttpServlet {
@@ -24,33 +26,38 @@ public class svAsignacion extends HttpServlet {
     // Instancia de MonitorDAO para manejar las operaciones de base de datos relacionadas con los monitores.
     private final MonitorDAO mDao = new MonitorDAO();
 
+    /**
+     * Maneja las solicitudes HTTP POST para asignar el rol de monitor a un aprendiz.
+     * 
+     * @param request  El objeto HttpServletRequest que contiene la solicitud del cliente.
+     * @param response El objeto HttpServletResponse que contiene la respuesta que se enviará al cliente.
+     * @throws ServletException Si ocurre un error específico del servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Establecer una nueva sesión para obtener los datos en otra vista.
+        // Obtener la sesión actual o crear una nueva para almacenar datos entre vistas.
         HttpSession sesion = request.getSession();
 
-        // Tomar el id del aprendiz y del instructor desde el formulario.
+        // Recuperar el ID del aprendiz y del instructor desde los parámetros del formulario.
         String idAsignacion = request.getParameter("txtAsignacion");
         String idInstructor = request.getParameter("txtIdInstructor");
 
-        // Hacer la actualización en la base de datos y verificar si se realizó correctamente.
+        // Intentar asignar el rol de monitor al aprendiz en la base de datos.
         boolean actualizacion = userDao.asignarRolMonitor(idAsignacion, idInstructor);
 
-        // Redirigir a la vista de asignar monitor, donde se verá el nuevo monitor, según el resultado de la actualización.
+        // Si la asignación fue exitosa, obtener la lista actualizada de monitores y guardarla en la sesión.
         if (actualizacion) {
-            
-            // Obtener la lista de monitores asignados.
-            List<Perfil> monitores = mDao.obtenerMonitores(idInstructor); 
-            
-            // Guardar la lista de monitores en la sesión.
-            sesion.setAttribute("listMonitores", monitores); 
+            List<Perfil> monitores = mDao.obtenerMonitores(idInstructor);
+            sesion.setAttribute("listMonitores", monitores);
         } else {
+            // Imprimir un mensaje en la consola si la asignación no fue exitosa.
             System.out.println("No se pudo hacer la modificación");
         }
         
-        // Redirigir a la vista de asignar monitor.
-        response.sendRedirect("views/instructor/asignarMonitor.jsp"); 
+        // Redirigir al usuario a la vista de asignación de monitor.
+        response.sendRedirect("views/instructor/asignarMonitor.jsp");
     }
 }

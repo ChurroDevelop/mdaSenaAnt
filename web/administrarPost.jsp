@@ -312,7 +312,7 @@
                 </ul>
                 <div id="tab1" class="overflow-x-auto tab-content">
                     <table class="table overflow-hidden bg-white rounded-ss-none shadow-lg">
-                        <!-- head -->
+                        <!-- Listar posts pendientes -->
                         <thead>
                             <tr class="text-black text-md text-center">
                                 <th>Fecha</th>
@@ -376,7 +376,7 @@
                 </div>
                 <div id="tab2" class="overflow-x-auto tab-content">
                     <table class="table overflow-hidden bg-white rounded-ss-none shadow-lg">
-                        <!-- head -->
+                        <!-- Listar posts aceptados -->
                         <thead>
                             <tr class="text-black text-md text-center">
                                 <th>Fecha</th>
@@ -438,7 +438,7 @@
                 </div>
                 <div id="tab3" class="overflow-x-auto tab-content">
                     <table class="table overflow-hidden bg-white rounded-ss-none shadow-lg">
-                        <!-- head -->
+                        <!-- Listar posts rechazados -->
                         <thead>
                             <tr class="text-black text-md text-center">
                                 <th>Fecha</th>

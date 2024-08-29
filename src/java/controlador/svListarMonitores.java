@@ -13,8 +13,9 @@ import modelo.objetos.Perfil;
 
 /**
  * Servlet para listar los monitores asignados a un instructor específico.
- * Obtiene la lista de monitores desde la base de datos y la guarda en la
- * sesión.
+ * Este servlet maneja la solicitud para obtener la lista de monitores asignados a un instructor particular. Recupera el ID
+ * del instructor desde la solicitud GET, obtiene la lista de monitores desde la base de datos, guarda esta lista en la sesión
+ * y redirige a la vista de asignación de monitores.
  */
 @WebServlet(name = "svListarMonitores", urlPatterns = {"/svListarMonitores"})
 public class svListarMonitores extends HttpServlet {
@@ -22,6 +23,14 @@ public class svListarMonitores extends HttpServlet {
     // Instancia del DAO para manejar la base de datos de monitores
     private final MonitorDAO mDao = new MonitorDAO();
 
+    /**
+     * Maneja las solicitudes HTTP GET para listar los monitores asignados a un instructor.
+     * 
+     * @param request La solicitud HTTP del cliente, que contiene el parámetro "txtIdInstructor".
+     * @param response La respuesta HTTP al cliente.
+     * @throws ServletException Si ocurre un error durante el manejo de la solicitud.
+     * @throws IOException Si ocurre un error al leer o escribir datos.
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,5 +49,4 @@ public class svListarMonitores extends HttpServlet {
         // Redirige a la vista de asignación de monitores para mostrar los resultados
         response.sendRedirect("views/instructor/asignarMonitor.jsp");
     }
-
 }

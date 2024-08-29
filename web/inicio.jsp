@@ -7,35 +7,40 @@
 <%@page import="java.sql.SQLException"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
+    // Obtener la sesión actual. Redirigir al usuario al login si no hay sesión activa.
     HttpSession sesion = request.getSession(false);
     if (sesion == null || sesion.getAttribute("dataUser") == null) {
         response.sendRedirect("login.jsp");
         return;
     }
 
+    // Obtener el usuario de la sesión
     Usuario user = (Usuario) sesion.getAttribute("dataUser");
 
+    // Crear instancias de los DAOs
     PostDAO postDAO = new PostDAO();
     ArchivoDAO archivoDAO = new ArchivoDAO();
     List<Post> posts = null;
     try {
+        // Obtener la lista de posts desde la base de datos
         posts = postDAO.listarPosts();
     } catch (SQLException e) {
         e.printStackTrace();
-        // Manejar el error según sea necesario
+        // Manejar el error de manera adecuada (puede incluir un mensaje de error para el usuario)
     }
 %>
 
 <%
+    // Configurar el título de la página
     request.setAttribute("pageTitle", "MDA SENA - Inicio");
 %>
 
 <!DOCTYPE html>
 <html lang="en">
-    <%@ include file="partials/head.jsp" %>
+    <%@ include file="partials/head.jsp" %> <!-- Incluir el archivo de encabezado común -->
+
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
         <!-- Incluir la navegación -->
-
         <div class="hidden md:block">
             <%@ include file="partials/nav.jsp" %>            
         </div>
@@ -43,7 +48,6 @@
         <div class="block md:hidden">
             <%@ include file="partials/navMobile.jsp" %>            
         </div>
-
 
         <!-- Contenedor para los posts -->
         <section class="m-auto flex w-full max-w-screen-2xl min-h-screen justify-center p-5 gap-5 flex-wrap content-start">
@@ -62,13 +66,15 @@
                     <!-- Archivos anexados al post -->
                     <div class="max-h-12 overflow-scroll">
                         <%
+                            // Obtener la lista de archivos asociados al post
                             List<Archivo> archivos = null;
                             try {
                                 archivos = archivoDAO.listarArchivosPorPostId(post.getId());
                             } catch (SQLException e) {
                                 e.printStackTrace();
-                                // Manejar el error según sea necesario
+                                // Manejar el error de manera adecuada (puede incluir un mensaje de error para el usuario)
                             }
+                            // Mostrar los archivos si existen
                             if (archivos != null && !archivos.isEmpty()) {
                                 for (Archivo archivo : archivos) {
                         %>
@@ -88,23 +94,23 @@
             <% }%>
         </section>
 
-        <!-- Indicador de rol (sin cambios) -->
-        <!-- Indicador de rol -->
+        <!-- Indicador de rol del usuario (se muestra en la esquina superior derecha) -->
         <button class="bg-white btn btn-sm border-none text-mdaBlack fixed top-0 right-0 m-2.5 hover:bg-white">
             <i class="fa-solid fa-user"></i> <%= user.getId_rol_fk().getNombre_rol()%>
         </button>
 
-        <!-- Enlace para manejo del DOM -->
+        <!-- Archivos JavaScript para funcionalidades adicionales -->
         <script src="scripts/inicio.js"></script>
         <script src="scripts/buscar.js"></script>
         <script src="scripts/buscarMobile.js"></script>
         <script>
+            // Script para manejar la visibilidad del menú de navegación en dispositivos móviles
             document.addEventListener("DOMContentLoaded", function () {
                 const abrirNavegacionBtn = document.getElementById("abrirNavegacion");
                 const modalNavegacion = document.getElementById("modalNavegacion");
 
                 abrirNavegacionBtn.addEventListener("click", function () {
-                    // Toggle visibility of the navigation
+                    // Alternar la visibilidad de la navegación
                     if (modalNavegacion.classList.contains("hidden")) {
                         modalNavegacion.classList.remove("hidden");
                     } else {

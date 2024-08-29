@@ -12,9 +12,23 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
+/**
+ * Servlet para la descarga de archivos.
+ * Este servlet maneja las solicitudes de descarga de archivos. Recibe un ID de documento como parámetro,
+ * valida el ID, obtiene el archivo correspondiente desde la base de datos y envía el archivo al cliente
+ * para su descarga.
+ */
 @WebServlet("/descargarArchivo")
 public class svDescargarArchivos extends HttpServlet {
 
+    /**
+     * Maneja las solicitudes HTTP GET para la descarga de archivos.
+     * 
+     * @param request La solicitud HTTP del cliente.
+     * @param response La respuesta HTTP al cliente.
+     * @throws ServletException Si ocurre un error durante el manejo de la solicitud.
+     * @throws IOException Si ocurre un error al leer o escribir datos.
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtener el ID del documento desde la solicitud
@@ -49,14 +63,14 @@ public class svDescargarArchivos extends HttpServlet {
         // Instancia de un nuevo ArchivoDAO para obtener los archivos de la base de datos
         ArchivoDAO archivoDAO = new ArchivoDAO();
         
-        // Instancia de un nuevo objeto tipo Archiv que se le asigna el valor de null
+        // Instancia de un nuevo objeto tipo Archivo que se le asigna el valor de null
         Archivo archivo = null;
         try {
             // Al objeto archivo se le asigna el valor del archivo que retorna la funcion del objeto archivoDAO
             archivo = archivoDAO.obtenerArchivoPorId(idDocumento);
         } catch (SQLException e) {
             
-            // Envia error 400 (BAD REQUEST) con un mensaje personalizado
+            // Envia error 500 (INTERNAL SERVER ERROR) con un mensaje personalizado
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener el archivo");
             
             // Rompe de una vez la ejecucion del servlet
@@ -66,7 +80,7 @@ public class svDescargarArchivos extends HttpServlet {
         // Si el archivo sigue siendo nulo
         if (archivo == null) {
             
-            // Envia error 400 (BAD REQUEST) con un mensaje personalizado
+            // Envia error 404 (NOT FOUND) con un mensaje personalizado
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Archivo no encontrado");
             
             // Rompe de una vez la ejecucion del servlet
@@ -78,10 +92,10 @@ public class svDescargarArchivos extends HttpServlet {
         // Configura el tipo de contenido que retornara la respuesta, que indica el contenido del archivo en binario
         response.setContentType("application/octet-stream");
         
-        // Configura la cabecera para establecer que se debe descargar como archvio adjunto con el nombre establecido
+        // Configura la cabecera para establecer que se debe descargar como archivo adjunto con el nombre establecido
         response.setHeader("Content-Disposition", "attachment; filename=" + archivo.getNombreDocumento());
         
-        // Configura la longitud del contendio de respuesta en tamaño de bytes
+        // Configura la longitud del contenido de respuesta en tamaño de bytes
         response.setContentLength(archivo.getDocumento().length);
 
         // Enviar el archivo al cliente

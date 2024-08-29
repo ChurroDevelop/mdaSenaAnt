@@ -29,7 +29,6 @@
     <%@ include file="../../partials/roles/head.jsp" %>
 
     <body class="flex bg-mdaWhite bg-gradient-to-t from-mdaGreen_400 to-mdaWhite">
-        <!-- Ingrese aquí la estrucuta de la página -->
 
         <!-- Incluir la navegación -->
         <div class="hidden md:block">

@@ -24,6 +24,14 @@ public class svLogin extends HttpServlet {
     private final Usuario u = new Usuario(); // Objeto Usuario para almacenar credenciales
     private Perfil profile = new Perfil(); // Objeto Perfil para almacenar la información del perfil del usuario
 
+    /**
+     * Procesa la solicitud POST para autenticar al usuario.
+     * 
+     * @param request La solicitud HTTP del cliente.
+     * @param response La respuesta HTTP al cliente.
+     * @throws ServletException Si ocurre un error en el procesamiento del servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

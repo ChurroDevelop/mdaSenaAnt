@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Manejo de pestañas (tabs)
     const tabLinks = document.querySelectorAll('.tab-link');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -6,22 +7,22 @@ document.addEventListener('DOMContentLoaded', function () {
         link.addEventListener('click', function (e) {
             e.preventDefault();
 
-            // Remove active class from all links and hide all contents
+            // Elimina la clase 'active' de todos los enlaces y oculta todos los contenidos
             tabLinks.forEach(link => link.classList.remove('bg-white', 'text-mdaBlack'));
             tabContents.forEach(content => content.classList.remove('active'));
 
-            // Add active class to the clicked link and show corresponding content
+            // Añade la clase 'active' al enlace clicado y muestra el contenido correspondiente
             link.classList.add('bg-white', 'text-mdaBlack');
             const targetId = link.getAttribute('href').substring(1);
             document.getElementById(targetId).classList.add('active');
         });
     });
 
-    // Show the first tab by default
+    // Muestra la primera pestaña por defecto
     tabLinks[0].click();
 });
 
-// Esto es para ver la cantidad de archivos que tiene ese post
+// Manejo del contador de archivos
 const _btnContador = document.querySelectorAll("#cantidadArchivos");
 _btnContador.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -40,7 +41,7 @@ _btnContador.forEach((btn) => {
     });
 });
 
-// Boton para cerrar el modal de la cantidad de documentos
+// Manejo del botón para cerrar el modal de la cantidad de documentos
 const _cerrarCantidadPost = document.querySelectorAll("#cerrarCantidadPost");
 _cerrarCantidadPost.forEach((e) => {
     e.addEventListener("click", () => {
@@ -81,7 +82,7 @@ _observacion.forEach((element) => {
                 "items-center",
                 "relative"
                 );
-        _modal.textContent = "Observación"; // Por medio de JSP muestra la cantidad de archivos y muestra los arvhivos
+        _modal.textContent = "Observación"; // Aquí puedes mostrar la observación
         _section.appendChild(_modal);
 
         // Botón de cierre
@@ -112,8 +113,7 @@ _observacion.forEach((element) => {
     });
 });
 
-
-// Modal para confirmar aceptar el post
+// Modal para confirmar la aceptación de un post
 const _aceptarDos = document.querySelectorAll("#eliminarPost");
 _aceptarDos.forEach((e) => {
     e.addEventListener("click", async () => {
@@ -164,13 +164,13 @@ _aceptarDos.forEach((e) => {
         _buttonContainer.appendChild(_buttonUpdate);
 
         _buttonUpdate.addEventListener("click", async () => {
-            // Aquí pega la el método para aceptar publicar el post
+            // Aquí pega el método para aceptar publicar el post
             let _idPost = e.getAttribute('data-id');
             let _idInstructor = document.getElementById("idInstructor").value;
             console.log(_idPost);
             let response = await fetch('/svEliminarPost', {
                 method: 'POST',
-                header: {
+                headers: { // Corrige 'header' a 'headers'
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
@@ -202,7 +202,7 @@ _aceptarDos.forEach((e) => {
     });
 });
 
-// Modal para confirmar aceptar el post
+// Modal para confirmar la publicación de un post
 const _aceptar = document.querySelectorAll("#aceptarPost");
 _aceptar.forEach((e) => {
     e.addEventListener("click", async () => {
@@ -253,14 +253,14 @@ _aceptar.forEach((e) => {
         _buttonContainer.appendChild(_buttonUpdate);
 
         _buttonUpdate.addEventListener("click", async () => {
-            // Aquí pega la el método para aceptar publicar el post
+            // Aquí pega el método para aceptar publicar el post
             let _idPost = e.getAttribute('data-id');
             let _idInstructor = document.getElementById("idInstructor").value;
             console.log(_idInstructor);
 
             let response = await fetch('/svEstadoPost', {
                 method: 'POST',
-                header: {
+                headers: { // Corrige 'header' a 'headers'
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
@@ -291,298 +291,3 @@ _aceptar.forEach((e) => {
 
     });
 });
-
-// Modal para rechazar el post
-const _rechazar = document.querySelectorAll("#rechazarPost");
-_rechazar.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        const _section = document.createElement("section");
-        _section.classList.add(
-                "flex",
-                "bg-[#1D1D1D60]",
-                "fixed",
-                "min-h-screen",
-                "w-full",
-                "justify-center",
-                "items-center",
-                "z-10"
-                );
-        document.body.appendChild(_section);
-
-        const _modal = document.createElement("div");
-        _modal.classList.add(
-                "bg-white",
-                "w-96",
-                "rounded-lg",
-                "p-5",
-                "text-center",
-                "flex",
-                "gap-2.5",
-                "flex-col",
-                "items-center",
-                "relative"
-                );
-        _modal.textContent = "¿Motivo del rechazo al post?";
-        _section.appendChild(_modal);
-
-        // Botón de cierre
-        const _closeBtn = document.createElement("button");
-        _closeBtn.classList.add(
-                "absolute",
-                "top-2",
-                "right-2",
-                "bg-red-500",
-                "text-white",
-                "rounded-full",
-                "w-6",
-                "h-6",
-                "flex",
-                "items-center",
-                "justify-center"
-                );
-        _closeBtn.textContent = "X";
-        _closeBtn.addEventListener("click", () => {
-            document.body.removeChild(_section);
-        });
-        _modal.appendChild(_closeBtn);
-
-        // Input para observaciones
-        const _inputObservacion = document.createElement("textarea");
-        _inputObservacion.classList.add(
-                "w-full",
-                "p-2",
-                "textarea",
-                "textarea-bordered",
-                "bg-white",
-                "text-black"
-                );
-        _inputObservacion.placeholder = "Escribe tu observación aquí...";
-        _modal.appendChild(_inputObservacion);
-
-        // Botón para enviar observación
-        const _submitBtn = document.createElement("button");
-        _submitBtn.classList.add(
-                "btn",
-                "bg-mdaGreen",
-                "border-none",
-                "text-white",
-                "hover:bg-mdaGreen",
-                "w-full"
-                );
-        _submitBtn.textContent = "Enviar Observación";
-        _submitBtn.addEventListener("click", async () => {
-            let observacion = _inputObservacion.value;
-            console.log("Observación enviada:", observacion);
-            // Brou aquí el método para la consulta
-
-            let _idPost = btn.getAttribute("data-id");
-            let _idInstructor = document.getElementById("idInstructor").value;
-            console.log(_idInstructor);
-            console.log(_idPost);
-
-            let request = await fetch("/svRechazarPost", {
-                method: "POST",
-                header: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    "txtIdPost": _idPost,
-                    "txtIdInstructor": _idInstructor,
-                    "txtObservacion": observacion
-                })
-            });
-
-            location.reload();
-
-            // Modificar el estado y agregar la observación
-            document.body.removeChild(_section);
-        });
-        _modal.appendChild(_submitBtn);
-
-        const _buttonContainer = document.createElement("div");
-        _modal.appendChild(_buttonContainer);
-    });
-});
-
-const _deshabilitar = document.querySelectorAll("#deshabilitarUser");
-_deshabilitar.forEach((btnFalse) => {
-    btnFalse.addEventListener("click", async () => {
-        const _section = document.createElement("section");
-        _section.classList.add(
-                "flex",
-                "bg-[#1D1D1D60]",
-                "fixed",
-                "min-h-screen",
-                "w-full",
-                "justify-center",
-                "items-center",
-                "z-10"
-                );
-        document.body.appendChild(_section);
-
-        const _modal = document.createElement("div");
-        _modal.classList.add(
-                "bg-white",
-                "w-96",
-                "rounded-lg",
-                "p-5",
-                "text-center",
-                "flex",
-                "gap-5",
-                "flex-col",
-                "items-center"
-                );
-        _modal.textContent = "¿Seguro que quieres deshabilitar el usuarios?";
-        _section.appendChild(_modal);
-
-        const _br = document.createElement("br");
-        _modal.appendChild(_br);
-
-        const _btnContainer = document.createElement("div");
-        _modal.appendChild(_btnContainer);
-
-        const _btnUpdate = document.createElement("button");
-        _btnUpdate.classList.add(
-                "btn",
-                "w-14",
-                "bg-mdaGreen",
-                "text-white",
-                "hover:bg-mdaGreen",
-                "border-none"
-                );
-        _btnUpdate.textContent = "Si";
-        _btnContainer.appendChild(_btnUpdate);
-
-        _btnUpdate.addEventListener("click", async () => {
-            let _idUser = btnFalse.getAttribute("data-id");
-            let _idAdmin = document.getElementById("idAdmin").value;
-
-            let request = await fetch("/svDeshabilitarUser", {
-                method: "POST",
-                header: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    "txtIdUser": _idUser,
-                    "txtIdAdmin": _idAdmin
-                })
-            })
-            location.reload();
-            document.body.removeChild(_section);
-        });
-
-        const _btnCerrar = document.createElement("button");
-        _btnCerrar.classList.add(
-                "btn",
-                "w-14",
-                "bg-mdaRed",
-                "text-white",
-                "hover:bg-mdaRed",
-                "border-none",
-                "ml-2"
-                );
-        _btnCerrar.textContent = "No";
-        _btnContainer.appendChild(_btnCerrar);
-
-        _btnCerrar.addEventListener("click", () => {
-            document.body.removeChild(_section);
-        })
-    });
-});
-
-const _habilitarUsers = document.querySelectorAll("#habilitarUser");
-_habilitarUsers.forEach((btnHabilitar) => {
-    btnHabilitar.addEventListener("click", async () => {
-        const _section = document.createElement("section");
-        _section.classList.add(
-                "flex",
-                "bg-[#1D1D1D60]",
-                "fixed",
-                "min-h-screen",
-                "w-full",
-                "justify-center",
-                "items-center",
-                "z-10"
-                );
-        document.body.appendChild(_section);
-
-        const _modal = document.createElement("div");
-        _modal.classList.add(
-                "bg-white",
-                "w-96",
-                "rounded-lg",
-                "p-5",
-                "text-center",
-                "flex",
-                "gap-5",
-                "flex-col",
-                "items-center"
-                );
-        _modal.textContent = "¿Seguro que quieres habilitar el usuarios?";
-        _section.appendChild(_modal);
-
-        const _br = document.createElement("br");
-        _modal.appendChild(_br);
-
-        const _btnContainer = document.createElement("div");
-        _modal.appendChild(_btnContainer);
-
-        const _btnUpdate = document.createElement("button");
-        _btnUpdate.classList.add(
-                "btn",
-                "w-14",
-                "bg-mdaGreen",
-                "text-white",
-                "hover:bg-mdaGreen",
-                "border-none"
-                );
-        _btnUpdate.textContent = "Si";
-        _btnContainer.appendChild(_btnUpdate);
-
-        _btnUpdate.addEventListener("click", async () => {
-            let _idUser = btnHabilitar.getAttribute("data-id");
-            let _idAdmin = document.getElementById("idAdmin").value;
-
-            let request = await fetch("/svHabilitarUser", {
-                method: "POST",
-                header: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    "txtIdUser": _idUser,
-                    "txtIdAdmin": _idAdmin
-                })
-            })
-            location.reload();
-            document.body.removeChild(_section);
-        });
-
-        const _btnCerrar = document.createElement("button");
-        _btnCerrar.classList.add(
-                "btn",
-                "w-14",
-                "bg-mdaRed",
-                "text-white",
-                "hover:bg-mdaRed",
-                "border-none",
-                "ml-2"
-                );
-        _btnCerrar.textContent = "No";
-        _btnContainer.appendChild(_btnCerrar);
-
-        _btnCerrar.addEventListener("click", () => {
-            document.body.removeChild(_section);
-        })
-    })
-})
-
-const _btnModificar = document.querySelectorAll("#btnModificar");
-_btnModificar.forEach((element) => {
-    element.addEventListener("click", () => {
-        document.getElementById('modalPost').classList.remove('hidden');
-    });
-});
-
-function closeModal() {
-    document.getElementById('modalPost').classList.add('hidden');
-}

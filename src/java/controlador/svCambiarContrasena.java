@@ -15,57 +15,64 @@ import modelo.UsuarioDao;
 import modelo.objetos.Usuario;
 
 /**
- * Servlet para manejar el cambio de contraseña del usuario.
+ * Servlet que maneja el cambio de contraseña del usuario.
+ * Responde a solicitudes POST para actualizar la contraseña del usuario autenticado.
  */
 @WebServlet(name = "svCambiarContrasena", urlPatterns = {"/svCambiarContrasena"})
 public class svCambiarContrasena extends HttpServlet {
 
-    // Instancia de UsuarioDao para manejar las operaciones de base de datos relacionadas con el usuario.
+    // Instancia de UsuarioDao para manejar las operaciones de base de datos relacionadas con los usuarios.
     UsuarioDao userDao = new UsuarioDao();
 
+    /**
+     * Maneja las solicitudes HTTP POST para cambiar la contraseña de un usuario.
+     * 
+     * @param request  El objeto HttpServletRequest que contiene la solicitud del cliente.
+     * @param response El objeto HttpServletResponse que contiene la respuesta que se enviará al cliente.
+     * @throws ServletException Si ocurre un error específico del servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Obtiene la sesión del usuario.
+        // Obtiene la sesión actual del usuario.
         HttpSession sesionUser = request.getSession();
         
-        // Configura la codificación de caracteres para evitar problemas con acentos y caracteres especiales.
+        // Configura la codificación de caracteres del request para manejar acentos y caracteres especiales.
         request.setCharacterEncoding("UTF-8");
 
-        // Obtiene la nueva contraseña y la confirmación de la nueva contraseña ingresadas por el usuario en el formulario.
+        // Obtiene la nueva contraseña y la confirmación de la nueva contraseña del formulario.
         String clave = request.getParameter("txtClave");
         String confirmarClave = request.getParameter("txtConfirmarClave");
 
-        // Recupera el objeto Usuario de la sesión.
+        // Recupera el objeto Usuario de la sesión, el cual contiene los datos del usuario autenticado.
         Usuario user = (Usuario) sesionUser.getAttribute("autenticacion");
         
-         // Depuracion para el usuario autenticado
+        // Imprime en la consola el correo del usuario autenticado para propósitos de depuración.
         System.out.println("Usuario: " + user.getCorreoInst());
 
-        // Verifica si la nueva contraseña y su confirmación coinciden.
+        // Verifica si la nueva contraseña y la confirmación coinciden.
         if (clave.equals(confirmarClave)) {
             
-            // Encripta la nueva contraseña.
+            // Encripta la nueva contraseña antes de guardarla en la base de datos.
             String encript = EncriptarContraseña.encriptar(confirmarClave);
             
-            // Manejo de errores
             try {
-                
-                // Mensaje de confirmación en consola.
+                // Imprime en la consola que las contraseñas coinciden.
                 System.out.println("Las contraseñas coinciden");
                 
                 // Cambia la contraseña del usuario en la base de datos.
                 userDao.cambiarContrasena(userDao.obtenerId(user.getCorreoInst()), encript);
                 
-                // Redirige al usuario a la página de inicio de sesión.
+                // Redirige al usuario a la página de inicio de sesión tras cambiar la contraseña.
                 response.sendRedirect("login.jsp");
             } catch (SQLException ex) {
-                // Manejo de excepciones de SQL.
+                // Maneja cualquier excepción de SQL y la registra en el log.
                 Logger.getLogger(svCambiarContrasena.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            // Mensaje de error en consola si las contraseñas no coinciden.
+            // Imprime en la consola que las contraseñas no coinciden si hay un error.
             System.out.println("Las contraseñas no coinciden");
         }
     }

@@ -6,126 +6,126 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import modelo.objetos.Perfil;
-import modelo.objetos.Usuario;
 import modelo.objetos.Post;
+import modelo.objetos.Usuario;
 
 /**
- * Clase DAO para operaciones relacionadas con los monitores.
+ * Clase DAO para realizar operaciones relacionadas con los monitores en la base de datos.
+ * Hereda de la clase {@link Conexion} para manejar la conexión a la base de datos.
  */
 public class MonitorDAO extends Conexion {
 
-    // Metodo para obtner la lista de los monitores que asigno dicho instructor
+    /**
+     * Obtiene la lista de perfiles de monitores asignados a un instructor específico.
+     * 
+     * @param idInstructor El ID del instructor al que se le han asignado los monitores.
+     * @return Una lista de perfiles de monitores asignados al instructor.
+     */
     public List<Perfil> obtenerMonitores(String idInstructor) {
-        List<Perfil> monitores = new ArrayList<>(); // Instancia de un nuevo ArrayList
-        PreparedStatement ps = null; // Variable para el manejo de la consulta SQL
-        ResultSet rs = null; // Variable para obtener lo que retorna la consulta SQL
+        List<Perfil> monitores = new ArrayList<>(); // Lista para almacenar los perfiles de los monitores
+        PreparedStatement ps = null; // Variable para la sentencia SQL
+        ResultSet rs = null; // Variable para el resultado de la consulta SQL
         try {
-            this.conectar(); // Método para conectar con la base de datos
-            String sql = "SELECT * FROM tb_perfil INNER JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario WHERE tb_usuarios.id_rol_fk = 3 AND id_instructor_asig = ?"; // Consulta para obtener todos los usuarios que tengan el rol de monitor
-            ps = getCon().prepareStatement(sql); // Preparar la consulta SQL
-            ps.setString(1, idInstructor);
-            rs = ps.executeQuery(); // Ejecutar la consulta SQL
+            this.conectar(); // Conecta a la base de datos
 
-            // Realizar bucle para que retorne aprendiz por aprendiz que cumpla con la consulta SQL
+            // Consulta SQL para obtener monitores asignados al instructor con rol de monitor
+            String sql = "SELECT * FROM tb_perfil " +
+                         "INNER JOIN tb_usuarios ON tb_perfil.id_usuario_fk = tb_usuarios.id_usuario " +
+                         "WHERE tb_usuarios.id_rol_fk = 3 AND id_instructor_asig = ?";
+            ps = getCon().prepareStatement(sql); // Prepara la sentencia SQL
+            ps.setString(1, idInstructor); // Asigna el ID del instructor a la consulta SQL
+            rs = ps.executeQuery(); // Ejecuta la consulta SQL
+
+            // Procesa los resultados de la consulta
             while (rs.next()) {
-                System.out.println("SE ESTAN GENERANDO LOS MONITORES, UN MOMENTO");
-                Perfil perfil = new Perfil(); // Instancia de un nuevo perfil
+                Perfil perfil = new Perfil(); // Crea una nueva instancia de Perfil
 
-                // Seteo de perfil para agregarlo al ArrayList
+                // Asigna valores a los atributos del perfil desde el ResultSet
                 perfil.setId_perfil(rs.getInt("id_perfil"));
                 perfil.setNombre_usuario(rs.getString("nombre_usuario"));
                 perfil.setApellido_usuario(rs.getString("apellido_usuario"));
                 perfil.setCentro_formacion(rs.getString("centro_formacion"));
                 perfil.setNum_documento(rs.getString("num_documento"));
-                perfil.setId_usuario_fk(new Usuario()); // Puede ser mejorado si necesitas más información del usuario
+                perfil.setId_usuario_fk(new Usuario()); // Se puede mejorar si se requiere información adicional del usuario
 
-                monitores.add(perfil);
+                monitores.add(perfil); // Agrega el perfil a la lista de monitores
             }
         } catch (Exception e) {
-            System.out.println("ERROR OBTENIENDO LOS DATOS DE LOS MONITORES: " + e.getMessage());
+            System.out.println("Error obteniendo los datos de los monitores: " + e.getMessage());
         } finally {
-            this.desconectar();
+            this.desconectar(); // Desconecta de la base de datos
         }
-        return monitores;
+        return monitores; // Devuelve la lista de monitores
     }
 
-    // Metodo para eliminar el rol monitor de dicho usuario
+    /**
+     * Elimina el rol de monitor de un usuario específico.
+     * 
+     * @param idUser El ID del usuario cuyo rol de monitor se desea eliminar.
+     * @return true si la operación fue exitosa, false en caso contrario.
+     */
     public boolean eliminarMonitor(String idUser) {
-        // Manejo de estado para saber si se modificó o no el rol del aprendiz
-        boolean modificacion = false; 
-        // Variable para la consulta SQL
-        PreparedStatement ps = null; 
+        boolean modificacion = false; // Estado de la operación de modificación
+        PreparedStatement ps = null; // Variable para la sentencia SQL
         
         try {
-            // Método para conectar a la base de datos
-            this.conectar();
+            this.conectar(); // Conecta a la base de datos
             
-            // Consulta SQL para actualizar el rol del usuario
-            String sql = "UPDATE tb_usuarios\n" +
-                        "SET id_rol_fk = 1, id_instructor_asig = null\n" +
-                        "WHERE id_usuario = (SELECT id_usuario_fk FROM tb_perfil WHERE id_perfil = ?);"; 
+            // Consulta SQL para actualizar el rol del usuario a 'aprendiz' y eliminar la asignación del instructor
+            String sql = "UPDATE tb_usuarios " +
+                         "SET id_rol_fk = 1, id_instructor_asig = NULL " +
+                         "WHERE id_usuario = (SELECT id_usuario_fk FROM tb_perfil WHERE id_perfil = ?)";
+            ps = getCon().prepareStatement(sql); // Prepara la sentencia SQL
+            ps.setString(1, idUser); // Asigna el ID del usuario a la consulta SQL
             
-            // Preparar la consulta para ejecutar en el gestor de base de datos
-            ps = getCon().prepareStatement(sql); 
+            // Ejecuta la consulta SQL de actualización
+            int modificado = ps.executeUpdate();
             
-            // Pasarle el parámetro que es el ID del usuario
-            ps.setString(1, idUser); 
-            
-            // Ejecutar la consulta, devuelve un entero
-            int modificado = ps.executeUpdate(); 
-
-            // Si lo que ha sido modificado es mayor a 0 entonces ejecuta lo siguiente
+            // Verifica si la actualización afectó alguna fila
             if (modificado > 0) {
-                // Cambia el estado a true, es decir que modificó el usuario
-                modificacion = true; 
+                modificacion = true; // La operación fue exitosa
             } else {
-                
-                // Depuracion de la modificacion del rol por si salio algun error
-                System.out.println("NO SE PUDO REALIZAR LA MODIFICACION DE ROL: " + idUser);
+                System.out.println("No se pudo realizar la modificación del rol: " + idUser);
             }
         } catch (Exception e) {
-            // Depuracion por si ocurre un error
-            System.out.println("ERROR QUITANDO EL ROL MONITOR: " + e.getMessage());
+            System.out.println("Error quitando el rol monitor: " + e.getMessage());
         } finally {
-            // Metodo para deconectar de la base de datos
-            this.desconectar();
+            this.desconectar(); // Desconecta de la base de datos
         }
-        // Retorna el boolean
-        return modificacion;
+        return modificacion; // Devuelve el estado de la operación
     }
     
-    // Metodo para listar los post por id de monitor
-    public List<Post> listaPostMonitor(int idMonitor){
+    /**
+     * Lista los posts publicados por un monitor específico.
+     * 
+     * @param idMonitor El ID del monitor cuyos posts se desean listar.
+     * @return Una lista de posts publicados por el monitor.
+     */
+    public List<Post> listaPostMonitor(int idMonitor) {
+        List<Post> postsMonitor = new ArrayList<>(); // Lista para almacenar los posts del monitor
+        PreparedStatement ps = null; // Variable para la sentencia SQL
+        ResultSet rs = null; // Variable para el resultado de la consulta SQL
         
-        // Retornara una lista de posts, los cuales son los que ha subido el monitor
-        List<Post> postsMonitor = new ArrayList<>();
-        
-        // Variable para el manejo de las consultas
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        
-        // Manejo de errores
         try {
-            // Metodo para conectar con la base de datos
-            this.conectar();
+            this.conectar(); // Conecta a la base de datos
             
-            // Consutla sql para obtener los datos necesarios
-            String sql = "SELECT p.id_post, p.titulo_post, p.estado, p.validacion, p.observacion, p.fecha_post, COUNT(a.id_archivo) as cantidadArchivos, CONCAT(pe.nombre_usuario, \" \", pe.apellido_usuario) as nombreCompleto FROM tb_post p JOIN tb_archivo a ON p.id_post = a.id_post_fk JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk WHERE p.id_usuario_fk = ? GROUP BY id_post";
+            // Consulta SQL para obtener los posts del monitor y contar el número de archivos asociados a cada post
+            String sql = "SELECT p.id_post, p.titulo_post, p.estado, p.validacion, p.observacion, p.fecha_post, " +
+                         "COUNT(a.id_archivo) AS cantidadArchivos, CONCAT(pe.nombre_usuario, ' ', pe.apellido_usuario) AS nombreCompleto " +
+                         "FROM tb_post p " +
+                         "JOIN tb_archivo a ON p.id_post = a.id_post_fk " +
+                         "JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario " +
+                         "JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk " +
+                         "WHERE p.id_usuario_fk = ? " +
+                         "GROUP BY id_post";
+            ps = getCon().prepareStatement(sql); // Prepara la sentencia SQL
+            ps.setInt(1, idMonitor); // Asigna el ID del monitor a la consulta SQL
             
-            // Preparar la conexion con la consulta sql
-            ps = getCon().prepareStatement(sql);
+            rs = ps.executeQuery(); // Ejecuta la consulta SQL
             
-            // Se setea el id del monitor en la primea columna para que se cumpla la consulta
-            ps.setInt(1, idMonitor);
-            
-            // Ejecutar la consulta
-            rs = ps.executeQuery();
-            
-            // Si se encuentran posts de ese monitor
-            while(rs.next()){
-                
-                // Se instancia un nuevo objeto post, y lo agregara en un arreglo
-                Post post = new Post();
+            // Procesa los resultados de la consulta
+            while (rs.next()) {
+                Post post = new Post(); // Crea una nueva instancia de Post
                 post.setId(rs.getInt("id_post"));
                 post.setIdUsuarioFk(idMonitor);
                 post.setTitulo(rs.getString("titulo_post"));
@@ -135,17 +135,14 @@ public class MonitorDAO extends Conexion {
                 post.setEstado(rs.getBoolean("estado"));
                 post.setContador(rs.getInt("cantidadArchivos"));
                 post.setFechaPost(rs.getTimestamp("fecha_post"));
-                
-                // Agregar el posts al arreglo
-                postsMonitor.add(post);
+
+                postsMonitor.add(post); // Agrega el post a la lista de posts del monitor
             }
         } catch (Exception e) {
-            System.out.println("ERROR OBTENIENDO LOS POSTS DEL MONITOR: " + e.getMessage());
+            System.out.println("Error obteniendo los posts del monitor: " + e.getMessage());
         } finally {
-            // Metodo para desconectar la base de datos
-            this.desconectar();
+            this.desconectar(); // Desconecta de la base de datos
         }
-        // Retorna la lista de los post de dicho monitor
-        return  postsMonitor;
+        return postsMonitor; // Devuelve la lista de posts del monitor
     }
 }

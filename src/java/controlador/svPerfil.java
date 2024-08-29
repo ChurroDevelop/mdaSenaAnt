@@ -1,7 +1,6 @@
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +20,14 @@ public class svPerfil extends HttpServlet {
 
     private final PerfilDAO perfilDao = new PerfilDAO();  // DAO para operaciones CRUD relacionadas con perfiles
 
+    /**
+     * Procesa la solicitud POST para registrar o actualizar el perfil del usuario.
+     * 
+     * @param request La solicitud HTTP del cliente.
+     * @param response La respuesta HTTP al cliente.
+     * @throws ServletException Si ocurre un error en el procesamiento del servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

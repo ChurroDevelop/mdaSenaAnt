@@ -1,7 +1,6 @@
 package controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,33 +12,42 @@ import modelo.MonitorDAO;
 import modelo.PostDAO;
 import modelo.objetos.Post;
 
+/**
+ * Servlet para listar los posts asociados a un monitor específico.
+ * Este servlet maneja la solicitud para obtener la lista de posts asociados a un monitor particular. Recupera el ID del
+ * monitor desde la solicitud POST, obtiene la lista de posts desde la base de datos, guarda esta lista en la sesión
+ * y redirige a la vista de administración de posts.
+ */
 @WebServlet(name = "svListarPostsMonitor", urlPatterns = {"/svListarPostsMonitor"})
 public class svListarPostsMonitor extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
-
+    /**
+     * Maneja las solicitudes HTTP POST para listar los posts de un monitor.
+     * 
+     * @param request La solicitud HTTP del cliente, que contiene el parámetro "txtIdMonitor".
+     * @param response La respuesta HTTP al cliente.
+     * @throws ServletException Si ocurre un error durante el manejo de la solicitud.
+     * @throws IOException Si ocurre un error al leer o escribir datos.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Atrapar sesion
+        // Obtiene la sesión actual
         HttpSession sesion = request.getSession();
         
-        // Atrapar el id del instructor para listar esos posts
-        int id = Integer.parseInt(request.getParameter("txtIdMonitor")) ;
+        // Recupera el ID del monitor desde la solicitud y lo convierte a entero
+        int id = Integer.parseInt(request.getParameter("txtIdMonitor"));
         
-        // Instancia de un MonitorDao
+        // Instancia de un MonitorDAO para manejar la base de datos de monitores
         MonitorDAO mDao = new MonitorDAO();
         
-        // Lista de los post de ese instructor
+        // Obtiene la lista de posts asociados al monitor con el ID proporcionado
         List<Post> posts = mDao.listaPostMonitor(id);
         
-        // Sobre escribir la sesion que tiene como valor los post de dicho monitr
+        // Guarda la lista de posts en la sesión para que esté disponible en la vista
         sesion.setAttribute("listaPostsMonitor", posts);
         
-        // Redirije a la vista de administrar post por parte del monitor
+        // Redirige a la vista de administración de posts para mostrar los resultados
         response.sendRedirect("administrarPost.jsp");
     }
 }

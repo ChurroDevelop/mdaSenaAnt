@@ -10,24 +10,27 @@ import modelo.objetos.Usuario;
 
 public class AdminDAO extends Conexion {
 
-    // Metodo para listar los post
+    /**
+     * Obtiene una lista de todos los posts desde la base de datos.
+     * 
+     * @return Una lista de objetos {@link Post} con la información de los posts.
+     */
     public List<Post> listarTodosLosPosts() {
 
-        // Retornara una lista de posts
+        // Lista que almacenará todos los posts recuperados de la base de datos
         List<Post> allPosts = new ArrayList<>();
 
-        // Variable para el manejo de las consultas
+        // Declaración de variables para el manejo de consultas SQL
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        // Manejo de errores
         try {
-            // Metodo para conectar con la base de datos
+            // Establece la conexión con la base de datos
             this.conectar();
 
-            // Consutla sql para obtener los datos necesarios
+            // Consulta SQL para obtener todos los posts junto con información adicional
             String sql = "SELECT \n"
-                    + "	p.id_post,\n"
+                    + "    p.id_post,\n"
                     + "    p.observacion,\n"
                     + "    p.fecha_post,\n"
                     + "    CONCAT(per.nombre_usuario, ' ', per.apellido_usuario) AS nombreCompleto,\n"
@@ -50,16 +53,17 @@ public class AdminDAO extends Conexion {
                     + "    tb_perfil pi ON ui.id_usuario = pi.id_usuario_fk\n"
                     + "GROUP BY \n"
                     + "    p.id_post, p.fecha_post, p.titulo_post, nombreCompleto, nombre_instructor_asignado, p.estado, p.validacion;";
-            // Preparar la conexion con la consulta sql
+            
+            // Prepara la consulta SQL
             ps = getCon().prepareStatement(sql);
 
-            // Ejecutar la consulta
+            // Ejecuta la consulta y obtiene el resultado
             rs = ps.executeQuery();
 
-            // Si se encuentran posts de ese monitor
+            // Procesa cada fila del resultado
             while (rs.next()) {
 
-                // Se instancia un nuevo objeto post, y lo agregara en un arreglo
+                // Crea una nueva instancia de Post y asigna sus atributos
                 Post post = new Post();
                 post.setId(rs.getInt("id_post"));
                 post.setTitulo(rs.getString("titulo_post"));
@@ -71,99 +75,142 @@ public class AdminDAO extends Conexion {
                 post.setFechaPost(rs.getTimestamp("fecha_post"));
                 post.setNombreInstructor(rs.getString("nombre_instructor_asignado"));
 
-                // Agregar el posts al arreglo
+                // Agrega el objeto Post a la lista
                 allPosts.add(post);
             }
         } catch (Exception e) {
-            System.out.println("ERROR LOS POSTS: " + e.getMessage());
+            // Manejo de errores en caso de excepción
+            System.out.println("ERROR AL LISTAR POSTS: " + e.getMessage());
         } finally {
-            // Metodo para desconectar la base de datos
+            // Cierra la conexión con la base de datos
             this.desconectar();
         }
-        // Retorna la lista de los post de dicho monitor
+
+        // Retorna la lista de posts
         return allPosts;
     }
 
+    /**
+     * Obtiene una lista de usuarios desde la base de datos, excluyendo los administradores.
+     * 
+     * @return Una lista de objetos {@link Usuario} con la información de los usuarios.
+     */
     public List<Usuario> listaUsuarios() {
+        // Lista que almacenará todos los usuarios recuperados de la base de datos
         List<Usuario> allUsers = new ArrayList<>();
 
+        // Declaración de variables para el manejo de consultas SQL
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
+            // Establece la conexión con la base de datos
             this.conectar();
-            String sql = "SELECT u.id_usuario ,CONCAT(p.nombre_usuario, \" \", p.apellido_usuario) as nombreCompleto, u.estado_usuario, r.nombre_rol FROM tb_usuarios u\n"
-                    + "JOIN tb_perfil p ON u.id_usuario = p.id_usuario_fk\n"
-                    + "JOIN tb_rol r ON r.id_rol = u.id_rol_fk\n"
-                    + "WHERE r.nombre_rol != \"Administrador\"";
-            ps = getCon().prepareStatement(sql);
-            rs = ps.executeQuery();
+
+            // Consulta SQL para obtener la información de los usuarios excluyendo administradores
+            String sql = "SELECT u.id_usuario, CONCAT(p.nombre_usuario, ' ', p.apellido_usuario) AS nombreCompleto, u.estado_usuario, r.nombre_rol "
+                    + "FROM tb_usuarios u "
+                    + "JOIN tb_perfil p ON u.id_usuario = p.id_usuario_fk "
+                    + "JOIN tb_rol r ON r.id_rol = u.id_rol_fk "
+                    + "WHERE r.nombre_rol != 'Administrador'";
             
+            // Prepara la consulta SQL
+            ps = getCon().prepareStatement(sql);
+
+            // Ejecuta la consulta y obtiene el resultado
+            rs = ps.executeQuery();
+
+            // Procesa cada fila del resultado
             while (rs.next()) {                
+                // Crea una nueva instancia de Usuario y asigna sus atributos
                 Usuario user = new Usuario();
-                
-                int idUser = rs.getInt("id_usuario");
-                String nombreUser = rs.getString("nombreCompleto");
-                String nombreRol = rs.getString("nombre_rol");
-                Boolean estadoUser = rs.getBoolean("estado_usuario");
-                
-                user.setId_usuario(idUser);
-                user.setNombreUser(nombreUser);
-                user.setNombreRol(nombreRol);
-                user.setEstadoUser(estadoUser);
-                
+                user.setId_usuario(rs.getInt("id_usuario"));
+                user.setNombreUser(rs.getString("nombreCompleto"));
+                user.setNombreRol(rs.getString("nombre_rol"));
+                user.setEstadoUser(rs.getBoolean("estado_usuario"));
+
+                // Agrega el objeto Usuario a la lista
                 allUsers.add(user);
-                
             }
         } catch (Exception e) {
-            System.out.println("Error agregando usuarios en la lista: " + e.getMessage());
+            // Manejo de errores en caso de excepción
+            System.out.println("ERROR AL LISTAR USUARIOS: " + e.getMessage());
         } finally {
+            // Cierra la conexión con la base de datos
             this.desconectar();
         }
 
+        // Retorna la lista de usuarios
         return allUsers;
     }
     
+    /**
+     * Deshabilita un usuario basado en su ID.
+     * 
+     * @param idUser El ID del usuario a deshabilitar.
+     * @return {@code true} si la operación fue exitosa, {@code false} en caso contrario.
+     */
     public boolean modificarEstado(String idUser) {
-        Boolean estado = false;
+        boolean estado = false;
         PreparedStatement ps = null;
+
         try {
+            // Establece la conexión con la base de datos
             this.conectar();
+
+            // Consulta SQL para deshabilitar al usuario
             String sql = "UPDATE tb_usuarios SET estado_usuario = 0 WHERE id_usuario = ?";
             ps = getCon().prepareStatement(sql);
             ps.setString(1, idUser);
-            int x = ps.executeUpdate();
-            
-            if (x > 0) {
+            int rowsAffected = ps.executeUpdate();
+
+            // Verifica si la operación fue exitosa
+            if (rowsAffected > 0) {
                 estado = true;
             }
         } catch (Exception e) {
-            System.out.println("Error al deshabilitar el usuario: " + e.getMessage());
+            // Manejo de errores en caso de excepción
+            System.out.println("ERROR AL DESHABILITAR USUARIO: " + e.getMessage());
         } finally {
+            // Cierra la conexión con la base de datos
             this.desconectar();
         }
+
         return estado;
     }
     
-    public boolean estadoActivo(String idUser){
+    /**
+     * Habilita un usuario basado en su ID.
+     * 
+     * @param idUser El ID del usuario a habilitar.
+     * @return {@code true} si la operación fue exitosa, {@code false} en caso contrario.
+     */
+    public boolean estadoActivo(String idUser) {
         boolean estado = false;
         PreparedStatement ps = null;
+
         try {
+            // Establece la conexión con la base de datos
             this.conectar();
+
+            // Consulta SQL para habilitar al usuario
             String sql = "UPDATE tb_usuarios SET estado_usuario = 1 WHERE id_usuario = ?";
             ps = getCon().prepareStatement(sql);
             ps.setString(1, idUser);
-            int x = ps.executeUpdate();
-            
-            if (x > 0) {
+            int rowsAffected = ps.executeUpdate();
+
+            // Verifica si la operación fue exitosa
+            if (rowsAffected > 0) {
                 estado = true;
             }
         } catch (Exception e) {
-            System.out.println("Error al activa el usuario: " + e.getMessage());
+            // Manejo de errores en caso de excepción
+            System.out.println("ERROR AL HABILITAR USUARIO: " + e.getMessage());
         } finally {
+            // Cierra la conexión con la base de datos
             this.desconectar();
         }
+
         return estado;
     }
-
 }

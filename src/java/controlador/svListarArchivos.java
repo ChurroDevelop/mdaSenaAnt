@@ -15,40 +15,54 @@ import java.util.logging.Logger;
 import modelo.ArchivoDAO;
 import modelo.objetos.Archivo;
 
+/**
+ * Servlet para listar archivos asociados a un post específico.
+ * Este servlet maneja la solicitud para listar los archivos relacionados con un post. Recibe el ID del post a través
+ * de una solicitud POST, obtiene la lista de archivos asociados a dicho post desde la base de datos y envía la lista
+ * en formato JSON como respuesta.
+ */
 @WebServlet("/svListarArchivos")
 public class svListarArchivos extends HttpServlet {
 
+    /**
+     * Maneja las solicitudes HTTP POST para listar archivos asociados a un post.
+     * 
+     * @param request La solicitud HTTP del cliente, que contiene el parámetro "txtIdPost".
+     * @param response La respuesta HTTP al cliente.
+     * @throws ServletException Si ocurre un error durante el manejo de la solicitud.
+     * @throws IOException Si ocurre un error al leer o escribir datos.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Atrapar el id del post y parsearlo a entero
+        // Captura el ID del post y lo convierte a entero
         int idPost = Integer.parseInt(request.getParameter("txtIdPost"));
 
-        // Instancia de un nuevo archivoDao para listar los archivos de dicho post
+        // Instancia de un ArchivoDAO para listar los archivos de dicho post
         ArchivoDAO aDao = new ArchivoDAO();
         
-        // Nuevo arreglo de archivos con valor inicial de null
+        // Lista de archivos con valor inicial nulo
         List<Archivo> listaArchivos = null;
         
         // Manejo de errores
         try {
-            // Se le asigna al arreglo los archivos que contengan el id capturado
+            // Asigna a la lista los archivos asociados al ID del post capturado
             listaArchivos = aDao.listarArchivosPorPostId(idPost);
         } catch (SQLException ex) {
-            // Erro por si algo sale malen al consulta SQL
+            // Registro de errores en caso de fallo en la consulta SQL
             Logger.getLogger(svListarArchivos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // Convertir la lista de archivos a JSON y enviarla como respuesta
+        // Convierte la lista de archivos a JSON y la envía como respuesta
         String json = new Gson().toJson(listaArchivos);
         
-        // Tipo de dato que sera visible al cliente
+        // Configura el tipo de contenido que será visible al cliente
         response.setContentType("application/json");
     
-        // Cotejamiento de la respuesta
+        // Configura la codificación de la respuesta
         response.setCharacterEncoding("UTF-8");
         
-        // Pintar los datos en la vista
+        // Escribe los datos JSON en la respuesta
         PrintWriter out = response.getWriter();
         out.print(json);
         out.flush();

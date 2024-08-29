@@ -19,8 +19,7 @@ import modelo.UsuarioDao;
 import modelo.objetos.Usuario;
 
 /**
- * Servlet para manejar el registro de usuarios enviando un código de
- * verificación por correo electrónico.
+ * Servlet para manejar el registro de usuarios enviando un código de verificación por correo electrónico.
  */
 @WebServlet(name = "svCodigo", urlPatterns = {"/svCodigo"})
 public class svCodigo extends HttpServlet {
@@ -30,6 +29,15 @@ public class svCodigo extends HttpServlet {
     UsuarioDao userDao = new UsuarioDao();
     EnviarCodigo mensaje = new EnviarCodigo();
 
+    /**
+     * Método que maneja las solicitudes HTTP POST para el registro de usuarios.
+     * Envía un código de verificación al correo del usuario si la validación es exitosa.
+     *
+     * @param request  El objeto HttpServletRequest que contiene la solicitud del cliente.
+     * @param response El objeto HttpServletResponse que contiene la respuesta que se enviará al cliente.
+     * @throws ServletException Si ocurre un error específico del servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,7 +48,7 @@ public class svCodigo extends HttpServlet {
         // Configura la codificación de caracteres para evitar problemas con acentos y caracteres especiales
         request.setCharacterEncoding("UTF-8");
 
-        // Obtiene los datos ingresados por el usuario en el formulario, como correo, clave y la confirmacion de la clave
+        // Obtiene los datos ingresados por el usuario en el formulario, como correo, clave y la confirmación de la clave
         String correo = request.getParameter("txtCorreo");
         String clave = request.getParameter("txtPass");
         String confirm = request.getParameter("txtConfirm");
@@ -72,59 +80,58 @@ public class svCodigo extends HttpServlet {
             // Encripta la contraseña
             String encript = EncriptarContraseña.encriptar(clave);
 
-            // Se setean los datos a los atributos de la nueva instancia del objeto
+            // Setea los datos a los atributos de la nueva instancia del objeto Usuario
             user.setCorreoInst(correo);
             user.setPassword(encript);
             user.setCodigo(codigo);
             
-            // Depuracion del codigo de verificacion por si algo falla
+            // Depuración del código de verificación por si algo falla
             System.out.println(codigo);
 
             // Verifica si el usuario ya existe en la base de datos
             boolean encontrado = userDao.buscarUser(user);
 
-            // Manejo de errores
             try {
                 if (!encontrado) {
                     
                     // Verifica si el correo cumple con el patrón de aprendiz
                     if (mAprendiz.matches()) {
                         
-                        // Envia el mensaje via outlook
+                        // Envía el mensaje de verificación por correo electrónico
                         mensaje.enviarEmail(user);
                         
-                        // Se setea una nueva sesion para tomarala en las vistas
+                        // Setea una nueva sesión para utilizarla en las vistas
                         sesion.setAttribute("autenticacion", user);
                         
-                        // Devuelve al cliente
+                        // Devuelve al cliente una respuesta indicando éxito
                         out.print("success");
                         
-                        // Verifica si el correo cumple con el patrón de instructor
+                    // Verifica si el correo cumple con el patrón de instructor
                     } else if (mInstructor.matches()) {
                         
-                        // Envia el mensaje via outlook
+                        // Envía el mensaje de verificación por correo electrónico
                         mensaje.enviarEmail(user);
                         
-                        // Se setea una nueva sesion para tomarla en las vistas
+                        // Setea una nueva sesión para utilizarla en las vistas
                         sesion.setAttribute("autenticacion", user);
                         
-                        // Devuelve al cliente
+                        // Devuelve al cliente una respuesta indicando éxito
                         out.print("success");
                         
-                        // Si el correo no cumple con ningún patrón
+                    // Si el correo no cumple con ningún patrón
                     } else {
                         out.print("invalid_email");
                     }
-                    // Si el usuario ya existe en la base de datos
+                // Si el usuario ya existe en la base de datos
                 } else {
                     out.print("email_exists");
                 }
-                // Maneja excepciones de dirección de correo inválida
+            // Maneja excepciones de dirección de correo inválida
             } catch (AddressException ex) {
                 Logger.getLogger(svCodigo.class.getName()).log(Level.SEVERE, null, ex);
                 out.print("error");
             }
-            // Si las contraseñas no coinciden
+        // Si las contraseñas no coinciden
         } else {
             out.print("password_mismatch");
         }

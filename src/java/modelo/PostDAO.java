@@ -11,13 +11,19 @@ import java.util.List;
 import modelo.objetos.Post;
 
 /**
- * Clase que gestiona las operaciones relacionadas con la tabla 'tb_post' en la
- * base de datos. Hereda de la clase Conexion para manejar la conexión a la base
- * de datos.
+ * Data Access Object (DAO) para las operaciones relacionadas con la tabla 'tb_post' en la base de datos.
+ * Esta clase hereda de {@link Conexion} para gestionar la conexión a la base de datos y proporciona métodos
+ * para crear, listar, modificar, agregar observaciones, deshabilitar y eliminar posts.
  */
 public class PostDAO extends Conexion {
 
-    // Metodo para crear el post
+    /**
+     * Crea un nuevo post en la base de datos.
+     * 
+     * @param post El objeto {@link Post} que contiene la información del nuevo post.
+     * @return El ID del nuevo post creado. Retorna 0 si ocurre un error.
+     * @throws SQLException Si ocurre un error durante la operación de base de datos.
+     */
     public int crearPost(Post post) throws SQLException {
         int idPost = 0;  // Variable para almacenar el ID del post creado
         PreparedStatement ps = null;  // Preparación de la sentencia SQL
@@ -55,7 +61,12 @@ public class PostDAO extends Conexion {
         return idPost;  // Retornar el ID del post creado (0 si ocurrió un error)
     }
 
-    // metodo para listar todos los post de la base de datos
+    /**
+     * Lista todos los posts activos en la base de datos.
+     * 
+     * @return Una lista de objetos {@link Post} que representan los posts activos.
+     * @throws SQLException Si ocurre un error durante la operación de base de datos.
+     */
     public List<Post> listarPosts() throws SQLException {
         List<Post> posts = new ArrayList<>();  // Lista para almacenar los posts activos
         PreparedStatement ps = null;  // Preparación de la sentencia SQL
@@ -98,19 +109,34 @@ public class PostDAO extends Conexion {
         return posts;  // Retornar la lista de posts activos
     }
 
-    // Metodo para listar los posts de los monitores que asigno el instructor
+    /**
+     * Lista los posts asignados por un instructor a un monitor específico.
+     * 
+     * @param idInstructor El ID del instructor cuyo posts queremos listar.
+     * @return Una lista de objetos {@link Post} asignados por el instructor.
+     */
     public List<Post> listarPostsUser(String idInstructor) {
         List<Post> posts = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             this.conectar();
-            String sql = "SELECT p.id_post ,p.fecha_post as fecha ,CONCAT(pe.nombre_usuario, \" \", pe.apellido_usuario) as nombreCompleto, p.titulo_post, COUNT(a.id_archivo) AS cantidadArchivos, p.estado, p.validacion, p.observacion FROM tb_post p JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk JOIN tb_archivo a ON a.id_post_fk = p.id_post WHERE u.id_instructor_asig = ? GROUP BY p.titulo_post";
+            // SQL para seleccionar los posts asignados por el instructor junto con información adicional
+            String sql = "SELECT p.id_post, p.fecha_post AS fecha, CONCAT(pe.nombre_usuario, ' ', pe.apellido_usuario) AS nombreCompleto, p.titulo_post, COUNT(a.id_archivo) AS cantidadArchivos, p.estado, p.validacion, p.observacion " +
+                         "FROM tb_post p " +
+                         "JOIN tb_usuarios u ON p.id_usuario_fk = u.id_usuario " +
+                         "JOIN tb_perfil pe ON u.id_usuario = pe.id_usuario_fk " +
+                         "JOIN tb_archivo a ON a.id_post_fk = p.id_post " +
+                         "WHERE u.id_instructor_asig = ? " +
+                         "GROUP BY p.titulo_post";
+
+            // Preparar y ejecutar la sentencia SQL
             ps = getCon().prepareStatement(sql);
             ps.setString(1, idInstructor);
             rs = ps.executeQuery();
+
+            // Procesar los resultados
             while (rs.next()) {           
-                System.out.println("AGREGANDO UN NUEVO POST AL ARREGLO");
                 Timestamp a = rs.getTimestamp("fecha");
                 Post postIns = new Post();
                 postIns.setId(rs.getInt("id_post"));
@@ -124,133 +150,123 @@ public class PostDAO extends Conexion {
                 posts.add(postIns);
             }
         } catch (Exception e) {
-            System.out.println("ERROR LISTANDO LOS POSTS: " + e.getMessage());
+            System.out.println("Error listando los posts: " + e.getMessage());
         } finally {
             this.desconectar();
         }
         return posts;
     }
     
-    // Metodo para modificar la visualizacion del post
+    /**
+     * Modifica el estado de un post a 'activo' y establece la validación como 'verdadera'.
+     * 
+     * @param idPost El ID del post a modificar.
+     * @return {@code true} si la operación fue exitosa, {@code false} en caso contrario.
+     */
     public boolean modificarEstado(int idPost) {
-        // Manejo de estado para saber si se modifico o no
         boolean estado = false;
-        
-        // Variable para el manejo de las consultas SQL
         PreparedStatement ps = null;
         
         try {
-            // Metodo para conectar la base de datos
             this.conectar();
             
-            // Update SQL para modificar el estaod del post y la validacion del post
-            String sql = "UPDATE tb_post set validacion = true, estado = true WHERE id_post = ?";
+            // SQL para actualizar el estado y la validación del post
+            String sql = "UPDATE tb_post SET validacion = true, estado = true WHERE id_post = ?";
             
-            // Preparar la consulta SQL
+            // Preparar y ejecutar la sentencia SQL
             ps = getCon().prepareStatement(sql);
-            
-            // Se setea el valor a su respectiva columna
             ps.setInt(1, idPost);
-            
-            // Entero para manejar su se ejecuto el update SQL o no
             int x = ps.executeUpdate();
             if (x > 0) {
-                System.out.println("SE MODIFICO EL ESTADO DEL POST");
                 estado = true;
             }
         } catch (Exception e) {
-            // Depuracion del error por consola
-            System.out.println("ERROR ACTUALIZANDO EL ESTADO DEL PSOT: " + e.getMessage());
+            System.out.println("Error actualizando el estado del post: " + e.getMessage());
         } finally {
-            // Metodo para desconectar la base de datos
             this.desconectar();
         }
-        // Retorna el valor booleano
         return estado;
     }
     
-    // Metodo para agregar la observacion al post
+    /**
+     * Agrega una observación a un post y cambia su estado a 'inactivo' y su validación a 'verdadera'.
+     * 
+     * @param idPost El ID del post al que se le agregará la observación.
+     * @param observacion La observación a agregar al post.
+     * @return {@code true} si la operación fue exitosa, {@code false} en caso contrario.
+     */
     public boolean agregarObservacion(int idPost, String observacion){
-        // Manejo de estado para saber si fue o no actualizado
         boolean estado = false;
-        
-        // Variable para el manejo de la consulta SQL
         PreparedStatement ps = null;
         
         try {
-            // Metodo para conectar la base de datos
             this.conectar();
             
-            // Update SQL de dicho post, agregandole la observacion
+            // SQL para actualizar la observación del post
             String sql = "UPDATE tb_post SET estado = false, validacion = true, observacion = ? WHERE id_post = ?";
             
-            // Preparar la consulta SQL
+            // Preparar y ejecutar la sentencia SQL
             ps = getCon().prepareStatement(sql);
-            
-            // Setearle a sus columnas los datos correspondientes
             ps.setString(1, observacion);
             ps.setInt(2, idPost);
-            
-            // Entero para saber si fue o no actualizado la observacion del post
             int x = ps.executeUpdate();
             if (x > 0) {
-                System.out.println("SE MODIFICO Y SE AGREGO UNA OBSERVACION"); 
                 estado = true;
-           }
+            }
         } catch (Exception e) {
-            // Depuracion del error
-            System.out.println("ERROR ACTUALIZANDO EL POST CON OBSERVACION: " + e.getMessage());
+            System.out.println("Error actualizando el post con observación: " + e.getMessage());
         } finally {
-            // Metodo para desconectar la base de datos
             this.desconectar();
         }
-        // Retorna el estado
         return estado;
     }
     
-    /*
-        Metodo para deshabilitar el post, "No se esta utilizando este metodo"
-    */
+    /**
+     * Deshabilita un post marcándolo como 'inactivo' y estableciendo la validación como 'verdadera'.
+     * Este método no se está utilizando actualmente.
+     * 
+     * @param idPost El ID del post a deshabilitar.
+     * @return {@code true} si la operación fue exitosa, {@code false} en caso contrario.
+     */
     public boolean deshabilitarPost(String idPost){
         boolean estado = false;
         PreparedStatement ps = null;
-        ResultSet rs = null;
         try {
             this.conectar();
+            // SQL para deshabilitar un post
             String sql = "UPDATE tb_post SET estado = false, validacion = true WHERE id_post = ?";
             ps = getCon().prepareStatement(sql);
             ps.setString(1, idPost);
             int x = ps.executeUpdate();
             if (x > 0) {
                 estado = true;
-                System.out.println("SE MODIFICO EL ESTADO DEL POST: " + idPost);
             }
         } catch (Exception e) {
-            System.out.println("ERROR AL MODIFICAR EL ESTADO DEL POST: " + e.getMessage());
+            System.out.println("Error al modificar el estado del post: " + e.getMessage());
         } finally {
             this.desconectar();
         }
         return estado;
     }
 
-    // Metodo para eliminar el post de la base de datos
+    /**
+     * Elimina un post de la base de datos junto con sus archivos asociados.
+     * 
+     * @param idPost El ID del post a eliminar.
+     * @return {@code true} si la operación fue exitosa, {@code false} en caso contrario.
+     */
     public boolean eliminarPost(String idPost) {
-        
-        // Manejo del estado para saber si se elimino o no el post
         boolean estado = false;
-        
-        // Variables para el manejo de las consu,tas
         PreparedStatement ps = null;
         PreparedStatement psDos = null;
+        
         try {
-            // Metodo para conectar con la base de datos
             this.conectar();
             
-            // Consultas SQL
+            // SQL para eliminar el post y sus archivos asociados
             String sql = "DELETE FROM tb_post WHERE id_post = ?";
             String sqlDos = "DELETE FROM tb_archivo WHERE id_post_fk = ?";
             
-            // Tomar y preparar las consultas sql
             ps = getCon().prepareStatement(sql);
             psDos = getCon().prepareStatement(sqlDos);
             
@@ -263,15 +279,12 @@ public class PostDAO extends Conexion {
             int x = ps.executeUpdate();
             if (x > 0) {
                 estado = true;
-                System.out.println("SE ELIMINO EL POST CON EL ID: " + idPost);
             }
         } catch (Exception e) {
-            System.out.println("ERROR ELIMINANDO EL POST: " + e.getMessage());
+            System.out.println("Error eliminando el post: " + e.getMessage());
         } finally {
-            // Metodo para desconectar la base de datos
             this.desconectar();
         }
-        // Retornara un valor booleano
         return estado;
     }
 }

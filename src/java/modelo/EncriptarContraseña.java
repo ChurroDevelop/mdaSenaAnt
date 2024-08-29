@@ -4,15 +4,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Clase para encriptar contraseñas utilizando el algoritmo SHA-256.
+ * Clase que proporciona métodos para encriptar contraseñas utilizando el algoritmo SHA-256.
  */
 public class EncriptarContraseña {
 
     /**
-     * Encripta la contraseña utilizando SHA-256.
-     *
-     * @param password La contraseña que se quiere encriptar.
-     * @return La contraseña encriptada en formato hexadecimal.
+     * Encripta una contraseña utilizando el algoritmo SHA-256.
+     * 
+     * @param password La contraseña en texto plano que se desea encriptar.
+     * @return La contraseña encriptada en formato hexadecimal, o {@code null} si ocurre un error.
      */
     public static String encriptar(String password) {
         try {
@@ -25,6 +25,7 @@ public class EncriptarContraseña {
             // Convierte el hash a formato hexadecimal y lo retorna
             return bytesToHex(hash);
         } catch (NoSuchAlgorithmException e) {
+            // Maneja el caso en el que el algoritmo SHA-256 no esté disponible
             e.printStackTrace();
             return null;
         }
@@ -32,8 +33,8 @@ public class EncriptarContraseña {
 
     /**
      * Convierte un arreglo de bytes a una cadena hexadecimal.
-     *
-     * @param hash El arreglo de bytes que se quiere convertir.
+     * 
+     * @param hash El arreglo de bytes que se desea convertir a formato hexadecimal.
      * @return La representación en cadena hexadecimal del arreglo de bytes.
      */
     private static String bytesToHex(byte[] hash) {

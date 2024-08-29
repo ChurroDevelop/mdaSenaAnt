@@ -12,8 +12,12 @@ import modelo.MonitorDAO;
 import modelo.objetos.Perfil;
 
 /**
- * Servlet para eliminar un monitor asignado a un instructor. Elimina el monitor
- * especificado y actualiza la lista de monitores del instructor.
+ * Servlet para eliminar un monitor asignado a un instructor.
+ * <p>
+ * Este servlet maneja la solicitud para eliminar un monitor específico asignado a un instructor. Recibe el ID del monitor
+ * y el ID del instructor a través de una solicitud POST, elimina el monitor de la base de datos, actualiza la lista de
+ * monitores del instructor en la sesión y redirige al usuario a la vista de asignación de monitores.
+ * </p>
  */
 @WebServlet(name = "svEliminarMonitor", urlPatterns = {"/svEliminarMonitor"})
 public class svEliminarMonitor extends HttpServlet {
@@ -21,6 +25,14 @@ public class svEliminarMonitor extends HttpServlet {
     // Instancia del DAO para manejar la base de datos de monitores
     private final MonitorDAO mDao = new MonitorDAO();
 
+    /**
+     * Maneja las solicitudes HTTP POST para eliminar un monitor asignado a un instructor.
+     * 
+     * @param request La solicitud HTTP del cliente, que contiene los parámetros "txtIdMonitor" y "txtIdInstructor".
+     * @param response La respuesta HTTP al cliente.
+     * @throws ServletException Si ocurre un error durante el manejo de la solicitud.
+     * @throws IOException Si ocurre un error al leer o escribir datos.
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
